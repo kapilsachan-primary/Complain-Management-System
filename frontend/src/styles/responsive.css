@@ -1,0 +1,98 @@
+/* -------------------------------------------------------------------------- */
+/*                         [ Responsive Font Scaling ]                        */
+/* -------------------------------------------------------------------------- */
+
+/* 
+10px	62.5%
+9.5px	59.375%
+9px	    56.25%
+8.5px	53.125%
+8px	    50%
+7.5px	46.875%
+7px	    43.75%
+6.5px	40.625%
+6px	    37.5%
+5.5px	34.375%
+5px	    31.25%
+4.5px	28.125%
+4px	    25%
+3.5px	21.875%
+3px	    18.75% 
+*/
+
+
+
+/* 10px base */
+html {
+    font-size: 62.5%;
+}
+
+/* 9px base */
+@media (max-width: 1920px) {
+    html {
+        font-size: 56.25%;
+    }
+}
+
+/* 8.5px base */
+@media (max-width: 1760px) {
+    html {
+        font-size: 53.125%;
+    }
+}
+
+/* 8px base */
+@media (max-width: 1600px) {
+    html {
+        font-size: 50%;
+    }
+}
+
+/* 7.5px base */
+@media (max-width: 1440px) {
+    html {
+        font-size: 46.875%;
+    }
+}
+
+/* 7px base */
+@media (max-width: 1280px) {
+    html {
+        font-size: 43.75%;
+    }
+}
+
+/* 6.5px base */
+@media (max-width: 1024px) {
+    html {
+        font-size: 40.625%;
+    }
+}
+
+/* 6px base */
+@media (max-width: 768px) {
+    html {
+        font-size: 37.5%;
+    }
+}
+
+/* 5.5px base */
+@media (max-width: 600px) {
+    html {
+        font-size: 34.375%;
+    }
+}
+
+/* 5px base */
+@media (max-width: 480px) {
+    html {
+        font-size: 31.25%;
+    }
+}
+
+/* 4.5px base */
+@media (max-width: 320px) {
+    html {
+        font-size: 28.125%;
+    }
+}

@@ -1,20 +1,8 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-/* Custom global styles */
-body {
-  @apply bg-gray-100 text-gray-900;
-}
-
-
-/* -------------------------------------------------------------------------- */
-
 /* -------------------------------------------------------------------------- */
 /*                              [ Font Families ]                             */
 /* -------------------------------------------------------------------------- */
 
-/* @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
 
 
@@ -106,7 +94,6 @@ html {
 body {
   overflow: hidden;
   scroll-behavior: smooth;
-  display: flex;
   background-color: var(--color-lightblue);
 }
 
@@ -143,75 +130,480 @@ h5,
 h6 {
   font-family: var(--font-primary);
 }
-body{
-    background-color: red;
-}
-/* -------------------------------------------------------------------------- */
-/* UserDashboard.css */
 
-body, html {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+/* -------------------------------------------------------------------------- */
+/*                                [ Alignments ]                              */
+/* -------------------------------------------------------------------------- */
+
+/* ---------- Common ---------- */
+.input_area_wrapper {
+  max-width: 140rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  margin-bottom: 5rem;
+}
+
+/* Column Input area */
+.input_area_columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+}
+
+/* Two Column Input area */
+.input_area_two_columns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem;
+}
+
+/* Three Column Input area */
+.input_area_three_columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+}
+
+/* Four Column Input area */
+.input_area_four_columns {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.5rem;
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .input_area_three_columns {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  .page {
-    width: 100vw;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+
+  .input_area_three_columns section:nth-child(3) {
+    grid-column: span 2;
   }
-  
-  .page-header {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
+
+  .input_area_four_columns {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  .page-content {
-    width: 100%;
-    max-width: 500px;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+
+  .input_area_four_columns section:nth-child(3),
+  .input_area_four_columns section:nth-child(4) {
+    grid-column: span 1;
   }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+}
+
+@media (max-width: 480px) {
+  .input_area_two_columns {
+    grid-template-columns: 1fr;
   }
-  
-  .input, .textarea, .select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
+
+  .input_area_three_columns {
+    grid-template-columns: 1fr;
   }
-  
-  .textarea {
-    resize: none;
-    height: 80px;
+
+  .input_area_three_columns section {
+    grid-column: span 2;
   }
-  
-  .button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s;
+
+  .input_area_four_columns {
+    grid-template-columns: 1fr;
   }
-  
-  .button:hover {
-    background-color: #0056b3;
+
+  .input_area_four_columns section {
+    grid-column: span 1;
   }
-  
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                          [ Form Components Style ]                         */
+/* -------------------------------------------------------------------------- */
+
+/* ---------- Input ---------- */
+input {
+  color: var(--color-darkgray);
+  width: 100%;
+  height: 7rem;
+  padding: 0 2rem;
+  border: 0.1rem solid var(--color-silvergray);
+  border-radius: 0.8rem;
+  font-size: 1.6rem;
+  font-weight: 400;
+}
+
+input::placeholder {
+  color: var(--color-darkgray);
+}
+
+input:focus {
+  color: var(--color-black);
+  border: 0.15rem solid var(--color-deepskyblue);
+}
+
+.input_label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.input_label label {
+  font-size: 1.6rem;
+  font-weight: 400;
+}
+
+/* number input (remove up/down arrow) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+
+/* ---------- Select ---------- */
+.select_container {
+  width: 100%;
+  position: relative;
+  display: inline-block;
+}
+
+.select_container::after {
+  content: "\f107";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  position: absolute;
+  top: 50%;
+  right: 2rem;
+  font-size: 1.4rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--color-darkgray);
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  color: var(--color-darkgray);
+  width: 100%;
+  height: 7rem;
+  padding: 0 5rem 0 2rem;
+  border: 0.1rem solid var(--color-silvergray);
+  border-radius: 0.8rem;
+  font-size: 1.6rem;
+  font-weight: 400;
+  position: relative;
+}
+
+select option {
+  color: var(--color-black);
+}
+
+select:focus {
+  color: var(--color-black);
+  border: 0.15rem solid var(--color-deepskyblue);
+  outline: none;
+}
+
+
+/* ---------- Textarea ---------- */
+textarea {
+  color: var(--color-darkgray);
+  width: 100%;
+  height: 11rem;
+  padding: 2rem;
+  border: 0.1rem solid var(--color-silvergray);
+  border-radius: 0.8rem;
+  font-size: 1.6rem;
+  font-weight: 400;
+  resize: vertical;
+  overflow: auto;
+}
+
+textarea::placeholder {
+  color: var(--color-darkgray);
+}
+
+textarea:focus {
+  color: var(--color-black);
+  border: 0.15rem solid var(--color-deepskyblue);
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                                 [ Buttons ]                                */
+/* -------------------------------------------------------------------------- */
+
+
+/* -------------------------------------------------------------------------- */
+/*                                 [ Buttons ]                                */
+/* -------------------------------------------------------------------------- */
+
+/* ---------- Outlined Button Style ---------- */
+.btn_outlined_primary button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4rem;
+  border: 0.1rem solid var(--color-deepskyblue);
+  background-color: var(--transparent);
+  color: var(--color-deepskyblue);
+}
+
+.btn_outlined_primary button:hover {
+  border: 0.1rem solid var(--color-deepskyblue);
+  background-color: var(--color-deepskyblue);
+  color: var(--color-white);
+}
+
+.btn_outlined_primary button:hover img {
+  filter: brightness(0) saturate(100%) invert(100%);
+}
+
+/* ---------- Fill Button Style ---------- */
+.btn_fill_primary button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 4rem;
+  border: 0.1rem solid var(--color-deepskyblue);
+  background-color: var(--color-deepskyblue);
+  color: var(--color-white);
+}
+
+
+/*  ---------- Buttons Area Columns (Primary) ---------- */
+.buttons_area_columns {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+/* Buttons Area Columns > Main Button */
+.buttons_area_columns .main_button {
+  font-size: 2rem;
+  font-weight: 500;
+  min-height: 6rem;
+  padding: 1rem 4.5rem;
+}
+
+/* Buttons Area Columns > Popup Close Btn */
+.buttons_area_columns.popup_close_btn {
+  justify-content: flex-end;
+}
+
+/* Buttons Area Columns > item/img */
+.buttons_area_columns .edit_item img,
+.buttons_area_columns .delete_item img,
+.buttons_area_columns .accept_item img {
+  width: 5rem;
+}
+
+/* Buttons Area Columns > Info Primary Button  */
+.buttons_area_columns .info_primary_button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.buttons_area_columns .info_primary_button .info_icon img {
+  width: 2.5rem;
+}
+
+
+/* ---------- Buttons Area Columns (Secondary) ---------- */
+.buttons_area_columns_secondary {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.buttons_area_columns_secondary .secondary_button {
+  font-size: 1.2rem;
+  font-weight: 500;
+  min-height: 3.5rem;
+  padding: 1rem 2rem;
+}
+
+
+/* ---------- Buttons Area Columns (Tertiary) ---------- */
+.buttons_area_columns_tertiary {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.buttons_area_columns_tertiary .tertiary_button {
+  font-size: 1.4rem;
+  font-weight: 500;
+  min-height: 3.5rem;
+  padding: 0.5rem 1.5rem;
+}
+
+
+/*  ---------- Buttons Area Rows (Primary) ---------- */
+.buttons_area_rows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+/* Buttons Area Rows > Main Button */
+.buttons_area_rows .main_button {
+  font-size: 2rem;
+  font-weight: 500;
+  min-height: 6rem;
+  padding: 1rem 4.5rem;
+}
+
+/* Buttons Area Rows > .search_sidebar_btns */
+.buttons_area_rows.search_sidebar_btns {
+  width: 100%;
+  gap: 1.5rem;
+}
+
+.buttons_area_rows.search_sidebar_btns .main_button {
+  width: 100%;
+  min-height: 6rem;
+}
+
+.buttons_area_rows.search_sidebar_btns .search_btn,
+.buttons_area_rows.search_sidebar_btns .reset_btn {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttons_area_rows.search_sidebar_btns .advanced_search_btn span {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--color-deepskyblue);
+  border-bottom: 0.1rem solid var(--color-deepskyblue);
+  line-height: 0.8;
+}
+
+
+/* ---------- Popups > .x_icon ----------  */
+.popup_content .x_icon {
+  display: flex;
+  justify-content: end;
+}
+
+.popup_content .x_icon button {
+  cursor: pointer !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup_content .x_icon button img {
+  width: 4.2rem;
+  height: 4.2rem;
+}
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                            [ Main Content CSS ]                            */
+/* -------------------------------------------------------------------------- */
+
+.main_content {
+  flex-grow: 1;
+  height: 100vh;
+  padding: 2.5rem 3rem 2.5rem 5rem;
+  transition: margin-right 0.5s ease;
+  overflow-y: scroll;
+}
+
+
+/* ------------------------ [ Main Content > Header ] ----------------------- */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 2rem;
+  border-bottom: 0.2rem solid var(--color-silver);
+}
+
+
+/* ---------- Page Content Header (Common) ---------- */
+.page_content_header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.page_content_header h1 {
+  font-size: 3rem;
+  font-weight: 600;
+  color: var(--color-black);
+}
+
+.page_content_header p {
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--color-deepskyblue);
+}
+
+
+/* ---------- Header ---------- */
+
+header{
+  margin-bottom: 4rem;
+}
+/* Header Action btns */
+header .head_action_btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+header .head_action_btns button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header .head_action_btns .cloud_btn img,
+header .head_action_btns .notification_btn img,
+header .head_action_btns .user_details_btn .user_icon img {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+}
+
+header .head_action_btns .user_details_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+header .head_action_btns .user_details_btn .user_icon {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-aliceblue);
+
+}
+
+header .head_action_btns .user_details_btn .down_icon i {
+  font-size: 1.4rem;
+  color: var(--color-black);
+  position: relative;
+}

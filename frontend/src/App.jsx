@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import "./styles/global.css"; // Import global styles
 
 import UserDashboard from "./pages/user/UserDashboard";
 import TechnicianDashboard from "./pages/technician/TechnicianDashboard";
