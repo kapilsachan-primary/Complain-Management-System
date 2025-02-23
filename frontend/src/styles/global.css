@@ -445,7 +445,65 @@ textarea:focus {
 }
 
 
+/* -------------------------------------------------------------------------- */
+/*                                   Status                                   */
+/* -------------------------------------------------------------------------- */
 
+
+
+/* Status data (*-status)  */
+.cadd-status-pending,
+.cadd-status-resolved,
+.cadd-priority-high,
+.cadd-priority-medium,
+.cadd-priority-low {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1.5rem;
+  border-radius: 1.8rem;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.cadd-status-resolved {
+  background-color: var(--color-applegreen);
+  color: var(--color-greenhaze);
+}
+.cadd-status-pending {
+  background-color: var(--color-earlydawn);
+  color: var(--color-lightningyellow);
+}
+.cadd-priority-low{
+  background-color: var(--color-applegreen);
+  color: var(--color-greenhaze);
+}
+.cadd-priority-medium {
+  background-color: var(--color-earlydawn);
+  color: var(--color-lightningyellow);
+}
+.cadd-priority-high {
+  background-color: var(--color-remy);
+  color: var(--color-amaranth);
+}
+
+
+/* tatus data (*-dot)  */
+active-dot {
+  width: 1.2rem;
+  height: 1.2rem;
+  background-color: var(--color-forestgreen);
+  border-radius: 100%;
+  display: inline-block;
+}
+
+inactive-dot {
+  width: 1.2rem;
+  height: 1.2rem;
+  background-color: var(--color-crimson);
+  border-radius: 100%;
+  display: inline-block;
+}
 
 
 /* -------------------------------------------------------------------------- */

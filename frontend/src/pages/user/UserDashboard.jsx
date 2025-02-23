@@ -21,13 +21,16 @@ export default function UserDashboard() {
 
   return (
     <main className="main_content">
+
+      {/* Header */}
       <header>
-        <section className="desk page_content_header">
+        <section className="page_content_header">
           <h1>User Dashboard</h1>
           <p>Raise Issues with Ease – Get Quick Resolutions Fast!</p>
         </section>
       </header>
 
+      {/* User Form */}
       <section className="form_section">
         <form onSubmit={handleSubmit} className="issue_form">
 
@@ -100,6 +103,7 @@ export default function UserDashboard() {
 
         </form>
       </section>
+      
     </main>
   );
 }
