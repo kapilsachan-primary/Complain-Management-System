@@ -31,10 +31,7 @@ export default function UserDashboard() {
       <section className="form_section">
         <form onSubmit={handleSubmit} className="issue_form">
 
-          {/* Input Area Wrapper */}
           <div className="input_area_wrapper">
-
-            {/* Column Input area */}
             <section className="input_area_columns">
 
               <section className="input_area_two_columns">
@@ -59,7 +56,7 @@ export default function UserDashboard() {
                 <div className="input_label">
                   <label htmlFor="contactNo">Contact No:</label>
                 </div>
-                <input type="text" id="contactNo" name="contactNo" placeholder="Enter your contact number" value={formData.contactNo} onChange={handleChange} required />
+                <input type="number" id="contactNo" name="contactNo" placeholder="Enter your contact number" value={formData.contactNo} onChange={handleChange} required />
               </section>
 
               <section>
@@ -93,15 +90,12 @@ export default function UserDashboard() {
             </section>
           </div>
 
-          {/* Buttons Area Column */}
           <section class="buttons_area_columns">
-
             <section class="btn_fill_primary">
               <button type="submit" class="main_button">
                 <span>Add</span>
               </button>
             </section>
-
           </section>
 
         </form>

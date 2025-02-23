@@ -6,6 +6,8 @@
 
 
 
+
+
 /* -------------------------------------------------------------------------- */
 /*                              [ Variable CSS ]                              */
 /* -------------------------------------------------------------------------- */
@@ -64,6 +66,8 @@
   /* ---------- Overlays ----------  */
   --overlay: rgba(0, 0, 0, 0.5);
 }
+
+
 
 
 
@@ -130,6 +134,10 @@ h5,
 h6 {
   font-family: var(--font-primary);
 }
+
+
+
+
 
 /* -------------------------------------------------------------------------- */
 /*                                [ Alignments ]                              */
@@ -215,6 +223,9 @@ h6 {
 }
 
 
+
+
+
 /* -------------------------------------------------------------------------- */
 /*                          [ Form Components Style ]                         */
 /* -------------------------------------------------------------------------- */
@@ -237,7 +248,7 @@ input::placeholder {
 
 input:focus {
   color: var(--color-black);
-  border: 0.15rem solid var(--color-deepskyblue);
+  border: 0.2rem solid var(--color-deepskyblue);
 }
 
 .input_label {
@@ -265,7 +276,6 @@ input[type="number"] {
   appearance: none;
   margin: 0;
 }
-
 
 /* ---------- Select ---------- */
 .select_container {
@@ -308,10 +318,9 @@ select option {
 
 select:focus {
   color: var(--color-black);
-  border: 0.15rem solid var(--color-deepskyblue);
+  border: 0.2rem solid var(--color-deepskyblue);
   outline: none;
 }
-
 
 /* ---------- Textarea ---------- */
 textarea {
@@ -333,20 +342,77 @@ textarea::placeholder {
 
 textarea:focus {
   color: var(--color-black);
-  border: 0.15rem solid var(--color-deepskyblue);
+  border: 0.2rem solid var(--color-deepskyblue);
 }
 
 
-/* -------------------------------------------------------------------------- */
-/*                                 [ Buttons ]                                */
-/* -------------------------------------------------------------------------- */
+
 
 
 /* -------------------------------------------------------------------------- */
 /*                                 [ Buttons ]                                */
 /* -------------------------------------------------------------------------- */
 
-/* ---------- Outlined Button Style ---------- */
+/*  ---------- Buttons Area Columns (Primary) ---------- */
+.buttons_area_columns {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.buttons_area_columns .main_button {
+  font-size: 2rem;
+  font-weight: 500;
+  min-height: 6rem;
+  padding: 1rem 4.5rem;
+}
+
+/* ---------- Buttons Area Columns (Secondary) ---------- */
+.buttons_area_columns_secondary {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.buttons_area_columns_secondary .secondary_button {
+  font-size: 1.2rem;
+  font-weight: 500;
+  min-height: 3.5rem;
+  padding: 1rem 2rem;
+}
+
+/* ---------- Buttons Area Columns (Tertiary) ---------- */
+.buttons_area_columns_tertiary {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.buttons_area_columns_tertiary .tertiary_button {
+  font-size: 1.4rem;
+  font-weight: 500;
+  min-height: 3.5rem;
+  padding: 0.5rem 1.5rem;
+}
+
+/*  ---------- Buttons Area Rows (Primary) ---------- */
+.buttons_area_rows {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+/* Buttons Area Rows > Main Button */
+.buttons_area_rows .main_button {
+  font-size: 2rem;
+  font-weight: 500;
+  min-height: 6rem;
+  padding: 1rem 4.5rem;
+}
+
+/* ---------- Outlined Button (Style) ---------- */
 .btn_outlined_primary button {
   display: flex;
   justify-content: center;
@@ -367,7 +433,7 @@ textarea:focus {
   filter: brightness(0) saturate(100%) invert(100%);
 }
 
-/* ---------- Fill Button Style ---------- */
+/* ---------- Fill Button (Style) ---------- */
 .btn_fill_primary button {
   display: flex;
   justify-content: center;
@@ -378,139 +444,6 @@ textarea:focus {
   color: var(--color-white);
 }
 
-
-/*  ---------- Buttons Area Columns (Primary) ---------- */
-.buttons_area_columns {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-
-/* Buttons Area Columns > Main Button */
-.buttons_area_columns .main_button {
-  font-size: 2rem;
-  font-weight: 500;
-  min-height: 6rem;
-  padding: 1rem 4.5rem;
-}
-
-/* Buttons Area Columns > Popup Close Btn */
-.buttons_area_columns.popup_close_btn {
-  justify-content: flex-end;
-}
-
-/* Buttons Area Columns > item/img */
-.buttons_area_columns .edit_item img,
-.buttons_area_columns .delete_item img,
-.buttons_area_columns .accept_item img {
-  width: 5rem;
-}
-
-/* Buttons Area Columns > Info Primary Button  */
-.buttons_area_columns .info_primary_button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.buttons_area_columns .info_primary_button .info_icon img {
-  width: 2.5rem;
-}
-
-
-/* ---------- Buttons Area Columns (Secondary) ---------- */
-.buttons_area_columns_secondary {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.buttons_area_columns_secondary .secondary_button {
-  font-size: 1.2rem;
-  font-weight: 500;
-  min-height: 3.5rem;
-  padding: 1rem 2rem;
-}
-
-
-/* ---------- Buttons Area Columns (Tertiary) ---------- */
-.buttons_area_columns_tertiary {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-}
-
-.buttons_area_columns_tertiary .tertiary_button {
-  font-size: 1.4rem;
-  font-weight: 500;
-  min-height: 3.5rem;
-  padding: 0.5rem 1.5rem;
-}
-
-
-/*  ---------- Buttons Area Rows (Primary) ---------- */
-.buttons_area_rows {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2.5rem;
-}
-
-/* Buttons Area Rows > Main Button */
-.buttons_area_rows .main_button {
-  font-size: 2rem;
-  font-weight: 500;
-  min-height: 6rem;
-  padding: 1rem 4.5rem;
-}
-
-/* Buttons Area Rows > .search_sidebar_btns */
-.buttons_area_rows.search_sidebar_btns {
-  width: 100%;
-  gap: 1.5rem;
-}
-
-.buttons_area_rows.search_sidebar_btns .main_button {
-  width: 100%;
-  min-height: 6rem;
-}
-
-.buttons_area_rows.search_sidebar_btns .search_btn,
-.buttons_area_rows.search_sidebar_btns .reset_btn {
-  width: 90%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.buttons_area_rows.search_sidebar_btns .advanced_search_btn span {
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: var(--color-deepskyblue);
-  border-bottom: 0.1rem solid var(--color-deepskyblue);
-  line-height: 0.8;
-}
-
-
-/* ---------- Popups > .x_icon ----------  */
-.popup_content .x_icon {
-  display: flex;
-  justify-content: end;
-}
-
-.popup_content .x_icon button {
-  cursor: pointer !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.popup_content .x_icon button img {
-  width: 4.2rem;
-  height: 4.2rem;
-}
 
 
 
@@ -560,9 +493,10 @@ header {
 
 /* ---------- Header ---------- */
 
-header{
+header {
   margin-bottom: 4rem;
 }
+
 /* Header Action btns */
 header .head_action_btns {
   display: flex;
