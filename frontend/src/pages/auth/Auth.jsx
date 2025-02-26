@@ -16,8 +16,19 @@ const Auth = () => {
           {isSignup && (
             <input type="text" placeholder="Full Name" className="auth-input" />
           )}
+
           <input type="email" placeholder="Email" className="auth-input" />
+
+          {isSignup && (
+            <input type="tel" placeholder="Phone Number" className="auth-input" />
+          )}
+
           <input type="password" placeholder="Password" className="auth-input" />
+
+          {isSignup && (
+            <input type="password" placeholder="Confirm Password" className="auth-input" />
+          )}
+
           <button type="submit" className="auth-button">
             {isSignup ? "Sign Up" : "Login"}
           </button>

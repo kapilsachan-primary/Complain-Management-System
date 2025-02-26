@@ -351,6 +351,11 @@ textarea:focus {
   border: 0.2rem solid var(--color-deepskyblue);
 }
 
+/* ---------- User Form Errors ---------- */
+.userform-error{
+  font-size: 1.4rem;
+  color: var(--color-crimson);
+}
 
 
 
