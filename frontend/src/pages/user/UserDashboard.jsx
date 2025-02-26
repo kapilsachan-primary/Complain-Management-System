@@ -1,5 +1,5 @@
 import { useState } from "react";
-
+import UserformValidate from "./UserformValidation";
 export default function UserDashboard() {
   const [formData, setFormData] = useState({
     name: "",
@@ -9,7 +9,7 @@ export default function UserDashboard() {
     description: "",
     priority: "",
   });
-
+  const [errors,seterrors]=useState({});
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -17,6 +17,12 @@ export default function UserDashboard() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Submitted", formData);
+    seterrors(UserformValidate(formData));
+    const checkerr=UserformValidate(formData);
+    console.log(Object.entries(checkerr).length)
+    if(Object.entries(checkerr).length=== 0){
+      alert("Every Thing OK.");
+    }
   };
 
   return (
@@ -43,39 +49,39 @@ export default function UserDashboard() {
                   <div className="input_label">
                     <label htmlFor="name">Name:</label>
                   </div>
-                  <input type="text" id="name" name="name" placeholder="Enter your name" value={formData.name} onChange={handleChange} required />
+                  <input type="text" id="name" name="name" placeholder="Enter your name" value={formData.name} onChange={handleChange}  />
+                  {errors.name && <div className='userform-error'>{errors.name}</div>}
                 </section>
-
                 <section>
                   <div className="input_label">
                     <label htmlFor="roomNo">Room No:</label>
                   </div>
-                  <input type="text" id="roomNo" name="roomNo" placeholder="Enter your room number" value={formData.roomNo} onChange={handleChange} required />
+                  <input type="text" id="roomNo" name="roomNo" placeholder="Enter your room number" value={formData.roomNo} onChange={handleChange}  />
+                  {errors.roomNo && <div className='userform-error'>{errors.roomNo}</div>}
                 </section>
-
               </section>
 
               <section>
                 <div className="input_label">
                   <label htmlFor="contactNo">Contact No:</label>
                 </div>
-                <input type="number" id="contactNo" name="contactNo" placeholder="Enter your contact number" value={formData.contactNo} onChange={handleChange} required />
+                <input type="number" id="contactNo" name="contactNo" placeholder="Enter your contact number" value={formData.contactNo} onChange={handleChange}  />
+                {errors.contactNo && <div className='userform-error'>{errors.contactNo}</div>}
               </section>
-
               <section>
                 <div className="input_label">
                   <label htmlFor="subject">Subject:</label>
                 </div>
-                <input type="text" id="subject" name="subject" placeholder="Enter issue subject" value={formData.subject} onChange={handleChange} required />
+                <input type="text" id="subject" name="subject" placeholder="Enter issue subject" value={formData.subject} onChange={handleChange}  />
+                {errors.subject && <div className='userform-error'>{errors.subject}</div>}
               </section>
-
               <section>
                 <div className="input_label">
                   <label htmlFor="description">Description:</label>
                 </div>
-                <textarea id="description" name="description" placeholder="Describe your issue" value={formData.description} onChange={handleChange} required></textarea>
+                <textarea id="description" name="description" placeholder="Describe your issue" value={formData.description} onChange={handleChange} ></textarea>
+                {errors.description && <div className='userform-error'>{errors.description}</div>}
               </section>
-
               <section>
                 <div className="input_label">
                   <label htmlFor="priority">Priority:</label>
@@ -88,8 +94,8 @@ export default function UserDashboard() {
                     <option value="High">High</option>
                   </select>
                 </div>
+                {errors.priority && <div className='userform-error'>{errors.priority}</div>}
               </section>
-
             </section>
           </div>
 
