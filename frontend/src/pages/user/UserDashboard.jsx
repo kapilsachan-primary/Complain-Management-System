@@ -17,13 +17,18 @@ export default function UserDashboard() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Submitted", formData);
-    seterrors(UserformValidate(formData));
-    const checkerr=UserformValidate(formData);
-    console.log(Object.entries(checkerr).length)
-    if(Object.entries(checkerr).length=== 0){
-      alert("Every Thing OK.");
+  
+    const checkerr = UserformValidate(formData);
+    seterrors(checkerr);
+    console.log(Object.entries(checkerr).length);
+  
+    if (Object.entries(checkerr).length === 0) {
+      alert("Everything is OK.");
+    } else {
+      setTimeout(() => seterrors({}), 3000); // Clear errors after 3 seconds
     }
   };
+  
 
   return (
     <main className="main_content">
@@ -52,6 +57,7 @@ export default function UserDashboard() {
                   <input type="text" id="name" name="name" placeholder="Enter your name" value={formData.name} onChange={handleChange}  />
                   {errors.name && <div className='userform-error'>{errors.name}</div>}
                 </section>
+
                 <section>
                   <div className="input_label">
                     <label htmlFor="roomNo">Room No:</label>
@@ -68,6 +74,7 @@ export default function UserDashboard() {
                 <input type="number" id="contactNo" name="contactNo" placeholder="Enter your contact number" value={formData.contactNo} onChange={handleChange}  />
                 {errors.contactNo && <div className='userform-error'>{errors.contactNo}</div>}
               </section>
+              
               <section>
                 <div className="input_label">
                   <label htmlFor="subject">Subject:</label>
@@ -75,6 +82,7 @@ export default function UserDashboard() {
                 <input type="text" id="subject" name="subject" placeholder="Enter issue subject" value={formData.subject} onChange={handleChange}  />
                 {errors.subject && <div className='userform-error'>{errors.subject}</div>}
               </section>
+
               <section>
                 <div className="input_label">
                   <label htmlFor="description">Description:</label>
@@ -82,6 +90,7 @@ export default function UserDashboard() {
                 <textarea id="description" name="description" placeholder="Describe your issue" value={formData.description} onChange={handleChange} ></textarea>
                 {errors.description && <div className='userform-error'>{errors.description}</div>}
               </section>
+
               <section>
                 <div className="input_label">
                   <label htmlFor="priority">Priority:</label>
@@ -96,6 +105,7 @@ export default function UserDashboard() {
                 </div>
                 {errors.priority && <div className='userform-error'>{errors.priority}</div>}
               </section>
+
             </section>
           </div>
 
