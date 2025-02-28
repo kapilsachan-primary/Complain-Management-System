@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "./Auth.css"; // Import the CSS file
 import LoginValidate from "./LoginValidation";
 import RegisterValidate from "./RegistrationValidation";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const Auth = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [formData, setFormData] = useState({
@@ -11,6 +13,8 @@ const Auth = () => {
     password: "",
     confirmpass: "",
   });
+  axios.defaults.withCredentials=true;
+  const navigate=useNavigate();
   const [errors, seterrors] = useState({});
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -27,7 +31,7 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Submitted", formData);
+    //console.log("Form Submitted", formData);
 
     if (isSignup) {
       const checkerr = RegisterValidate(formData);
@@ -35,7 +39,21 @@ const Auth = () => {
       console.log(Object.entries(checkerr).length);
 
       if (Object.entries(checkerr).length === 0) {
-        alert("Everything is OK.");
+        axios.post("http://localhost:3000/technician/register",{
+          name:formData.name,
+          email:formData.email,
+          contactno:formData.contactNo,
+          password:formData.password,
+        }).then(res =>{
+             // console.log(res);
+              if(res.data.status){
+              alert(res.data.message);
+              }
+              else
+              alert(res.data.message);
+        }).catch(err =>{
+          console.log(err);
+        })
         toggleForm();
       } else {
         setTimeout(() => seterrors({}), 3000); // Clear errors after 3 seconds
@@ -46,7 +64,22 @@ const Auth = () => {
       console.log(Object.entries(checkerr).length);
 
       if (Object.entries(checkerr).length === 0) {
-        alert("Everything is OK.");
+        axios.post("http://localhost:3000/technician/login",{
+          email:formData.email,
+          password:formData.password,
+        }).then(res =>{
+              //console.log(res);
+              if(res.data.status){
+              alert(res.data.message);
+              navigate("/technician/dashboard");
+              }
+              else{
+              alert(res.data.message);
+              window.location.reload();
+            }
+        }).catch(err =>{
+          console.log(err);
+        })
       } else {
         setTimeout(() => seterrors({}), 3000); // Clear errors after 3 seconds
       }

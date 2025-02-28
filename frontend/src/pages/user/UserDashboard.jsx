@@ -1,5 +1,6 @@
 import { useState } from "react";
 import UserformValidate from "./UserformValidation";
+import axios from "axios";
 export default function UserDashboard() {
   const [formData, setFormData] = useState({
     name: "",
@@ -16,14 +17,27 @@ export default function UserDashboard() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Submitted", formData);
-  
+    //console.log("Form Submitted", formData);
     const checkerr = UserformValidate(formData);
     seterrors(checkerr);
     console.log(Object.entries(checkerr).length);
-  
     if (Object.entries(checkerr).length === 0) {
-      alert("Everything is OK.");
+      axios.post("http://localhost:3000/user/complain",{
+        name:formData.name,
+        roomno:formData.roomNo,
+        contactno:formData.contactNo,
+        subject:formData.subject,
+        description:formData.description,
+        priority:formData.priority,
+      }).then(res =>{
+            console.log(res);
+            if(res.data.status){
+            alert(res.data.message);
+            window.location.reload();
+            }
+      }).catch(err =>{
+        console.log(err);
+      })
     } else {
       setTimeout(() => seterrors({}), 3000); // Clear errors after 3 seconds
     }

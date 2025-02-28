@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 // import "./TechnicianDashboard.css";
-
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 const TechnicianDashboard = () => {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
-
+  const [name,setname]=useState('');
+  const [id,setid]=useState('');
+  axios.defaults.withCredentials=true;
+  const navigate=useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -40,6 +44,18 @@ const TechnicianDashboard = () => {
     setFilteredData(filtered);
   }, [searchText, statusFilter, data]);
 
+  useEffect(()=>{
+    axios.get('http://localhost:3000/technician/status')
+    .then( res=>{
+      if(res.data.Status === "Success"){
+          setname(res.data.name);
+          setid(res.data.id);
+      }
+      else{
+        navigate("/auth");
+      }
+    })
+  },[])
 
   const columns = [
     { 
