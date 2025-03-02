@@ -1,0 +1,85 @@
+/* Auth Container with Stylish Gradient */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, var(--color-deepskyblue) 0%, var(--color-lavender-indigo) 50%, var(--color-light-coral) 100%);
+  background-size: 300% 300%;
+  animation: gradientAnimation 10s ease infinite;
+}
+
+/* Gradient Animation */
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Auth Box */
+.auth-box {
+  background: var(--color-white);
+  padding: 5rem 3rem;
+  border-radius: 1.2rem;
+  box-shadow: var(--shadow-card);
+  text-align: center;
+  width: 50rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.auth-box:hover {
+  transform: scale(1.03);
+}
+
+/* Heading */
+.auth-box h2 {
+  font-size: 3.2rem;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  color: var(--color-darkgray);
+  margin-bottom: 1.5rem;
+}
+
+/* Input Fields */
+.auth-input {
+  margin: 1rem 0;
+  transition: all 0.3s ease;
+}
+.auth-input:focus {
+  box-shadow: 0 0 0.8rem rgba(0, 91, 187, 0.3);
+}
+
+/* Button */
+.auth-button {
+  width: 100%;
+  padding: 1.2rem;
+  margin-top: 1.2rem;
+  background: var(--color-deepskyblue);
+  color: var(--color-white);
+  border: none;
+  border-radius: 0.8rem;
+  font-size: 1.8rem;
+  font-family: var(--font-secondary);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.auth-button:hover {
+  background: var(--color-black);
+}
+
+/* Toggle Text */
+.toggle-text {
+  margin-top: 1.5rem;
+  color: var(--color-deepskyblue);
+  cursor: pointer;
+  font-size: 1.4rem;
+  font-family: var(--font-tertiary);
+  transition: color 0.3s ease;
+}
+
+.toggle-text:hover {
+  color: var(--color-black);
+  text-decoration: underline;
+}
