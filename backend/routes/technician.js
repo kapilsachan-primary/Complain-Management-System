@@ -38,7 +38,7 @@ router.post('/login', async(req,res)=>{
     if(!validPassword){
         return res.json({status: false,message: "Invalid Credentials"})
     }
-    const token=jwt.sign({name: technician.firstname, id: technician._id}, process.env.KEY , {expiresIn: '2h'})
+    const token=jwt.sign({name: technician.name, id: technician._id}, process.env.KEY , {expiresIn: '2h'})
     res.cookie('ttoken', token, {httpOnly: true,maxAge: 7200000})
     return res.json({status: true, message: "Login Successfull"})
 })
