@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./admin-styles/AdminLogin.css";
+import "./auth-styles/Auth.css"; // Import the CSS file
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({

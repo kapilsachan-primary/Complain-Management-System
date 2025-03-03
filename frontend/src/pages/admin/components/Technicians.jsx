@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
-// import "./TechnicianDashboard.css";
+// import "./Technician.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-const TechnicianDashboard = () => {
+const Technician = () => {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
-  const [name,setname]=useState('');
-  const [id,setid]=useState('');
-  axios.defaults.withCredentials=true;
-  const navigate=useNavigate();
+  const [name, setname] = useState('');
+  const [id, setid] = useState('');
+  axios.defaults.withCredentials = true;
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,24 +45,24 @@ const TechnicianDashboard = () => {
     setFilteredData(filtered);
   }, [searchText, statusFilter, data]);
 
-  useEffect(()=>{
+  useEffect(() => {
     axios.get('http://localhost:3000/technician/status')
-    .then( res=>{
-      if(res.data.Status === "Success"){
+      .then(res => {
+        if (res.data.Status === "Success") {
           setname(res.data.name);
           setid(res.data.id);
-      }
-      else{
-        navigate("/auth");
-      }
-    })
-  },[])
+        }
+        else {
+          navigate("/auth");
+        }
+      })
+  }, [])
 
   const columns = [
-    { 
+    {
       name: <span className="column_header">ID</span>,
-      selector: (row) => row.complaintId, 
-      sortable: true, 
+      selector: (row) => row.complaintId,
+      sortable: true,
       center: true,
       wrap: true,
     },
@@ -79,11 +79,11 @@ const TechnicianDashboard = () => {
       center: true,
       cell: (row) => <span className={`status ${row.status.toLowerCase().replace(" ", "-")}`}>{row.status}</span>,
     },
-    { 
+    {
       name: <span className="column_header">Subject</span>,
-      selector: (row) => row.subject, 
-      sortable: true, 
-      center: true 
+      selector: (row) => row.subject,
+      sortable: true,
+      center: true
     },
     {
       name: <span className="column_header">Priority</span>,
@@ -104,15 +104,7 @@ const TechnicianDashboard = () => {
   ];
 
   return (
-    <main className="main_content">
-
-      {/* Header */}
-      <header>
-        <section className="page_content_header">
-          <h1>Technician Dashboard</h1>
-          <p>Track, Update & Complete Your Service Requests</p>
-        </section>
-      </header>
+    <>
 
       <div className="controls">
         <div className="filter-buttons">
@@ -123,14 +115,25 @@ const TechnicianDashboard = () => {
           ))}
         </div>
 
-        <div className="search-container">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="search-input"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-          />
+        <div className="dfr gap-12">
+
+          <div className="add_btn">
+            <i class="fa-solid fa-plus"></i>
+            <button>
+              <span>Add Technician</span>
+            </button>
+          </div>
+
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="search-input"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+            />
+          </div>
+
         </div>
       </div>
 
@@ -145,8 +148,9 @@ const TechnicianDashboard = () => {
           className="table-content"
         />
       </div>
-    </main>
+
+    </>
   );
 };
 
-export default TechnicianDashboard;
+export default Technician;
