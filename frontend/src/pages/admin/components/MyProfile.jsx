@@ -1,23 +1,82 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import "../admin-styles/MyProfile.css"; // Import the CSS file
-
+import { Editform } from "./ProfileValidate";
+import { Resetpass } from "./ProfileValidate";
+import axios from "axios";
 const MyProfile = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    contactNo: "",
-    password: "",
-  });
-
-  const [errors, setErrors] = useState({});
+  const [formData, setFormData] = useState([]);
+  axios.defaults.withCredentials=true;
+  const [errors, seterrors] = useState({});
   const [activeForm, setActiveForm] = useState("edit"); // Default to "edit"
-
+  const [name, setname] = useState('');
+  const [id, setid] = useState('');
+  const [password,setpassword]=useState('');
+  useEffect(() => {
+    axios.get('http://localhost:3000/admin/status')
+      .then(res => {
+        if (res.data.Status === "Success") {
+          setname(res.data.name);
+          setid(res.data.id);
+          axios.post("http://localhost:3000/admin/profile",{
+            id:res.data.id
+          }).then(res =>{
+            console.log(res.data);
+            setFormData(res.data);
+          }).catch(err => console.log(err))
+        }
+        else {
+          navigate("/admin-login");
+        }
+      })
+  }, [])
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(activeForm=="edit"){
+      const checkerr = Editform(formData);
+      seterrors(checkerr);
+      console.log(Object.entries(checkerr).length);
+      console.log(checkerr)
+      if (Object.entries(checkerr).length === 0) {
+        axios.put("http://localhost:3000/admin/editprofile",{
+          id:id,
+          name:formData.name,
+          email:formData.email,
+          contactno:formData.contactNo,
+      }).then(res => {
+        if(res.data.Status === true){
+          alert(res.data.message)
+        }
+        else{
+          alert(res.data.message)
+        }
+      }).catch(err => console.log(err));
+
+      }
+    }
+    else{
+      const checkerr = Resetpass(password);
+      seterrors(checkerr);
+      console.log(Object.entries(checkerr).length);
+      console.log(checkerr)
+      if (Object.entries(checkerr).length === 0) {
+        axios.put("http://localhost:3000/admin/resetpassword",{
+          id:id,
+          password:password,
+      }).then(res => {
+        if(res.data.Status === true){
+          alert(res.data.message)
+          setpassword('');
+        }
+        else{
+          alert(res.data.message)
+        }
+      }).catch(err => console.log(err));
+      }
+    }
   };
 
   return (
@@ -25,14 +84,14 @@ const MyProfile = () => {
       <section className="buttons_area_columns">
         {/* Edit Profile Button */}
         <section className={activeForm === "edit" ? "btn_fill_primary" : "btn_outlined_primary"}>
-          <button className="main_button" onClick={() => setActiveForm("edit")}>
+          <button className="main_button" onClick={() => {setActiveForm("edit"); seterrors({});}}>
             <span>Edit Profile</span>
           </button>
         </section>
 
         {/* Reset Password Button */}
         <section className={activeForm === "reset" ? "btn_fill_primary" : "btn_outlined_primary"}>
-          <button className="main_button" onClick={() => setActiveForm("reset")}>
+          <button className="main_button" onClick={() => {setActiveForm("reset");seterrors({});}}>
             <span>Reset Password</span>
           </button>
         </section>
@@ -65,8 +124,8 @@ const MyProfile = () => {
                     <div className="input_label">
                       <label htmlFor="contactNo">Contact No:</label>
                     </div>
-                    <input type="number" id="contactNo" name="contactNo" placeholder="Enter your contact number" value={formData.contactNo} onChange={handleChange} />
-                    {errors.contactNo && <div className="userform-error">{errors.contactNo}</div>}
+                    <input type="number" id="contactNo" name="contactno" placeholder="Enter your contact number" value={formData.contactno} onChange={handleChange} />
+                    {errors.contactno && <div className="userform-error">{errors.contactno}</div>}
                   </section>
                 </section>
               </div>
@@ -92,7 +151,7 @@ const MyProfile = () => {
                     <div className="input_label">
                       <label htmlFor="password">Password:</label>
                     </div>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" value={formData.password} onChange={handleChange} />
+                    <input type="password" id="password" name="password" placeholder="Enter your password" value={password} onChange={(e)=>{setpassword(e.target.value)}} />
                     {errors.password && <div className="authform-error">{errors.password}</div>}
                   </section>
                 </section>

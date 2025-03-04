@@ -25,6 +25,15 @@ const Technician = () => {
       }
     };
     fetchData();
+  //   axios.post('http://localhost:3000/admin/details',{
+  //     fetch:'technician',
+  // })
+  // .then(res => {
+  //     setData(res.data);
+  //     setFilteredData(res.data)
+  //     console.log(res.data);
+  // })
+  // .catch(err => {console.log(res.data.message)});
   }, []);
 
   useEffect(() => {
@@ -46,14 +55,14 @@ const Technician = () => {
   }, [searchText, statusFilter, data]);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/technician/status')
+    axios.get('http://localhost:3000/admin/status')
       .then(res => {
         if (res.data.Status === "Success") {
           setname(res.data.name);
           setid(res.data.id);
         }
         else {
-          navigate("/auth");
+          navigate("/admin-login");
         }
       })
   }, [])

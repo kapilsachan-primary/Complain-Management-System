@@ -16,6 +16,9 @@ export default function UserformValidate(formData){
     if(formData.subject===""){
         errors.subject="Subject is reqired";
     }
+    if(formData.department===""){
+        errors.department="Department is reqired";
+    }
     if(formData.description===""){
         errors.description="Description is reqired";
     }

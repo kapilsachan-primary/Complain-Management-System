@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 const router=express.Router();
 import { Admin } from "../models/Admin.js";
 import jwt from 'jsonwebtoken';
-
+import { Technician} from "../models/Technician.js";
 router.post('/login', async(req,res)=>{
     const email=req.body.email;
     const password=req.body.password;
@@ -11,13 +11,13 @@ router.post('/login', async(req,res)=>{
     if(!admin){
         return res.json({status: false,message: "Invalid Credentials"})
     }
-    //const validPassword= await bcrypt.compare(password, admin.password)
-    if(password!=admin.password){
+    const validPassword= await bcrypt.compare(password, admin.password)
+    if(!validPassword){
         return res.json({status: false,message: "Invalid Credentials"})
     }
     const token=jwt.sign({name: admin.name, id: admin._id}, process.env.KEY , {expiresIn: '2h'})
     res.cookie('atoken', token, {httpOnly: true,maxAge: 7200000})
-    return res.json({status: true, message: "Login Successfull remember to hash it."})
+    return res.json({status: true, message: "Login Successfull"})
 })
 
 const verifyadmin = (req,res,next) =>{
@@ -44,6 +44,19 @@ router.get("/status",verifyadmin,(req,res) =>{
 router.get('/logout',(req,res)=>{
     res.clearCookie('atoken');
     return res.json({Status: "Success"});
+})
+router.post("/profile",async(req,res)=>{
+    try{
+    const id=req.body.id;
+    const admin= await Admin.findById(id); 
+    if(!admin){
+        return res.json({status: false,message: "admin Not Found"})
+    }  
+     return res.json(admin);
+    }
+    catch(err){
+        return res.json({status: false,message: "Server error"})
+    }
 })
 router.put("/editprofile", async(req,res)=>{
     const id=req.body.id;
@@ -78,4 +91,17 @@ router.put("/resetpassword", async(req,res)=>{
         return res.json({Status: false,message: "Server error"})
     }
 })
+
+router.post("/details",async(req,res)=>{
+    const fetch=req.body.fetch;
+    if(fetch==='technician'){
+        try{
+            const technicians= await Technician.find();
+            return res.json(technicians);
+        }
+        catch(err){
+            return res.json({Status: false,message: "Server error"}) 
+        }
+    }
+});
 export {router as AdminRouter}

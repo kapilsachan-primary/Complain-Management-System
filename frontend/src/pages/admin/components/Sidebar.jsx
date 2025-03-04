@@ -1,7 +1,25 @@
 import React from "react";
 import "../admin-styles/Sidebar.css"; // Import the CSS file
-
+import axios from "axios";
+import { useEffect,useState } from "react";
+import { useNavigate } from "react-router-dom";
 const Sidebar = ({ activePage, setActivePage }) => {
+    axios.defaults.withCredentials=true;
+    const [name, setname] = useState('');
+    const [id, setid] = useState('');
+    const navigate=useNavigate();
+    useEffect(() => {
+        axios.get('http://localhost:3000/admin/status')
+          .then(res => {
+            if (res.data.Status === "Success") {
+              setname(res.data.name);
+              setid(res.data.id);
+            }
+            else {
+              navigate("/admin-login");
+            }
+          })
+      }, [])
     return (
         <aside className="sidebar_navigation">
 
