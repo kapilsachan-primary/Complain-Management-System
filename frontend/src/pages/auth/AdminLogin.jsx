@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./auth-styles/Auth.css"; // Import the CSS file
 import LoginValidate from "./LoginValidation";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";

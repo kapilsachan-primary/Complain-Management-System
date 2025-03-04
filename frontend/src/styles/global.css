@@ -374,7 +374,8 @@ textarea:focus {
 }
 
 /* Auth form error */
-.authform-error {
+.authform-error,
+.poupform-input {
   position: relative;
   top: -0.8rem;
   text-align: start;
@@ -515,8 +516,6 @@ textarea:focus {
 /*                                   Status                                   */
 /* -------------------------------------------------------------------------- */
 
-
-
 /* Status data (*-status)  */
 .status,
 .priority {
@@ -576,6 +575,147 @@ inactive-dot {
   border-radius: 100%;
   display: inline-block;
 }
+
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                         [ Sidebar Navigation CSS ]                         */
+/* -------------------------------------------------------------------------- */
+
+
+
+.sidebar_navigation {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 32rem;
+  border-radius: 2.5rem;
+  height: 100%;
+  max-height: calc(100vh - 5rem);
+  border-radius: 1.7rem;
+  background-color: var(--color-deepskyblue);
+  box-shadow: var(--shadow-sidebar-navigation);
+  transition: width 0.5s ease;
+  margin: 3rem 0 3rem 3rem;
+}
+
+.sidebar_navigation_container {
+  overflow-y: auto;
+  padding: 4.4rem 0 4.4rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8rem;
+}
+
+
+/* ---------- Sidebar Navigation X icon (Mobile) ---------- */
+#close_mobile_sidebar_navigation_btn {
+  display: none;
+  cursor: pointer;
+}
+
+
+
+
+/* ----- Sidebar Navigation Logo ----- */
+.sidebar_navigation .sidebar_nav_logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--color-white);
+  text-decoration: line-through;
+}
+
+
+
+/* ---------- Sidebar Navigation List ---------- */
+.sidebar_navigation .nav_list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4.8rem;
+}
+
+.sidebar_navigation .nav_list .nav_item {
+  height: 3.5rem;
+  padding: 0 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.sidebar_navigation.open .nav_list .nav_item {
+  padding: 0 4.4rem;
+}
+
+.sidebar_navigation.open .nav_list .nav_item {
+  justify-content: start;
+}
+
+.sidebar_navigation .nav_list .nav_item.active::before,
+.sidebar_navigation .nav_list .nav_item:hover::before {
+  content: "";
+  position: absolute;
+  left: 0rem;
+  top: 0rem;
+  bottom: 0;
+  z-index: 1;
+  width: 0.5rem;
+  background-color: var(--color-white);
+  border-top-right-radius: 0.3rem;
+  border-bottom-right-radius: 0.3rem;
+}
+
+.sidebar_navigation .nav_list .nav_item .link_style {
+  width: inital;
+  white-space: nowrap;
+  display: flex;
+  gap: 2rem;
+  color: var(--color-white) !important;
+  position: relative;
+  padding: 0;
+  transition: padding 0.5s ease;
+}
+
+.sidebar_navigation.open .nav_list .nav_item .link_style {
+  width: 100%;
+  padding-left: 0 1.5rem;
+}
+
+.sidebar_navigation .nav_list .nav_item_icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.sidebar_navigation .nav_list .nav_item_icon img {
+  width: 2.25rem;
+}
+
+.sidebar_navigation.open .nav_list .nav_item_icon img {
+  width: 2.5rem;
+}
+
+.sidebar_navigation .nav_list .nav_item_text {
+  width: 100%;
+  font-size: 2rem;
+  font-weight: 400;
+  position: relative;
+  cursor: pointer;
+}
+
+.sidebar_navigation.open .nav_list .nav_item_text {
+  display: flex;
+  align-items: center;
+}
+
+
 
 
 /* -------------------------------------------------------------------------- */
@@ -679,8 +819,7 @@ header .head_action_btns .user_details_btn .down_icon i {
   position: relative;
 }
 
-/* ---------- Common DataTable Style ---------- */
-
+/* ------------------------- Common DataTable Style ------------------------- */
 
 .controls {
   display: flex;
@@ -775,4 +914,237 @@ header .head_action_btns .user_details_btn .down_icon i {
   border-radius: 1rem;
   padding: 1rem;
   font-size: 1.8rem;
+}
+
+.fa-trash-can {
+  color: var(--color-white);
+  background: var(--color-amaranth);
+  border: 1px solid var(--color-amaranth);
+  border-radius: 1rem;
+  padding: 1rem;
+  font-size: 1.8rem;
+}
+
+
+
+/* ------------------------------- Auth Forms ------------------------------- */
+
+/* Auth Container with Stylish Gradient */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: linear-gradient(135deg, var(--color-deepskyblue) 0%, var(--color-lavender-indigo) 50%, var(--color-light-coral) 100%);
+  background-size: 300% 300%;
+  animation: gradientAnimation 10s ease infinite;
+}
+
+/* Gradient Animation */
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Auth Box */
+.auth-box {
+  background: var(--color-white);
+  padding: 5rem 3rem;
+  border-radius: 1.2rem;
+  box-shadow: var(--shadow-card);
+  text-align: center;
+  width: 50rem;
+  transition: transform 0.3s ease-in-out;
+}
+
+.auth-box:hover {
+  transform: scale(1.03);
+}
+
+/* Heading */
+.auth-box h2 {
+  font-size: 3.2rem;
+  font-family: var(--font-primary);
+  font-weight: 600;
+  color: var(--color-darkgray);
+  margin-bottom: 1.5rem;
+}
+
+/* Input Fields */
+.auth-input {
+  margin: 1rem 0;
+  transition: all 0.3s ease;
+}
+
+.auth-input:focus {
+  box-shadow: 0 0 0.8rem rgba(0, 91, 187, 0.3);
+}
+
+/* Button */
+.auth-button {
+  width: 100%;
+  padding: 1.2rem;
+  margin-top: 1.2rem;
+  background: var(--color-deepskyblue);
+  color: var(--color-white);
+  border: none;
+  border-radius: 0.8rem;
+  font-size: 1.8rem;
+  font-family: var(--font-secondary);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.auth-button:hover {
+  background: var(--color-black);
+}
+
+/* Toggle Text */
+.toggle-text {
+  margin-top: 1.5rem;
+  color: var(--color-deepskyblue);
+  cursor: pointer;
+  font-size: 1.4rem;
+  font-family: var(--font-tertiary);
+  transition: color 0.3s ease;
+}
+
+.toggle-text:hover {
+  color: var(--color-black);
+  text-decoration: underline;
+}
+
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                                 Popups CSS                                 */
+/* -------------------------------------------------------------------------- */
+
+
+/* -------------------------- [ Common Popup CSS ] -------------------------- */
+
+/* ---------- Popup Container ---------- */
+.popup_container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* align-items: flex-start; */
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--overlay);
+  z-index: 100;
+}
+
+/* .popup_container.active_scroll {
+  align-items: flex-start;
+  overflow-y: auto;
+} */
+
+
+/* ----- Popup Content ---------- */
+.popup_content {
+  width: 146.55rem;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 3rem;
+  margin: 5rem;
+  background: var(--color-white);
+  box-shadow: var(--shadow-popup);
+  border: 0.1rem solid var(--gray-light);
+  border-radius: 2.5rem;
+  position: relative;
+}
+
+/* ---------- Popups > .x_icon ----------  */
+.popup_content .x_icon {
+  display: flex;
+  justify-content: end;
+}
+
+.popup_content .x_icon button {
+  cursor: pointer !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3.2rem;
+  color: var(--color-black);
+  border: 2px solid var(--color-black);
+  background: transparent;
+  width: 4.8rem;
+  /* Ensure width and height are equal */
+  height: 4.8rem;
+  border-radius: 50%;
+  /* Ensures a perfect circle */
+}
+
+
+/* .popup_content .x_icon button img {
+  width: 4.2rem;
+  height: 4.2rem;
+} */
+
+/* Popup Primary Header */
+.popup_components .popup_primary_header {
+  font-size: 3rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+/* Popup Secondary Header */
+.popup_components .popup_secondary_header {
+  font-size: 2.4rem;
+  font-weight: 600;
+  margin-bottom: 4rem;
+}
+
+/* ----- Popup Components ----- */
+.popup_components {
+  padding: 0 6.75rem 6.75rem;
+}
+
+/* Input Fields */
+.poup-input {
+  margin: 1rem 0;
+  transition: all 0.3s ease;
+}
+
+.poup-input:focus {
+  box-shadow: 0 0 0.8rem rgba(0, 91, 187, 0.3);
+}
+
+/* Button */
+.popup_button {
+  margin-top: 4rem;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                              Individual Pages                              */
+/* -------------------------------------------------------------------------- */
+
+/* Admin > MyProfie.jsx */
+.admin_myprofile_content {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  /* align-items: center; */
+  gap: 6rem;
 }

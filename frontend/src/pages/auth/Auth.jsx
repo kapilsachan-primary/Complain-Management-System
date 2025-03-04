@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./auth-styles/Auth.css"; // Import the CSS file
 import LoginValidate from "./LoginValidation";
 import RegisterValidate from "./RegistrationValidation";
 import axios from "axios";

@@ -1,5 +1,4 @@
 import { useState,useEffect } from "react";
-import "../admin-styles/MyProfile.css"; // Import the CSS file
 import { Editform } from "./ProfileValidate";
 import { Resetpass } from "./ProfileValidate";
 import axios from "axios";
@@ -45,7 +44,7 @@ const MyProfile = () => {
           id:id,
           name:formData.name,
           email:formData.email,
-          contactno:formData.contactNo,
+          contactno:formData.contactno,
       }).then(res => {
         if(res.data.Status === true){
           alert(res.data.message)

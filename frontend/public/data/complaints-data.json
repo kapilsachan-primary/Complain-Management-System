@@ -1,0 +1,107 @@
+[
+  {
+    "complaintId": 1,
+    "status": "Resolved",
+    "subject": "Printer not working",
+    "department": "Biomedical Engineering",
+    "priority": "High"
+  },
+  {
+    "complaintId": 2,
+    "status": "Pending",
+    "subject": "Software installation required",
+    "department": "Applied Mechanics",
+    "priority": "Medium"
+  },
+  {
+    "complaintId": 3,
+    "status": "Resolved",
+    "subject": "System overheating",
+    "department": "Automobile Engineering",
+    "priority": "High"
+  },
+  {
+    "complaintId": 4,
+    "status": "Pending",
+    "subject": "Internet connectivity issue",
+    "department": "Automobile Engineering",
+    "priority": "Low"
+  },
+  {
+    "complaintId": 5,
+    "status": "Pending",
+    "subject": "Monitor flickering",
+    "department": "Automobile Engineering",
+    "priority": "Medium"
+  },
+  {
+    "complaintId": 6,
+    "status": "Resolved",
+    "subject": "Keyboard replacement",
+    "department": "Automobile Engineering",
+    "priority": "Low"
+  },
+  {
+    "complaintId": 7,
+    "status": "Pending",
+    "subject": "Email not syncing",
+    "department": "Civil Engineering",
+    "priority": "Medium"
+  },
+  {
+    "complaintId": 8,
+    "status": "Resolved",
+    "subject": "Mouse not functioning",
+    "department": "Automobile Engineering",
+    "priority": "Low"
+  },
+  {
+    "complaintId": 9,
+    "status": "Pending",
+    "subject": "Server downtime",
+    "department": "Automobile Engineering",
+    "priority": "High"
+  },
+  {
+    "complaintId": 10,
+    "status": "Resolved",
+    "subject": "Application crashing frequently",
+    "department": "Biomedical Engineering",
+    "priority": "High"
+  },
+  {
+    "complaintId": 11,
+    "status": "Pending",
+    "subject": "Data backup request",
+    "department": "Biomedical Engineering",
+    "priority": "Medium"
+  },
+  {
+    "complaintId": 12,
+    "status": "Resolved",
+    "subject": "Scanner not working",
+    "department": "Applied Mechanics ",
+    "priority": "Low"
+  },
+  {
+    "complaintId": 13,
+    "status": "Pending",
+    "subject": "Laptop battery replacement",
+    "department": "Automobile Engineering",
+    "priority": "Medium"
+  },
+  {
+    "complaintId": 14,
+    "status": "Resolved",
+    "subject": "VPN connectivity issue",
+    "department": "Civil Engineering",
+    "priority": "High"
+  },
+  {
+    "complaintId": 15,
+    "status": "Pending",
+    "subject": "Projector not turning on",
+    "department": "Applied Mechanics",
+    "priority": "Low"
+  }
+]

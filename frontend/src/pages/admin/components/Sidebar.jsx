@@ -1,5 +1,4 @@
 import React from "react";
-import "../admin-styles/Sidebar.css"; // Import the CSS file
 import axios from "axios";
 import { useEffect,useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -78,6 +77,20 @@ const Sidebar = ({ activePage, setActivePage }) => {
                             </div>
                         </div>
                     </li>
+                    <li
+                        className={`nav_item ${activePage === "ComplaintStatus" ? "active" : ""}`}
+                        onClick={() => setActivePage("ComplaintStatus")}
+                    >
+                        <div className="link_style">
+                            {/* <div className="nav_item_icon">
+                                <img src="assets/icons/technicians.svg" alt="Technicians Icon" />
+                            </div> */}
+                            <div className="nav_item_text">
+                                <span>Complaint Status</span>
+                            </div>
+                        </div>
+                    </li>
+
                 </ul>
 
 
