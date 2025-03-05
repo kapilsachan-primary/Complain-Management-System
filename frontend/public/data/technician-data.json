@@ -1,107 +1,77 @@
 [
   {
-    "complaintId": 1,
-    "status": "Resolved",
-    "subject": "Printer not working",
-    "department": "Biomedical Engineering",
-    "priority": "High"
+    "name": "Amit Sharma",
+    "contactno": "919876543210",
+    "email": "amit.sharma@example.com"
   },
   {
-    "complaintId": 2,
-    "status": "Pending",
-    "subject": "Software installation required",
-    "department": "Applied Mechanics",
-    "priority": "Medium"
+    "name": "Rajesh Kumar",
+    "contactno": "919812345678",
+    "email": "rajesh.kumar@example.com"
   },
   {
-    "complaintId": 3,
-    "status": "Resolved",
-    "subject": "System overheating",
-    "department": "Automobile Engineering",
-    "priority": "High"
+    "name": "Priya Verma",
+    "contactno": "919898765432",
+    "email": "priya.verma@example.com"
   },
   {
-    "complaintId": 4,
-    "status": "Pending",
-    "subject": "Internet connectivity issue",
-    "department": "Automobile Engineering",
-    "priority": "Low"
+    "name": "Suresh Yadav",
+    "contactno": "919834567890",
+    "email": "suresh.yadav@example.com"
   },
   {
-    "complaintId": 5,
-    "status": "Pending",
-    "subject": "Monitor flickering",
-    "department": "Automobile Engineering",
-    "priority": "Medium"
+    "name": "Neha Gupta",
+    "contactno": "919876123456",
+    "email": "neha.gupta@example.com"
   },
   {
-    "complaintId": 6,
-    "status": "Resolved",
-    "subject": "Keyboard replacement",
-    "department": "Automobile Engineering",
-    "priority": "Low"
+    "name": "Vikram Singh",
+    "contactno": "919854321098",
+    "email": "vikram.singh@example.com"
   },
   {
-    "complaintId": 7,
-    "status": "Pending",
-    "subject": "Email not syncing",
-    "department": "Civil Engineering",
-    "priority": "Medium"
+    "name": "Anjali Mehta",
+    "contactno": "919890123456",
+    "email": "anjali.mehta@example.com"
   },
   {
-    "complaintId": 8,
-    "status": "Resolved",
-    "subject": "Mouse not functioning",
-    "department": "Automobile Engineering",
-    "priority": "Low"
+    "name": "Manoj Tiwari",
+    "contactno": "919832145678",
+    "email": "manoj.tiwari@example.com"
   },
   {
-    "complaintId": 9,
-    "status": "Pending",
-    "subject": "Server downtime",
-    "department": "Automobile Engineering",
-    "priority": "High"
+    "name": "Ravi Chauhan",
+    "contactno": "919876234567",
+    "email": "ravi.chauhan@example.com"
   },
   {
-    "complaintId": 10,
-    "status": "Resolved",
-    "subject": "Application crashing frequently",
-    "department": "Biomedical Engineering",
-    "priority": "High"
+    "name": "Kiran Patel",
+    "contactno": "919898765321",
+    "email": "kiran.patel@example.com"
   },
   {
-    "complaintId": 11,
-    "status": "Pending",
-    "subject": "Data backup request",
-    "department": "Biomedical Engineering",
-    "priority": "Medium"
+    "name": "Pooja Das",
+    "contactno": "919845612378",
+    "email": "pooja.das@example.com"
   },
   {
-    "complaintId": 12,
-    "status": "Resolved",
-    "subject": "Scanner not working",
-    "department": "Applied Mechanics ",
-    "priority": "Low"
+    "name": "Deepak Joshi",
+    "contactno": "919834561209",
+    "email": "deepak.joshi@example.com"
   },
   {
-    "complaintId": 13,
-    "status": "Pending",
-    "subject": "Laptop battery replacement",
-    "department": "Automobile Engineering",
-    "priority": "Medium"
+    "name": "Sunita Rao",
+    "contactno": "919890567432",
+    "email": "sunita.rao@example.com"
   },
   {
-    "complaintId": 14,
-    "status": "Resolved",
-    "subject": "VPN connectivity issue",
-    "department": "Civil Engineering",
-    "priority": "High"
+    "name": "Arun Mishra",
+    "contactno": "919876543201",
+    "email": "arun.mishra@example.com"
   },
   {
-    "complaintId": 15,
-    "status": "Pending",
-    "subject": "Projector not turning on",
-    "department": "Applied Mechanics",
-    "priority": "Low"
+    "name": "Meena Reddy",
+    "contactno": "919812309876",
+    "email": "meena.reddy@example.com"
   }
 ]

@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import Dashboard from "./components/Dashboard";
 import MyProfile from "./components/MyProfile";
 import Technicians from "./components/Technicians";
+import ComplaintStatus from "./components/ComplaintStatus";
 
 const AdminDashboard = () => {
   const [activePage, setActivePage] = useState("Dashboard");
@@ -17,6 +18,8 @@ const AdminDashboard = () => {
         return <MyProfile />;
       case "Technicians":
         return <Technicians />;
+      case "ComplaintStatus":
+        return <ComplaintStatus />;
       default:
         return <Dashboard />;
     }

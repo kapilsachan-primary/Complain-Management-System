@@ -1,7 +1,0 @@
-.admin_myprofile_content{
-    display: flex;
-    flex-direction: column;
-    /* justify-content: center; */
-    /* align-items: center; */
-    gap: 6rem;
-}

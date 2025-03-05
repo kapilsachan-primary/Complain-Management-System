@@ -1,5 +1,4 @@
 import { useState,useEffect } from "react";
-import "../admin-styles/MyProfile.css"; // Import the CSS file
 import { Editform } from "./ProfileValidate";
 import { Resetpass } from "./ProfileValidate";
 import axios from "axios";

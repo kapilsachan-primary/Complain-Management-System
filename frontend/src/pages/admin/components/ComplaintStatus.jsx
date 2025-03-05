@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-const TechnicianDashboard = () => {
+const ComplaintStatus = () => {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
@@ -103,15 +103,7 @@ const TechnicianDashboard = () => {
   ];
 
   return (
-    <main className="main_content">
-
-      {/* Header */}
-      <header>
-        <section className="page_content_header">
-          <h1>Technician Dashboard</h1>
-          <p>Track, Update & Complete Your Service Requests</p>
-        </section>
-      </header>
+    <section>
 
       <div className="controls">
         <div className="filter-buttons">
@@ -144,8 +136,9 @@ const TechnicianDashboard = () => {
           className="table-content"
         />
       </div>
-    </main>
+
+    </section>
   );
 };
 
-export default TechnicianDashboard;
+export default ComplaintStatus;
