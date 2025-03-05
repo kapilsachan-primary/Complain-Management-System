@@ -45,14 +45,14 @@ const ComplaintStatus = () => {
   }, [searchText, statusFilter, data]);
 
   useEffect(()=>{
-    axios.get('http://localhost:3000/technician/status')
+    axios.get('http://localhost:3000/admin/status')
     .then( res=>{
       if(res.data.Status === "Success"){
           setname(res.data.name);
           setid(res.data.id);
       }
       else{
-        navigate("/auth");
+        navigate("/admin-login");
       }
     })
   },[])
