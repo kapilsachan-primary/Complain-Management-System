@@ -4,6 +4,7 @@ const router=express.Router();
 import { Admin } from "../models/Admin.js";
 import jwt from 'jsonwebtoken';
 import { Technician} from "../models/Technician.js";
+import { Complain } from "../models/Complain.js";
 router.post('/login', async(req,res)=>{
     const email=req.body.email;
     const password=req.body.password;
@@ -106,5 +107,46 @@ router.post("/details",async(req,res)=>{
             return res.json({Status: false,message: "Server error"}) 
         }
     }
+    if(fetch==='complain'){
+        try{
+            const complains= await Complain.find();
+            return res.json(complains);
+        }
+        catch(err){
+            return res.json({Status: false,message: "Server error"}) 
+        }
+    }
+    if(fetch==='selecttech'){
+        try{
+            const technicians= await Technician.find({}, 'name contactno');
+            return res.json(technicians);
+        }
+        catch(err){
+            return res.json({Status: false,message: "Server error"}) 
+        }
+    }
 });
+router.get('/complains/:id', async (req, res) => {
+    try {
+        const complaint = await Complain.findById(req.params.id);
+        if (!complaint) return res.status(404).json({ error: "Complaint not found" });
+        res.json(complaint);
+    } catch (error) {
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+router.put('/assigntechnician', async (req,res) =>{
+    const id=req.body.id;
+    const technician=req.body.technician;const technicianno=req.body.technicianno;
+    try{
+        const updatedcomplain=await Complain.findByIdAndUpdate({_id: id},{technician: technician,technicianno: technicianno},
+            { new:true,runValidators:true });
+            if(!updatedcomplain){
+                return res.json({Status: false,message: "Complaint Not Found"})       
+            }
+            return res.json({Status: true,message: "Complaint Updated"})
+    }catch(err){
+        return res.json({Status: false,message: "Server error"})
+    }
+})
 export {router as AdminRouter}

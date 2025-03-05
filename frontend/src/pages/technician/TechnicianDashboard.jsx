@@ -57,7 +57,7 @@ const TechnicianDashboard = () => {
           setid(res.data.id);
         }
         else {
-          navigate("/auth");
+          navigate("/technician-login");
         }
       })
   }, [])
