@@ -8,6 +8,9 @@ const Technician = () => {
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [technicianToDelete, setTechnicianToDelete] = useState(null);
+
   const [formData, setFormData] = useState({
     name: "",
     contactNo: "",
@@ -15,7 +18,7 @@ const Technician = () => {
     password: "",
     confirmpass: "",
   });
-  const [errors,seterrors]=useState({});
+  const [errors, seterrors] = useState({});
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
 
@@ -32,15 +35,15 @@ const Technician = () => {
     //   }
     // };
     // fetchData();
-    axios.post('http://localhost:3000/admin/details',{
-      fetch:'technician',
-      })
+    axios.post('http://localhost:3000/admin/details', {
+      fetch: 'technician',
+    })
       .then(res => {
-      setData(res.data);
-      console.log(res.data);
-      setFilteredData(res.data);
+        setData(res.data);
+        console.log(res.data);
+        setFilteredData(res.data);
       })
-      .catch(err => {console.log(res.data.message)});
+      .catch(err => { console.log(res.data.message) });
   }, []);
 
   useEffect(() => {
@@ -69,10 +72,10 @@ const Technician = () => {
   const handleAddTechnician = async (e) => {
     e.preventDefault();
     console.log("Adding Technician:", formData);
-  
+
     const checkerr = RegisterValidate(formData);
     seterrors(checkerr);
-  
+
     if (Object.entries(checkerr).length === 0) {
       try {
         const res = await axios.post("http://localhost:3000/technician/register", {
@@ -81,11 +84,11 @@ const Technician = () => {
           contactno: formData.contactNo,
           password: formData.password,
         });
-  
+
         if (res.data.status) {
           // alert(res.data.message);
           setShowPopup(false);
-  
+
           // Update state to show new technician in the table immediately
           const newTechnician = {
             name: formData.name,
@@ -94,7 +97,7 @@ const Technician = () => {
           };
           setData((prevData) => [...prevData, newTechnician]);
           setFilteredData((prevData) => [...prevData, newTechnician]);
-  
+
           // Reset form data
           setFormData({
             name: "",
@@ -113,7 +116,28 @@ const Technician = () => {
       setTimeout(() => seterrors({}), 3000);
     }
   };
-  
+
+
+  const handleDeleteClick = (technician) => {
+    setTechnicianToDelete(technician);
+    setShowDeletePopup(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!technicianToDelete) return;
+
+    try {
+      await axios.post("http://localhost:3000/technician/delete", { id: technicianToDelete.id });
+
+      setData((prevData) => prevData.filter((tech) => tech.id !== technicianToDelete.id));
+      setFilteredData((prevData) => prevData.filter((tech) => tech.id !== technicianToDelete.id));
+
+      setShowDeletePopup(false);
+      setTechnicianToDelete(null);
+    } catch (error) {
+      console.error("Error deleting technician:", error);
+    }
+  };
 
   const columns = [
     { name: "Name", selector: (row) => row.name, sortable: true, center: true },
@@ -123,7 +147,7 @@ const Technician = () => {
       name: "Actions",
       center: true,
       cell: (row) => (
-        <button className="btn-view" onClick={() => alert(`Delete Technician: ${row.name}`)}>
+        <button className="btn-view" onClick={() => handleDeleteClick(row)}>
           <i className="fa-regular fa-trash-can"></i>
         </button>
       ),
@@ -161,7 +185,7 @@ const Technician = () => {
           <div className="popup_content">
             <div className="x_icon" onClick={() => setShowPopup(false)}>
               <button className="close_popup">
-                <i className="fa-solid fa-xmark"></i>
+                <img src="/assets/icons/x-icon.svg" alt="Close Sidebar" />
               </button>
             </div>
             <form className="popup_components ">
@@ -176,9 +200,9 @@ const Technician = () => {
               {errors.password && <div className='authform-error'>{errors.password}</div>}
               <input type="password" placeholder="Confirm Password" className="poup-input" name="confirmpass" onChange={handleInputChange} />
               {errors.confirmpass && <div className='authform-error'>{errors.confirmpass}</div>}
-              <section class="buttons_area_columns popup_button">
-                <section class="btn_fill_primary">
-                  <button type="submit" class="main_button" onClick={handleAddTechnician}>
+              <section className="buttons_area_columns popup_button">
+                <section className="btn_fill_primary">
+                  <button type="submit" className="main_button" onClick={handleAddTechnician}>
                     <span>Add</span>
                   </button>
                 </section>
@@ -187,6 +211,30 @@ const Technician = () => {
           </div>
         </div>
       )}
+
+      {showDeletePopup && (
+        <div className="popup_container ">
+          <div className="popup_content delete_popup_content">
+            <div className="popup_components">
+              <h2>Are you sure?</h2>
+              <p>Do you really want to delete <span> "{technicianToDelete?.name}" </span>?</p>
+              <section className="buttons_area_columns delete_user_popup_btns" >
+                <section className="btn_fill_primary" onClick={() => setShowDeletePopup(false)}>
+                  <button className="main_button">
+                    <span>Cancel</span>
+                  </button>
+                </section>
+                <section className="btn_outlined_primary_red" onClick={confirmDelete}>
+                  <button className="main_button">
+                    <span>Delete</span>
+                  </button>
+                </section>
+              </section>
+            </div>
+          </div>
+        </div>
+      )}
+
     </>
   );
 };

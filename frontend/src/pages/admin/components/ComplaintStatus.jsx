@@ -2,15 +2,20 @@ import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
 const ComplaintStatus = () => {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
-  const [name,setname]=useState('');
-  const [id,setid]=useState('');
-  axios.defaults.withCredentials=true;
-  const navigate=useNavigate();
+  const [name, setName] = useState("");
+  const [id, setId] = useState("");
+  const [selectedComplaint, setSelectedComplaint] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  axios.defaults.withCredentials = true;
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -44,32 +49,40 @@ const ComplaintStatus = () => {
     setFilteredData(filtered);
   }, [searchText, statusFilter, data]);
 
-  useEffect(()=>{
-    axios.get('http://localhost:3000/admin/status')
-    .then( res=>{
-      if(res.data.Status === "Success"){
-          setname(res.data.name);
-          setid(res.data.id);
-      }
-      else{
+  useEffect(() => {
+    axios.get("http://localhost:3000/admin/status").then((res) => {
+      if (res.data.Status === "Success") {
+        setName(res.data.name);
+        setId(res.data.id);
+      } else {
         navigate("/admin-login");
       }
-    })
-  },[])
+    });
+  }, []);
+
+  const handleViewComplaint = (complaint) => {
+    setSelectedComplaint(complaint);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedComplaint(null);
+  };
 
   const columns = [
-    { 
+    {
       name: <span className="column_header">ID</span>,
-      selector: (row) => row.complaintId, 
-      sortable: true, 
+      selector: (row) => row.complaintId,
+      sortable: true,
       center: true,
       wrap: true,
     },
     {
       name: <span className="column_header">Department</span>,
-      selector: (row) => row.department, 
-      sortable: true, 
-      center: true
+      selector: (row) => row.department,
+      sortable: true,
+      center: true,
     },
     {
       name: <span className="column_header">Status</span>,
@@ -78,11 +91,11 @@ const ComplaintStatus = () => {
       center: true,
       cell: (row) => <span className={`status ${row.status.toLowerCase().replace(" ", "-")}`}>{row.status}</span>,
     },
-    { 
+    {
       name: <span className="column_header">Subject</span>,
-      selector: (row) => row.subject, 
-      sortable: true, 
-      center: true 
+      selector: (row) => row.subject,
+      sortable: true,
+      center: true,
     },
     {
       name: <span className="column_header">Priority</span>,
@@ -95,7 +108,7 @@ const ComplaintStatus = () => {
       name: <span className="column_header">Actions</span>,
       center: true,
       cell: (row) => (
-        <button className="btn-view" onClick={() => alert(`Complaint ID: ${row.complaintId}`)}>
+        <button className="btn-view" onClick={() => handleViewComplaint(row)}>
           <i className="fa-regular fa-eye"></i>
         </button>
       ),
@@ -104,10 +117,9 @@ const ComplaintStatus = () => {
 
   return (
     <section>
-
       <div className="controls">
         <div className="filter-buttons">
-          {['All', 'Resolved', 'Pending'].map((status) => (
+          {["All", "Resolved", "Pending"].map((status) => (
             <button key={status} className={statusFilter === status ? "active" : ""} onClick={() => setStatusFilter(status)}>
               {status}
             </button>
@@ -126,16 +138,181 @@ const ComplaintStatus = () => {
       </div>
 
       <div className="datatable-container">
-        <DataTable
-          columns={columns}
-          data={filteredData}
-          pagination
-          highlightOnHover
-          striped
-          responsive
-          className="table-content"
-        />
+        <DataTable columns={columns} data={filteredData} pagination highlightOnHover striped responsive className="table-content" />
       </div>
+
+      {isModalOpen && selectedComplaint && (
+        <div className="popup_container active_scroll">
+          <div className="popup_content">
+
+            <div className="x_icon" onClick={closeModal}>
+              <button className="close_popup">
+                <img src="/assets/icons/x-icon.svg" alt="Close Sidebar" />
+              </button>
+            </div>
+
+            <form className="popup_components">
+              <h1 className="popup_primary_header">Complaint Status Details</h1>
+
+              <div className="top_cont">
+                <div className="token_no_component">
+                  <p>
+                    Token No: <span>{selectedComplaint.complaintId}</span>
+                  </p>
+                </div>
+                <div className="status_component">
+                  <div>
+                    <p>Status:</p>
+                    <span className={`status ${selectedComplaint.status.toLowerCase()}`}>
+                      {selectedComplaint.status}
+                    </span>
+                  </div>
+                  <div>
+                    <p>Priority:</p>
+                    <span className={`priority ${selectedComplaint.priority.toLowerCase()}`}>
+                      {selectedComplaint.priority}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="input_area_wrapper">
+                <section className="input_area_columns">
+                  <div className="input_area_two_columns">
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="issue_date">Issue Date:</label>
+                      </div>
+                      <input
+                        type="date"
+                        id="issue_date"
+                        name="issue_date"
+                      />
+                    </section>
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="close_date">Close Date:</label>
+                      </div>
+                      <input
+                        type="date"
+                        id="close_date"
+                        name="close_date"
+                      />
+                    </section>
+                  </div>
+
+                  <div className="input_area_two_columns">
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="facility_name">Facility Name:</label>
+                      </div>
+                      <input type="text" id="facility_name" name="facility_name" className="custom-input" />
+                    </section>
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="facility_no">Facility No:</label>
+                      </div>
+                      <input type="text" id="facility_no" name="facility_no" className="custom-input" />
+                    </section>
+                  </div>
+
+                  <div className="input_area_two_columns">
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="department">Department:</label>
+                      </div>
+                      <input
+                        type="text"
+                        id="department"
+                        name="department"
+                        value={selectedComplaint.department}
+                      />
+                    </section>
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="room_no">Room No:</label>
+                      </div>
+                      <input type="text" id="room_no" name="room_no" className="custom-input" />
+                    </section>
+                  </div>
+
+                  <section>
+                    <div className="input_label">
+                      <label htmlFor="subject">Subject:</label>
+                    </div>
+                    <input
+                      type="text"
+                      id="subject"
+                      name="subject"
+                      className="custom-input"
+                      value={selectedComplaint.subject}
+                    />
+                  </section>
+
+                  <section>
+                    <div className="input_label">
+                      <label htmlFor="complaintDes">Description:</label>
+                    </div>
+                    <textarea
+                      name="complaintDes"
+                      id="complaintDes"
+                      className="custom-textarea"
+                    ></textarea>
+                  </section>
+
+                  <div className="input_area_two_columns">
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="technician_name">Technician Name:</label>
+                      </div>
+                      <div className="select_container">
+                        <select id="technician_name" name="technician_name">
+                          <option value="" disabled hidden selected>
+                            Select Technician
+                          </option>
+                          <option value="Chhota Bheem">Chhota Bheem</option>
+                          <option value="Chutki">Chutki</option>
+                          <option value="Raju">Raju</option>
+                          <option value="Jaggu Bandar">Jaggu Bandar</option>
+                          <option value="Kalia">Kalia</option>
+                          <option value="Dholu-Bholu">Dholu-Bholu</option>
+                        </select>
+                      </div>
+                    </section>
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="technician_contact">Technician Contact:</label>
+                      </div>
+                      <input type="tel" id="technician_contact" name="technician_contact" className="custom-input" />
+                    </section>
+                  </div>
+
+                  <section>
+                    <div className="input_label">
+                      <label htmlFor="complaintAction">Action:</label>
+                    </div>
+                    <textarea
+                      name="complaintAction"
+                      id="complaintAction"
+                      className="custom-textarea"
+                    ></textarea>
+                  </section>
+                </section>
+              </div>
+
+              <section className="buttons_area_columns popup_button">
+                <section className="btn_fill_primary">
+                  <button type="submit" className="main_button">
+                    <span>Submit</span>
+                  </button>
+                </section>
+              </section>
+            </form>
+
+
+          </div>
+        </div>
+      )}
 
     </section>
   );

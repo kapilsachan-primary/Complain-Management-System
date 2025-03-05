@@ -149,7 +149,7 @@ const MyProfile = () => {
                 <section className="input_area_columns">
                   <section>
                     <div className="input_label">
-                      <label htmlFor="password">Password:</label>
+                      <label htmlFor="password">Reset Password:</label>
                     </div>
                     <input type="password" id="password" name="password" placeholder="Enter your password" value={password} onChange={(e)=>{setpassword(e.target.value)}} />
                     {errors.password && <div className="authform-error">{errors.password}</div>}
