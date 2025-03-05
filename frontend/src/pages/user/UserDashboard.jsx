@@ -156,9 +156,9 @@ export default function UserDashboard() {
             </section>
           </div>
 
-          <section class="buttons_area_columns">
-            <section class="btn_fill_primary">
-              <button type="submit" class="main_button">
+          <section className="buttons_area_columns">
+            <section className="btn_fill_primary">
+              <button type="submit" className="main_button">
                 <span>Add</span>
               </button>
             </section>

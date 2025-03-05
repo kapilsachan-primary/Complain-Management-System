@@ -233,20 +233,6 @@ h6 {
 
 
 /* -------------------------------------------------------------------------- */
-/*                                  [ Flex ]                                  */
-/* -------------------------------------------------------------------------- */
-
-.dfr {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-
-
-
-
-/* -------------------------------------------------------------------------- */
 /*                          [ Form Components Style ]                         */
 /* -------------------------------------------------------------------------- */
 
@@ -384,6 +370,9 @@ textarea:focus {
 }
 
 
+
+
+
 /* -------------------------------------------------------------------------- */
 /*                                 [ Buttons ]                                */
 /* -------------------------------------------------------------------------- */
@@ -404,7 +393,7 @@ textarea:focus {
 }
 
 /* ---------- Buttons Area Columns (Secondary) ---------- */
-.buttons_area_columns_secondary {
+/* .buttons_area_columns_secondary {
   display: flex;
   align-items: center;
   gap: 1.5rem;
@@ -415,10 +404,10 @@ textarea:focus {
   font-weight: 500;
   min-height: 3.5rem;
   padding: 1rem 2rem;
-}
+} */
 
 /* ---------- Buttons Area Columns (Tertiary) ---------- */
-.buttons_area_columns_tertiary {
+/* .buttons_area_columns_tertiary {
   display: flex;
   align-items: center;
   gap: 1.5rem;
@@ -429,23 +418,23 @@ textarea:focus {
   font-weight: 500;
   min-height: 3.5rem;
   padding: 0.5rem 1.5rem;
-}
+} */
 
 /*  ---------- Buttons Area Rows (Primary) ---------- */
-.buttons_area_rows {
+/* .buttons_area_rows {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 2.5rem;
-}
+} */
 
 /* Buttons Area Rows > Main Button */
-.buttons_area_rows .main_button {
+/* .buttons_area_rows .main_button {
   font-size: 2rem;
   font-weight: 500;
   min-height: 6rem;
   padding: 1rem 4.5rem;
-}
+} */
 
 /* ---------- Outlined Button (Style) ---------- */
 .btn_outlined_primary button {
@@ -480,23 +469,24 @@ textarea:focus {
 }
 
 
-/* ---------- LogOut Btn ---------- */
-
-.logout_btn {
-  font-size: 2rem;
-  font-weight: 500;
-  min-height: 6rem;
-  padding: 1rem 3.5rem;
-  border-radius: 2rem;
+/* ---------- Logout Fill Button (Style) ---------- */
+.logout_btn_fill_primary {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  min-height: 5rem;
+  padding: 0 2.5rem;
+  border-radius: 0.8rem;
   background-color: var(--color-remy);
   color: var(--color-amaranth);
   border: 1px solid var(--color-crimson);
 }
 
 
-/* ---------- Add Btn ---------- */
-
-.add_btn {
+/* ---------- Icon Fill Button (Style) ---------- */
+.icon_btn_fill_primary {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -512,8 +502,11 @@ textarea:focus {
 }
 
 
+
+
+
 /* -------------------------------------------------------------------------- */
-/*                                   Status                                   */
+/*                               [ Status Tags ]                              */
 /* -------------------------------------------------------------------------- */
 
 /* Status data (*-status)  */
@@ -558,7 +551,6 @@ textarea:focus {
   border: 1px solid var(--color-crimson);
 }
 
-
 /* tatus data (*-dot)  */
 active-dot {
   width: 1.2rem;
@@ -584,8 +576,6 @@ inactive-dot {
 /*                         [ Sidebar Navigation CSS ]                         */
 /* -------------------------------------------------------------------------- */
 
-
-
 .sidebar_navigation {
   position: relative;
   display: flex;
@@ -609,17 +599,20 @@ inactive-dot {
   gap: 8rem;
 }
 
+.sidebar_navigation_container::-webkit-scrollbar {
+  display: none;
+}
 
-/* ---------- Sidebar Navigation X icon (Mobile) ---------- */
+.sidebar_overlay {
+  display: none;
+}
+
+/* Sidebar Navigation X icon (Mobile) */
 #close_mobile_sidebar_navigation_btn {
   display: none;
   cursor: pointer;
 }
 
-
-
-
-/* ----- Sidebar Navigation Logo ----- */
 .sidebar_navigation .sidebar_nav_logo {
   display: flex;
   justify-content: center;
@@ -630,31 +623,19 @@ inactive-dot {
   text-decoration: line-through;
 }
 
-
-
-/* ---------- Sidebar Navigation List ---------- */
 .sidebar_navigation .nav_list {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4.8rem;
+  gap: 3.5rem;
 }
 
 .sidebar_navigation .nav_list .nav_item {
-  height: 3.5rem;
-  padding: 0 2.4rem;
+  height: 5rem;
+  padding: 0 2.4rem 0 4.4rem;
   display: flex;
   align-items: center;
-  justify-content: center;
   position: relative;
-}
-
-.sidebar_navigation.open .nav_list .nav_item {
-  padding: 0 4.4rem;
-}
-
-.sidebar_navigation.open .nav_list .nav_item {
-  justify-content: start;
 }
 
 .sidebar_navigation .nav_list .nav_item.active::before,
@@ -665,10 +646,10 @@ inactive-dot {
   top: 0rem;
   bottom: 0;
   z-index: 1;
-  width: 0.5rem;
+  width: 0.6rem;
   background-color: var(--color-white);
-  border-top-right-radius: 0.3rem;
-  border-bottom-right-radius: 0.3rem;
+  border-top-right-radius: 0.6rem;
+  border-bottom-right-radius: 0.6rem;
 }
 
 .sidebar_navigation .nav_list .nav_item .link_style {
@@ -682,10 +663,6 @@ inactive-dot {
   transition: padding 0.5s ease;
 }
 
-.sidebar_navigation.open .nav_list .nav_item .link_style {
-  width: 100%;
-  padding-left: 0 1.5rem;
-}
 
 .sidebar_navigation .nav_list .nav_item_icon {
   display: flex;
@@ -695,12 +672,11 @@ inactive-dot {
 }
 
 .sidebar_navigation .nav_list .nav_item_icon img {
-  width: 2.25rem;
+  color: var(--color-white);
+  width: 3.5rem;
+  height: 3.5rem;
 }
 
-.sidebar_navigation.open .nav_list .nav_item_icon img {
-  width: 2.5rem;
-}
 
 .sidebar_navigation .nav_list .nav_item_text {
   width: 100%;
@@ -708,10 +684,8 @@ inactive-dot {
   font-weight: 400;
   position: relative;
   cursor: pointer;
-}
-
-.sidebar_navigation.open .nav_list .nav_item_text {
   display: flex;
+  justify-content: center;
   align-items: center;
 }
 
@@ -721,12 +695,6 @@ inactive-dot {
 /* -------------------------------------------------------------------------- */
 /*                            [ Main Content CSS ]                            */
 /* -------------------------------------------------------------------------- */
-
-.body-wrapper {
-  display: flex;
-  height: 100vh;
-  gap: 2.5rem;
-}
 
 .main_content {
   flex: 1;
@@ -739,39 +707,32 @@ inactive-dot {
 
 
 /* ------------------------ [ Main Content > Header ] ----------------------- */
+
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-bottom: 2rem;
   border-bottom: 0.2rem solid var(--color-silver);
+  margin-bottom: 4rem;
 }
 
-
-/* ---------- Page Content Header (Common) ---------- */
-.page_content_header {
+header .page_content_header {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.page_content_header h1 {
+header .page_content_header h1 {
   font-size: 3rem;
   font-weight: 600;
   color: var(--color-black);
 }
 
-.page_content_header p {
+header .page_content_header p {
   font-size: 1.6rem;
   font-weight: 400;
   color: var(--color-deepskyblue);
-}
-
-
-/* ---------- Header ---------- */
-
-header {
-  margin-bottom: 4rem;
 }
 
 /* Header Action btns */
@@ -779,47 +740,18 @@ header .head_action_btns {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  gap: 4rem;
 }
 
-header .head_action_btns button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-header .head_action_btns .cloud_btn img,
-header .head_action_btns .notification_btn img,
-header .head_action_btns .user_details_btn .user_icon img {
-  width: 5rem;
-  height: 5rem;
-  border-radius: 50%;
-}
-
-header .head_action_btns .user_details_btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
+/* Hamburger Menu (Mobile) */
+#hamburger_Menu {
+  display: none;
   cursor: pointer;
 }
 
-header .head_action_btns .user_details_btn .user_icon {
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-aliceblue);
 
-}
 
-header .head_action_btns .user_details_btn .down_icon i {
-  font-size: 1.4rem;
-  color: var(--color-black);
-  position: relative;
-}
-
-/* ------------------------- Common DataTable Style ------------------------- */
+/* ---------------- [ Main Content > Common DataTable Style ] --------------- */
 
 .controls {
   display: flex;
@@ -926,10 +858,222 @@ header .head_action_btns .user_details_btn .down_icon i {
 }
 
 
+/* ------------------- [ Main Content > Individual Pages ] ------------------ */
 
-/* ------------------------------- Auth Forms ------------------------------- */
+/* ---------- Admin Dashboard ---------- */
 
-/* Auth Container with Stylish Gradient */
+.admin-dashboard-wrapper {
+  display: flex;
+  height: 100vh;
+}
+
+/* Admin Dashboard > Dashboard */
+.page_content_section.dashboard_content {
+  gap: 4rem;
+}
+
+.dashboard_overview {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard_overview .head_container h2 {
+  font-size: 2.4rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.dashboard_overview .head_container p {
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--color-deepskyblue);
+}
+
+.overview_cards {
+  display: flex;
+  align-items: flex-end;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 2.5rem;
+  row-gap: 3rem;
+  display: flex;
+  align-items: flex-end;
+}
+
+@media (max-width: 600px) {
+  .overview_cards {
+    justify-content: center;
+  }
+}
+
+.overview_cards .stats_card_wrapper {
+  flex: 1;
+  height: 22rem;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+}
+
+.overview_cards .stats_card_wrapper .stats_card {
+  flex: 1;
+  width: 28rem;
+  /* height: 18rem; */
+}
+
+.overview_cards .stats_card_wrapper .stats_card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 4rem;
+  background-color: var(--color-white);
+  border-radius: 2.5rem;
+  padding: 2.5rem 3rem;
+  box-shadow: var(--shadow-card);
+  white-space: nowrap;
+}
+
+.overview_cards .stats_card_wrapper .stats_card .card__details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.overview_cards .stats_card_wrapper .stats_card .card__details .card__head {
+  font-size: 2.2rem;
+  font-weight: 500;
+  font-family: var(--font-tertiary);
+  color: var(--color-ashes);
+}
+
+.overview_cards .stats_card_wrapper .stats_card .card__details .card__count {
+  font-size: 3rem;
+  font-weight: 600;
+  color: var(--color-black);
+  margin-bottom: 0rem;
+}
+
+.overview_cards .stats_card_wrapper .stats_card .card__head {
+  font-size: 1.6rem;
+  font-weight: 500;
+  font-family: var(--font-tertiary);
+  color: var(--color-ashes);
+}
+
+.overview_cards .stats_card_wrapper .stats_card .card__more_info {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.overview_cards .stats_card_wrapper .stats_card .card__more_info .info_right_icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.overview_cards .stats_card_wrapper .stats_card .card__more_info .info_right_icon i {
+  color: var(--color-white);
+  font-size: 1rem;
+}
+
+.overview_cards .stats_card_wrapper .stats_card .card__more_info a {
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+.overview_cards .stats_card_wrapper .stats_card .stats_card_icon {
+  position: absolute;
+  top: 0rem;
+  right: 2.5rem;
+  padding: 2rem;
+  width: 7rem;
+  height: 7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 3rem;
+  color: var(--color-white);
+}
+
+.overview_cards .stats_card_wrapper:nth-child(1) .info_right_icon,
+.overview_cards .stats_card_wrapper:nth-child(1) .stats_card_icon {
+  background-color: var(--color-deepskyblue);
+}
+
+.overview_cards .stats_card_wrapper:nth-child(2) .info_right_icon,
+.overview_cards .stats_card_wrapper:nth-child(2) .stats_card_icon {
+  background-color: var(--color-light-coral);
+}
+
+.overview_cards .stats_card_wrapper:nth-child(3) .info_right_icon,
+.overview_cards .stats_card_wrapper:nth-child(3) .stats_card_icon {
+  background-color: var(--color-lavender-indigo);
+}
+
+.overview_cards .stats_card_wrapper:nth-child(4) .info_right_icon,
+.overview_cards .stats_card_wrapper:nth-child(4) .stats_card_icon {
+  background-color: var(--color-maize);
+}
+
+.overview_cards .stats_card_wrapper:nth-child(1) .card__more_info span {
+  color: var(--color-deepskyblue);
+}
+
+.overview_cards .stats_card_wrapper:nth-child(2) .card__more_info span {
+  color: var(--color-light-coral);
+}
+
+.overview_cards .stats_card_wrapper:nth-child(3) .card__more_info span {
+  color: var(--color-lavender-indigo);
+}
+
+.overview_cards .stats_card_wrapper:nth-child(4) .card__more_info span {
+  color: var(--color-maize);
+}
+
+.overview_cards .stats_card_wrapper:nth-child(1) .stats_card_icon {
+  box-shadow: 0 5px 2px rgba(0, 161, 209, 0.3);
+}
+
+.overview_cards .stats_card_wrapper:nth-child(2) .stats_card_icon {
+  box-shadow: 0 5px 2px rgba(238, 134, 123, 0.3);
+
+}
+
+.overview_cards .stats_card_wrapper:nth-child(3) .stats_card_icon {
+  box-shadow: 0 5px 2px rgba(144, 90, 223, 0.3);
+
+}
+
+.overview_cards .stats_card_wrapper:nth-child(4) .stats_card_icon {
+  box-shadow: 0 5px 2px rgba(244, 196, 62, 0.3);
+
+}
+
+
+/* Admin Dashboard > MyProfie.jsx */
+.admin_myprofile_content {
+  display: flex;
+  flex-direction: column;
+  gap: 6rem;
+}
+
+
+
+
+
+
+/* -------------------------------------------------------------------------- */
+/*                               [ Auth Forms ]                               */
+/* -------------------------------------------------------------------------- */
+
 .auth-container {
   display: flex;
   justify-content: center;
@@ -940,7 +1084,6 @@ header .head_action_btns .user_details_btn .down_icon i {
   animation: gradientAnimation 10s ease infinite;
 }
 
-/* Gradient Animation */
 @keyframes gradientAnimation {
   0% {
     background-position: 0% 50%;
@@ -955,7 +1098,6 @@ header .head_action_btns .user_details_btn .down_icon i {
   }
 }
 
-/* Auth Box */
 .auth-box {
   background: var(--color-white);
   padding: 5rem 3rem;
@@ -970,7 +1112,6 @@ header .head_action_btns .user_details_btn .down_icon i {
   transform: scale(1.03);
 }
 
-/* Heading */
 .auth-box h2 {
   font-size: 3.2rem;
   font-family: var(--font-primary);
@@ -979,7 +1120,6 @@ header .head_action_btns .user_details_btn .down_icon i {
   margin-bottom: 1.5rem;
 }
 
-/* Input Fields */
 .auth-input {
   margin: 1rem 0;
   transition: all 0.3s ease;
@@ -989,7 +1129,6 @@ header .head_action_btns .user_details_btn .down_icon i {
   box-shadow: 0 0 0.8rem rgba(0, 91, 187, 0.3);
 }
 
-/* Button */
 .auth-button {
   width: 100%;
   padding: 1.2rem;
@@ -1009,7 +1148,6 @@ header .head_action_btns .user_details_btn .down_icon i {
   background: var(--color-black);
 }
 
-/* Toggle Text */
 .toggle-text {
   margin-top: 1.5rem;
   color: var(--color-deepskyblue);
@@ -1029,13 +1167,9 @@ header .head_action_btns .user_details_btn .down_icon i {
 
 
 /* -------------------------------------------------------------------------- */
-/*                                 Popups CSS                                 */
+/*                               [ Popups CSS ]                               */
 /* -------------------------------------------------------------------------- */
 
-
-/* -------------------------- [ Common Popup CSS ] -------------------------- */
-
-/* ---------- Popup Container ---------- */
 .popup_container {
   position: fixed;
   top: 0;
@@ -1057,8 +1191,6 @@ header .head_action_btns .user_details_btn .down_icon i {
   overflow-y: auto;
 } */
 
-
-/* ----- Popup Content ---------- */
 .popup_content {
   width: 146.55rem;
   max-width: 100%;
@@ -1073,7 +1205,6 @@ header .head_action_btns .user_details_btn .down_icon i {
   position: relative;
 }
 
-/* ---------- Popups > .x_icon ----------  */
 .popup_content .x_icon {
   display: flex;
   justify-content: end;
@@ -1089,38 +1220,31 @@ header .head_action_btns .user_details_btn .down_icon i {
   border: 2px solid var(--color-black);
   background: transparent;
   width: 4.8rem;
-  /* Ensure width and height are equal */
   height: 4.8rem;
   border-radius: 50%;
-  /* Ensures a perfect circle */
 }
-
 
 /* .popup_content .x_icon button img {
   width: 4.2rem;
   height: 4.2rem;
 } */
 
-/* Popup Primary Header */
 .popup_components .popup_primary_header {
   font-size: 3rem;
   font-weight: 600;
   margin-bottom: 2rem;
 }
 
-/* Popup Secondary Header */
 .popup_components .popup_secondary_header {
   font-size: 2.4rem;
   font-weight: 600;
   margin-bottom: 4rem;
 }
 
-/* ----- Popup Components ----- */
 .popup_components {
   padding: 0 6.75rem 6.75rem;
 }
 
-/* Input Fields */
 .poup-input {
   margin: 1rem 0;
   transition: all 0.3s ease;
@@ -1130,21 +1254,6 @@ header .head_action_btns .user_details_btn .down_icon i {
   box-shadow: 0 0 0.8rem rgba(0, 91, 187, 0.3);
 }
 
-/* Button */
 .popup_button {
   margin-top: 4rem;
-}
-
-
-/* -------------------------------------------------------------------------- */
-/*                              Individual Pages                              */
-/* -------------------------------------------------------------------------- */
-
-/* Admin > MyProfie.jsx */
-.admin_myprofile_content {
-  display: flex;
-  flex-direction: column;
-  /* justify-content: center; */
-  /* align-items: center; */
-  gap: 6rem;
 }

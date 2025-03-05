@@ -1,4 +1,98 @@
 /* -------------------------------------------------------------------------- */
+/*                            [ Layout Adjustment ]                           */
+/* -------------------------------------------------------------------------- */
+
+@media (max-width: 1024px) {
+
+    /* ---------- [ Hide/Show Components ] ---------- */
+
+    /* Show the components */
+    #close_mobile_sidebar_navigation_btn,
+    #hamburger_Menu,
+    .sidebar_overlay {
+        display: initial;
+    }
+
+    /* ---------- [ Sidebar Navigation CSS ] ---------- */
+
+    .sidebar_navigation {
+        position: fixed;
+        z-index: 100;
+        top: 0;
+        left: 0;
+        width: 40rem;
+        height: 100vh;
+        margin: 0;
+        border-radius: 0;
+        transition: all 0.5s ease;
+        max-height: initial;
+        /* background: white; */
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar_navigation.mob_close {
+        left: -40rem;
+    }
+
+    .sidebar_navigation.mob_show {
+        left: 0;
+    }
+
+    /* Overlay for Sidebar */
+    .sidebar_overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 99;
+        transition: all 0.3s ease;
+    }
+
+    /* Hide overlay when sidebar is closed */
+    .sidebar_navigation.mob_close+.sidebar_overlay {
+        display: none;
+    }
+
+    .sidebar_navigation .sidebar_nav_logo {
+        justify-content: start;
+        padding: 0 5.4rem;
+    }
+
+    #close_mobile_sidebar_navigation_btn {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+    }
+
+    #close_mobile_sidebar_navigation_btn img {
+        width: 4rem;
+    }
+
+
+    .sidebar_navigation .nav_list .nav_item {
+        height: 5rem;
+        padding: 0 2.4rem 0 5.4rem;
+        display: flex;
+        align-items: center;
+        position: relative;
+    }
+
+    /* ---------- Main Content > Header ---------- */
+
+    #hamburger_Menu {
+        font-size: 2.8rem;
+        color: var(--color-deepskyblue);
+    }
+
+}
+
+
+
+
+
+/* -------------------------------------------------------------------------- */
 /*                         [ Responsive Font Scaling ]                        */
 /* -------------------------------------------------------------------------- */
 

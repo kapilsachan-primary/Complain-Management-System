@@ -80,6 +80,7 @@ const MyProfile = () => {
 
   return (
     <section className="admin_myprofile_content">
+      
       <section className="buttons_area_columns">
         {/* Edit Profile Button */}
         <section className={activeForm === "edit" ? "btn_fill_primary" : "btn_outlined_primary"}>

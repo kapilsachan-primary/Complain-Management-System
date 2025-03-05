@@ -66,34 +66,54 @@ const Technician = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleAddTechnician = (e) => {
+  const handleAddTechnician = async (e) => {
     e.preventDefault();
     console.log("Adding Technician:", formData);
-      const checkerr = RegisterValidate(formData);
-      seterrors(checkerr);
-      console.log(Object.entries(checkerr).length);
-      if (Object.entries(checkerr).length === 0) {
-        axios.post("http://localhost:3000/technician/register",{
-          name:formData.name,
-          email:formData.email,
-          contactno:formData.contactNo,
-          password:formData.password,
-        }).then(res =>{
-             // console.log(res);
-              if(res.data.status){
-              alert(res.data.message);
-              setShowPopup(false);
-              }
-              else
-              alert(res.data.message);
-        }).catch(err =>{
-          console.log(err);
-        })
+  
+    const checkerr = RegisterValidate(formData);
+    seterrors(checkerr);
+  
+    if (Object.entries(checkerr).length === 0) {
+      try {
+        const res = await axios.post("http://localhost:3000/technician/register", {
+          name: formData.name,
+          email: formData.email,
+          contactno: formData.contactNo,
+          password: formData.password,
+        });
+  
+        if (res.data.status) {
+          // alert(res.data.message);
+          setShowPopup(false);
+  
+          // Update state to show new technician in the table immediately
+          const newTechnician = {
+            name: formData.name,
+            email: formData.email,
+            contactno: formData.contactNo,
+          };
+          setData((prevData) => [...prevData, newTechnician]);
+          setFilteredData((prevData) => [...prevData, newTechnician]);
+  
+          // Reset form data
+          setFormData({
+            name: "",
+            contactNo: "",
+            email: "",
+            password: "",
+            confirmpass: "",
+          });
+        } else {
+          alert(res.data.message);
+        }
+      } catch (err) {
+        console.log(err);
       }
-      else {
-        setTimeout(() => seterrors({}), 3000); // Clear errors after 3 seconds
-      }
+    } else {
+      setTimeout(() => seterrors({}), 3000);
+    }
   };
+  
 
   const columns = [
     { name: "Name", selector: (row) => row.name, sortable: true, center: true },
@@ -114,7 +134,7 @@ const Technician = () => {
     <>
       <div className="controls">
         <div className="w-full flex justify-between items-center gap-12">
-          <div id="add_technician_btn" className="add_btn" onClick={() => setShowPopup(true)}>
+          <div id="add_technician_btn" className="icon_btn_fill_primary" onClick={() => setShowPopup(true)}>
             <i className="fa-solid fa-plus"></i>
             <button>
               <span>Add Technician</span>

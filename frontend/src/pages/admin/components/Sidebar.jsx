@@ -1,32 +1,40 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useEffect,useState } from "react";
 import { useNavigate } from "react-router-dom";
-const Sidebar = ({ activePage, setActivePage }) => {
-    axios.defaults.withCredentials=true;
-    const [name, setname] = useState('');
-    const [id, setid] = useState('');
-    const navigate=useNavigate();
+
+const Sidebar = ({ activePage, setActivePage, isSidebarOpen, toggleSidebar }) => {
+    axios.defaults.withCredentials = true;
+    const [name, setName] = useState("");
+    const [id, setId] = useState("");
+    const navigate = useNavigate();
+
     useEffect(() => {
-        axios.get('http://localhost:3000/admin/status')
-          .then(res => {
+        axios.get("http://localhost:3000/admin/status").then((res) => {
             if (res.data.Status === "Success") {
-              setname(res.data.name);
-              setid(res.data.id);
+                setName(res.data.name);
+                setId(res.data.id);
+            } else {
+                navigate("/admin-login");
             }
-            else {
-              navigate("/admin-login");
-            }
-          })
-      }, [])
+        });
+    }, []);
+
+    // Function to handle link click (set active page & close sidebar on mobile)
+    const handleNavClick = (page) => {
+        setActivePage(page);
+
+        // Close sidebar only if screen width is below 1024px
+        if (window.innerWidth < 1024) {
+            toggleSidebar();
+        }
+    };
+
     return (
-        <aside className="sidebar_navigation">
-
+        <aside className={`sidebar_navigation ${isSidebarOpen ? "mob_show" : "mob_close"}`}>
             <section className="sidebar_navigation_container">
-
-                {/* Sidebar Navigation X icon (Mobile) */}
-                <button id="close_mobile_sidebar_navigation_btn">
-                    <img src="assets/icons/x-icon-white.svg" alt="" />
+                {/* Close Sidebar Button */}
+                <button id="close_mobile_sidebar_navigation_btn" onClick={toggleSidebar}>
+                    <img src="/assets/icons/x-icon-white.svg" alt="Close" />
                 </button>
 
                 {/* Sidebar Navigation Logo */}
@@ -36,67 +44,51 @@ const Sidebar = ({ activePage, setActivePage }) => {
 
                 {/* Sidebar Navigation List */}
                 <ul className="nav_list">
-                    <li
-                        className={`nav_item ${activePage === "Dashboard" ? "active" : ""}`}
-                        onClick={() => setActivePage("Dashboard")}
-                    >
+                    <li className={`nav_item ${activePage === "Dashboard" ? "active" : ""}`} onClick={() => handleNavClick("Dashboard")}>
                         <div className="link_style">
-                            {/* <div className="nav_item_icon">
-                                <img src="./assets/icons/dashboard.svg" alt="Dashboard Icon" />
-                            </div> */}
+                            <div className="nav_item_icon">
+                                <img src="/assets/icons/dashboard.svg" alt="" />
+                            </div>
                             <div className="nav_item_text">
                                 <span> Dashboard </span>
                             </div>
                         </div>
                     </li>
 
-                    <li
-                        className={`nav_item ${activePage === "MyProfile" ? "active" : ""}`}
-                        onClick={() => setActivePage("MyProfile")}
-                    >
+                    <li className={`nav_item ${activePage === "MyProfile" ? "active" : ""}`} onClick={() => handleNavClick("MyProfile")}>
                         <div className="link_style">
-                            {/* <div className="nav_item_icon">
-                                <img src="assets/icons/profile.svg" alt="Profile Icon" />
-                            </div> */}
+                            <div className="nav_item_icon">
+                                <img src="/assets/icons/users.svg" alt="" />
+                            </div>
                             <div className="nav_item_text">
                                 <span> My Profile </span>
                             </div>
                         </div>
                     </li>
 
-                    <li
-                        className={`nav_item ${activePage === "Technicians" ? "active" : ""}`}
-                        onClick={() => setActivePage("Technicians")}
-                    >
+                    <li className={`nav_item ${activePage === "Technicians" ? "active" : ""}`} onClick={() => handleNavClick("Technicians")}>
                         <div className="link_style">
-                            {/* <div className="nav_item_icon">
-                                <img src="assets/icons/technicians.svg" alt="Technicians Icon" />
-                            </div> */}
+                            <div className="nav_item_icon">
+                                <img src="/assets/icons/category.svg" alt="" />
+                            </div>
                             <div className="nav_item_text">
                                 <span>Technicians</span>
                             </div>
                         </div>
                     </li>
-                    <li
-                        className={`nav_item ${activePage === "ComplaintStatus" ? "active" : ""}`}
-                        onClick={() => setActivePage("ComplaintStatus")}
-                    >
+
+                    <li className={`nav_item ${activePage === "ComplaintStatus" ? "active" : ""}`} onClick={() => handleNavClick("ComplaintStatus")}>
                         <div className="link_style">
-                            {/* <div className="nav_item_icon">
-                                <img src="assets/icons/technicians.svg" alt="Technicians Icon" />
-                            </div> */}
+                            <div className="nav_item_icon">
+                                <img src="/assets/icons/content.svg" alt="" />
+                            </div>
                             <div className="nav_item_text">
                                 <span>Complaint Status</span>
                             </div>
                         </div>
                     </li>
-
                 </ul>
-
-
-
             </section>
-
         </aside>
     );
 };
