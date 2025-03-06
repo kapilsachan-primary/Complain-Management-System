@@ -1,5 +1,6 @@
 import React from "react";
-
+import { useState,useEffect } from "react";
+import axios from "axios";
 const StatusCard = ({ count, head, icon, link }) => {
   return (
     <section className="stats_card_wrapper">
@@ -24,12 +25,21 @@ const StatusCard = ({ count, head, icon, link }) => {
 
 
 const Dashboard = () => {
+  const [values,setvalues]=useState({najobs: 0,pendingjobs: 0,resolvedjobs: 0,onholdjobs: 0,technicians: 0});
+  axios.defaults.withCredentials=true;
+  useEffect(()=>{
+    axios.get('http://localhost:3000/admin/countjobs')
+    .then(res =>{
+      setvalues(res.data)
+      console.log(res.data)
+    }).catch(err =>{console.log(err)})
+  },[])
   const statusCards = [
-    { count: "10", head: "Resolved Jobs", icon: "fa-solid fa-check-double", link: "./admin/dashboard" },
-    { count: "13", head: "Pending Jobs", icon: "fa-solid fa-clock-rotate-left", link: "./admin/dashboard" },
-    { count: "12", head: "On Hold Jobs", icon: "fa-solid fa-pause", link: "./admin/dashboard" },
-    { count: "26", head: "Not Assigned", icon: "fa-solid fa-hourglass", link: "./admin/dashboard" },
-    { count: "12", head: "Total Technicians", icon: "fa-solid fa-screwdriver-wrench", link: "./admin/dashboard" },
+    { count: values.resolvedjobs, head: "Resolved Jobs", icon: "fa-solid fa-check-double", link: "./admin/dashboard" },
+    { count: values.pendingjobs, head: "Pending Jobs", icon: "fa-solid fa-clock-rotate-left", link: "./admin/dashboard" },
+    { count: values.onholdjobs, head: "On Hold Jobs", icon: "fa-solid fa-pause", link: "./admin/dashboard" },
+    { count: values.najobs, head: "Not Assigned", icon: "fa-solid fa-hourglass", link: "./admin/dashboard" },
+    { count: values.technicians, head: "Total Technicians", icon: "fa-solid fa-screwdriver-wrench", link: "./admin/dashboard" },
   ];
 
   return (

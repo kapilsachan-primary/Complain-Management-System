@@ -109,7 +109,7 @@ router.post("/details",async(req,res)=>{
     }
     if(fetch==='complain'){
         try{
-            const complains= await Complain.find();
+            const complains= await Complain.find().sort({_id: -1});
             return res.json(complains);
         }
         catch(err){
@@ -139,7 +139,7 @@ router.put('/assigntechnician', async (req,res) =>{
     const id=req.body.id;
     const technician=req.body.technician;const technicianno=req.body.technicianno;
     try{
-        const updatedcomplain=await Complain.findByIdAndUpdate({_id: id},{technician: technician,technicianno: technicianno},
+        const updatedcomplain=await Complain.findByIdAndUpdate({_id: id},{technician: technician,technicianno: technicianno,status:"Pending"},
             { new:true,runValidators:true });
             if(!updatedcomplain){
                 return res.json({Status: false,message: "Complaint Not Found"})       
@@ -149,4 +149,16 @@ router.put('/assigntechnician', async (req,res) =>{
         return res.json({Status: false,message: "Server error"})
     }
 })
+router.get('/countjobs',async(req,res)=>{
+    try{
+        const najobs=await Complain.countDocuments({ status : "N/A" });
+        const pendingjobs=await Complain.countDocuments({ status: "Pending"});
+        const resolvedjobs=await Complain.countDocuments({ status: "Resolved"});
+        const onholdjobs=await Complain.countDocuments({ status: "OnHold"});
+        const technicians=await Technician.countDocuments();
+        return res.json({najobs,pendingjobs,resolvedjobs,onholdjobs,technicians})
+    }catch(err){
+        return res.json({status: false,message: err})
+    }
+});
 export {router as AdminRouter}

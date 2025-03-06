@@ -19,8 +19,8 @@ const ComplaintStatus = () => {
   const [errors,seterrors]=useState({});
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
-
-  useEffect(() => {
+  
+  const fetchComplaints =()=>{
     axios.post('http://localhost:3000/admin/details', {
       fetch: 'complain',
     })
@@ -30,6 +30,9 @@ const ComplaintStatus = () => {
         setFilteredData(res.data);
       })
       .catch(err => { console.log(res.data.message) });
+  };
+  useEffect(() => {
+    fetchComplaints();
   }, []);
 
   useEffect(() => {
@@ -132,6 +135,7 @@ const ComplaintStatus = () => {
           if(res.data.Status === true){
             alert(res.data.message)
             setIsModalOpen(false);
+            fetchComplaints();
           }
           else{
             alert(res.data.message)
@@ -390,7 +394,7 @@ const ComplaintStatus = () => {
 
               <section className="buttons_area_columns popup_button">
                 <section className="btn_fill_primary">
-                  <button type="submit" className="main_button" onClick={handlesubmit}>
+                  <button type="submit" className="main_button" onClick={handlesubmit} disabled={isAssigned}>
                     <span>Submit</span>
                   </button>
                 </section>

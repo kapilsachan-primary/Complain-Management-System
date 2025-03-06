@@ -5,7 +5,7 @@ import { Complain } from '../models/Complain.js';
 router.post('/complain',async (req,res)=>{
     try{
         const latesttoken=await Complain.findOne().sort({tokenno: -1});
-        const newtokenno=latesttoken?latesttoken+1:1;
+        const newtokenno=latesttoken?latesttoken.tokenno+1:1;
         const newComplain= new Complain({
             tokenno:newtokenno,
             issuedate: new Date(),
@@ -16,7 +16,7 @@ router.post('/complain',async (req,res)=>{
             subject: req.body.subject,
             description: req.body.description,
             priority: req.body.priority,
-            status: "Pending",
+            status: "N/A",
         })
         await newComplain.save();
         return res.json({status: true,message: "Complain registered Token No. "+newtokenno+" generated"})

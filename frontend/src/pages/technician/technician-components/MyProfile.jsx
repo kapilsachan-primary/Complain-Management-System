@@ -1,6 +1,6 @@
 import { useState,useEffect } from "react";
-// import { Editform } from "./ProfileValidate";
-// import { Resetpass } from "./ProfileValidate";
+import { Editform } from "../../admin/admin-components/ProfileValidate" ;
+import { Resetpass } from "../../admin/admin-components/ProfileValidate";
 import axios from "axios";
 const MyProfile = () => {
   const [formData, setFormData] = useState([]);
@@ -11,12 +11,12 @@ const MyProfile = () => {
   const [id, setid] = useState('');
   const [password,setpassword]=useState('');
   useEffect(() => {
-    axios.get('http://localhost:3000/admin/status')
+    axios.get('http://localhost:3000/technician/status')
       .then(res => {
         if (res.data.Status === "Success") {
           setname(res.data.name);
           setid(res.data.id);
-          axios.post("http://localhost:3000/admin/profile",{
+          axios.post("http://localhost:3000/technician/profile",{
             id:res.data.id
           }).then(res =>{
             console.log(res.data);
@@ -24,7 +24,7 @@ const MyProfile = () => {
           }).catch(err => console.log(err))
         }
         else {
-          navigate("/admin-login");
+          navigate("/technician-login");
         }
       })
   }, [])
@@ -35,48 +35,48 @@ const MyProfile = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Clicked');
-    // if(activeForm=="edit"){
-    //   const checkerr = Editform(formData);
-    //   seterrors(checkerr);
-    //   console.log(Object.entries(checkerr).length);
-    //   console.log(checkerr)
-    //   if (Object.entries(checkerr).length === 0) {
-    //     axios.put("http://localhost:3000/admin/editprofile",{
-    //       id:id,
-    //       name:formData.name,
-    //       email:formData.email,
-    //       contactno:formData.contactno,
-    //   }).then(res => {
-    //     if(res.data.Status === true){
-    //       alert(res.data.message)
-    //     }
-    //     else{
-    //       alert(res.data.message)
-    //     }
-    //   }).catch(err => console.log(err));
+    if(activeForm=="edit"){
+      const checkerr = Editform(formData);
+      seterrors(checkerr);
+      console.log(Object.entries(checkerr).length);
+      console.log(checkerr)
+      if (Object.entries(checkerr).length === 0) {
+        axios.put("http://localhost:3000/technician/editprofile",{
+          id:id,
+          name:formData.name,
+          email:formData.email,
+          contactno:formData.contactno,
+      }).then(res => {
+        if(res.data.Status === true){
+          alert(res.data.message)
+        }
+        else{
+          alert(res.data.message)
+        }
+      }).catch(err => console.log(err));
 
-    //   }
-    // }
-    // else{
-    //   const checkerr = Resetpass(password);
-    //   seterrors(checkerr);
-    //   console.log(Object.entries(checkerr).length);
-    //   console.log(checkerr)
-    //   if (Object.entries(checkerr).length === 0) {
-    //     axios.put("http://localhost:3000/admin/resetpassword",{
-    //       id:id,
-    //       password:password,
-    //   }).then(res => {
-    //     if(res.data.Status === true){
-    //       alert(res.data.message)
-    //       setpassword('');
-    //     }
-    //     else{
-    //       alert(res.data.message)
-    //     }
-    //   }).catch(err => console.log(err));
-    //   }
-    // }
+      }
+    }
+    else{
+      const checkerr = Resetpass(password);
+      seterrors(checkerr);
+      console.log(Object.entries(checkerr).length);
+      console.log(checkerr)
+      if (Object.entries(checkerr).length === 0) {
+        axios.put("http://localhost:3000/technician/resetpassword",{
+          id:id,
+          password:password,
+      }).then(res => {
+        if(res.data.Status === true){
+          alert(res.data.message)
+          setpassword('');
+        }
+        else{
+          alert(res.data.message)
+        }
+      }).catch(err => console.log(err));
+      }
+    }
   };
 
   return (

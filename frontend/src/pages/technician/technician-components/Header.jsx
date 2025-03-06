@@ -6,14 +6,13 @@ const Header = ({ activePage, toggleSidebar }) => {
 
   const handleLogout = () => {
     console.log("clicked");
-    // axios
-    //   .get("http://localhost:3000/technician/logout")
-    //   .then((res) => {
-    //     if (res.data.Status === "Success") {
-    //       location.reload(true);
-    //     } else alert("error");
-    //   })
-    //   .catch((err) => console.log(err));
+    axios.get("http://localhost:3000/technician/logout")
+      .then((res) => {
+        if (res.data.Status === "Success") {
+          location.reload(true);
+        } else alert("error");
+      })
+      .catch((err) => console.log(err));
   };
 
   return (

@@ -112,7 +112,7 @@ export default function UserDashboard() {
                     <option value="biomedical-engineering">Biomedical Engineering</option>
                     <option value="chemical-engineering">Chemical Engineering</option>
                     <option value="civil-engineering">Civil Engineering</option>
-                    {/* <option value="computer-engineering">Computer Engineering</option>
+                    <option value="computer-engineering">Computer Engineering</option>
                     <option value="electrical-engineering">Electrical Engineering</option>
                     <option value="electronics-communication">Electronics and Communication Engineering</option>
                     <option value="environment-engineering">Environment Engineering</option>
@@ -123,7 +123,7 @@ export default function UserDashboard() {
                     <option value="robotics-automation">Robotics and Automation</option>
                     <option value="rubber-technology">Rubber Technology</option>
                     <option value="science-humanities">Science and Humanities</option>
-                    <option value="textile-technology">Textile Technology</option> */}
+                    <option value="textile-technology">Textile Technology</option>
                   </select>
 
                 </div>
