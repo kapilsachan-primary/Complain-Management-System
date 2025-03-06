@@ -20,7 +20,7 @@ const Header = ({ activePage, toggleSidebar }) => {
     <header>
       <section className="page_content_header">
         <h1>Admin Dashboard</h1>
-        <p>Track, Update & Complete Your Service Requests</p>
+        <p>Manage users and track service requests.</p>
       </section>
       <div className="head_action_btns">
         <button className="logout_btn_fill_primary" onClick={handleLogout}>

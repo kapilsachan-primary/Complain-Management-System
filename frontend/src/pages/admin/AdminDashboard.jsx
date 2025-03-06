@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import Sidebar from "./components/Sidebar";
-import Header from "./components/Header";
-import Dashboard from "./components/Dashboard";
-import MyProfile from "./components/MyProfile";
-import Technicians from "./components/Technicians";
-import ComplaintStatus from "./components/ComplaintStatus";
+import Sidebar from "./admin-components/Sidebar";
+import Header from "./admin-components/Header";
+import Dashboard from "./admin-components/Dashboard";
+import MyProfile from "./admin-components/MyProfile";
+import Technicians from "./admin-components/Technicians";
+import ComplaintStatus from "./admin-components/ComplaintStatus";
 
 const AdminDashboard = () => {
   // Sidebar Toggle

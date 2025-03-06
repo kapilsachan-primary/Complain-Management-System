@@ -25,9 +25,10 @@ const StatusCard = ({ count, head, icon, link }) => {
 
 const Dashboard = () => {
   const statusCards = [
-    { count: "26", head: "New Jobs", icon: "fa-regular fa-file-lines", link: "./admin/dashboard" },
-    { count: "13", head: "Pending Jobs", icon: "fa-solid fa-clock-rotate-left", link: "./admin/dashboard" },
     { count: "10", head: "Resolved Jobs", icon: "fa-solid fa-check-double", link: "./admin/dashboard" },
+    { count: "13", head: "Pending Jobs", icon: "fa-solid fa-clock-rotate-left", link: "./admin/dashboard" },
+    { count: "12", head: "On Hold Jobs", icon: "fa-solid fa-pause", link: "./admin/dashboard" },
+    { count: "26", head: "Not Assigned", icon: "fa-solid fa-hourglass", link: "./admin/dashboard" },
     { count: "12", head: "Total Technicians", icon: "fa-solid fa-screwdriver-wrench", link: "./admin/dashboard" },
   ];
 
