@@ -23,18 +23,6 @@ const Technician = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   try {
-    //     const response = await fetch("/data/technician-data.json");
-    //     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-    //     const result = await response.json();
-    //     setData(result);
-    //     setFilteredData(result);
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
-    // fetchData();
     axios.post('http://localhost:3000/admin/details', {
       fetch: 'technician',
     })

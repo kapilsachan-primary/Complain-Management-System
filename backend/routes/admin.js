@@ -44,11 +44,13 @@ const verifyadmin = (req,res,next) =>{
 }
 router.get("/status",verifyadmin,(req,res) =>{
     return res.json({Status: "Success",name: req.name,id: req.id});
-})
+});
+
 router.get('/logout',(req,res)=>{
     res.clearCookie('atoken');
     return res.json({Status: "Success"});
-})
+});
+
 router.post("/profile",async(req,res)=>{
     try{
     const id=req.body.id;
@@ -61,12 +63,13 @@ router.post("/profile",async(req,res)=>{
     catch(err){
         return res.json({status: false,message: "Server error"})
     }
-})
+});
+
 router.put("/editprofile", async(req,res)=>{
-    const id=req.body.id;
-    const name=req.body.name;
-    const contactno=req.body.contactno;const email=req.body.email;
-    try{
+        const id=req.body.id;
+        const name=req.body.name;
+        const contactno=req.body.contactno;const email=req.body.email;
+        try{ 
         const updatedadmin=await Admin.findByIdAndUpdate({_id: id},{name: name,email: email,contactno: contactno},
         { new:true,runValidators:true });
         if(!updatedadmin){
@@ -77,7 +80,7 @@ router.put("/editprofile", async(req,res)=>{
     catch(err){
         return res.json({Status: false,message: "Server error"})
     }
-})
+});
 
 router.put("/resetpassword", async(req,res)=>{
     const id=req.body.id;
@@ -94,7 +97,7 @@ router.put("/resetpassword", async(req,res)=>{
     catch(err){
         return res.json({Status: false,message: "Server error"})
     }
-})
+});
 
 router.post("/details",async(req,res)=>{
     const fetch=req.body.fetch;
@@ -126,6 +129,7 @@ router.post("/details",async(req,res)=>{
         }
     }
 });
+
 router.get('/complains/:id', async (req, res) => {
     try {
         const complaint = await Complain.findById(req.params.id);
@@ -135,6 +139,7 @@ router.get('/complains/:id', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
 router.put('/assigntechnician', async (req,res) =>{
     const id=req.body.id;
     const technician=req.body.technician;const technicianno=req.body.technicianno;
@@ -148,7 +153,8 @@ router.put('/assigntechnician', async (req,res) =>{
     }catch(err){
         return res.json({Status: false,message: "Server error"})
     }
-})
+});
+
 router.get('/countjobs',async(req,res)=>{
     try{
         const najobs=await Complain.countDocuments({ status : "N/A" });
@@ -161,4 +167,5 @@ router.get('/countjobs',async(req,res)=>{
         return res.json({status: false,message: err})
     }
 });
+
 export {router as AdminRouter}

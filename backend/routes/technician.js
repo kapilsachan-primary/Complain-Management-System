@@ -4,6 +4,7 @@ const router=express.Router();
 import { Technician } from "../models/Technician.js";
 import { Complain } from "../models/Complain.js";
 import jwt from 'jsonwebtoken';
+
 router.post('/register',async (req,res)=>{
     const name=req.body.name;
     const email=req.body.email;
@@ -46,7 +47,7 @@ router.post('/login', async(req,res)=>{
     const token=jwt.sign({name: technician.name, id: technician._id}, process.env.KEY , {expiresIn: '2h'})
     res.cookie('ttoken', token, {httpOnly: true,maxAge: 7200000})
     return res.json({status: true, message: "Login Successfull"})
-})
+});
 
 const verifytechnician = (req,res,next) =>{
     const token=req.cookies.ttoken;
@@ -68,11 +69,13 @@ const verifytechnician = (req,res,next) =>{
 }
 router.get("/status",verifytechnician,(req,res) =>{
     return res.json({Status: "Success",name: req.name,id: req.id});
-})
+});
+
 router.get('/logout',(req,res)=>{
     res.clearCookie('ttoken');
     return res.json({Status: "Success"});
-})
+});
+
 router.post("/profile",async(req,res)=>{
     try{
     const id=req.body.id;
@@ -85,7 +88,8 @@ router.post("/profile",async(req,res)=>{
     catch(err){
         return res.json({status: false,message: "Server error"})
     }
-})
+});
+
 router.put("/editprofile", async(req,res)=>{
     const id=req.body.id;
     const name=req.body.name;
@@ -119,6 +123,7 @@ router.put("/resetpassword", async(req,res)=>{
         return res.json({Status: false,message: "Server error"})
     }
 })
+
 router.post("/fetchjobs",async(req,res)=>{
     const name=req.body.name;
         try{
@@ -129,6 +134,7 @@ router.post("/fetchjobs",async(req,res)=>{
             return res.json({Status: false,message: "Server error"}) 
         }
 });
+
 router.get('/complains/:id', async (req, res) => {
     try {
         const complaint = await Complain.findById(req.params.id);
@@ -138,6 +144,7 @@ router.get('/complains/:id', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
 router.put('/updateactionresolved', async (req,res) =>{
     const id=req.body.id;
     const status=req.body.status;const action=req.body.action;
@@ -152,6 +159,7 @@ router.put('/updateactionresolved', async (req,res) =>{
         return res.json({Status: false,message: "Server error"})
     }
 });
+
 router.put('/updateactionpending', async (req,res) =>{
     const id=req.body.id;
     const status=req.body.status;const action=req.body.action;
@@ -166,6 +174,7 @@ router.put('/updateactionpending', async (req,res) =>{
         return res.json({Status: false,message: "Server error"})
     }
 });
+
 router.put('/forward2admin', async (req,res) =>{
     const id=req.body.id;
     const action=req.body.action;
@@ -180,6 +189,7 @@ router.put('/forward2admin', async (req,res) =>{
         return res.json({Status: false,message: "Server error"})
     }
 });
+
 router.get('/countjobs/:name',async(req,res)=>{
     try{
         const name=req.params.name;
@@ -191,4 +201,5 @@ router.get('/countjobs/:name',async(req,res)=>{
         return res.json({status: false,message: err})
     }
 });
+
 export {router as TechnicianRouter}

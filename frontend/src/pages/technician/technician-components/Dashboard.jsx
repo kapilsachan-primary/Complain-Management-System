@@ -36,18 +36,23 @@ const Dashboard = () => {
             if (res.data.Status === "Success") {
                 setName(res.data.name);
                 setId(res.data.id);
+                axios.get(`http://localhost:3000/technician/countjobs/${res.data.name}`)
+                  .then(res =>{
+                    setvalues(res.data)
+                    console.log(res.data)
+                  }).catch(err =>{console.log(err)})
             } else {
                 navigate("/technician-login");
             }
         });
     }, []);
-    useEffect(()=>{
-      axios.get(`http://localhost:3000/technician/countjobs/${name}`)
-      .then(res =>{
-        setvalues(res.data)
-        console.log(res.data)
-      }).catch(err =>{console.log(err)})
-    },[name])
+    // useEffect(()=>{
+    //   axios.get(`http://localhost:3000/technician/countjobs/${name}`)
+    //   .then(res =>{
+    //     setvalues(res.data)
+    //     console.log(res.data)
+    //   }).catch(err =>{console.log(err)})
+    // },[name])
   const statusCards = [
     { count: values.resolvedjobs, head: "Resolved Jobs", icon: "fa-solid fa-check-double", link: "./admin/dashboard" },
     { count: values.pendingjobs, head: "Pending Jobs", icon: "fa-solid fa-clock-rotate-left", link: "./admin/dashboard" },
