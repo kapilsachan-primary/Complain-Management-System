@@ -141,15 +141,15 @@ router.get('/complains/:id', async (req, res) => {
 });
 
 router.put('/assigntechnician', async (req,res) =>{
-    const id=req.body.id;
+    const id=req.body.id;const techid=req.body.techid;
     const technician=req.body.technician;const technicianno=req.body.technicianno;
     try{
-        const updatedcomplain=await Complain.findByIdAndUpdate({_id: id},{technician: technician,technicianno: technicianno,status:"Pending"},
+        const updatedcomplain=await Complain.findByIdAndUpdate({_id: id},{technicianid: techid,technician: technician,technicianno: technicianno,status:"Pending"},
             { new:true,runValidators:true });
             if(!updatedcomplain){
                 return res.json({Status: false,message: "Complaint Not Found"})       
             }
-            return res.json({Status: true,message: "Complaint Updated"})
+            return res.json({Status: true,message: "Technician assigned"})
     }catch(err){
         return res.json({Status: false,message: "Server error"})
     }

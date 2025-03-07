@@ -18,9 +18,9 @@ const ComplaintStatus = () => {
   const [errors, seterrors] = useState({});
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
-  const fetchComplaints = (name) =>{
+  const fetchComplaints = (id) =>{
     axios.post('http://localhost:3000/technician/fetchjobs', {
-      name: name,
+      id: id,
     })
       .then(res => {
         setData(res.data);
@@ -31,8 +31,8 @@ const ComplaintStatus = () => {
   };
 
   useEffect(() => {
-    fetchComplaints(name);
-  }, [name]);
+    fetchComplaints(id);
+  }, [id]);
 
   
   useEffect(() => {
@@ -131,7 +131,7 @@ const ComplaintStatus = () => {
         if (res.data.Status === true) {
           alert(res.data.message)
           setIsModalOpen(false);
-          fetchComplaints(name);
+          fetchComplaints(id);
         }
         else {
           alert(res.data.message)
@@ -147,7 +147,7 @@ const ComplaintStatus = () => {
         if (res.data.Status === true) {
           alert(res.data.message)
           setIsModalOpen(false);
-          fetchComplaints(name);
+          fetchComplaints(id);
         }
         else {
           alert(res.data.message)
@@ -171,7 +171,7 @@ const ComplaintStatus = () => {
         if (res.data.Status === true) {
           alert(res.data.message)
           setIsModalOpen(false);
-          fetchComplaints(name);
+          fetchComplaints(id);
         }
         else {
           alert(res.data.message)

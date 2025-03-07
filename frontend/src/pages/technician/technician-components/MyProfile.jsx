@@ -46,6 +46,7 @@ const MyProfile = () => {
           name:formData.name,
           email:formData.email,
           contactno:formData.contactno,
+          oldname:name,
       }).then(res => {
         if(res.data.Status === true){
           alert(res.data.message)

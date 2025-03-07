@@ -92,9 +92,12 @@ router.post("/profile",async(req,res)=>{
 
 router.put("/editprofile", async(req,res)=>{
     const id=req.body.id;
-    const name=req.body.name;
+    const name=req.body.name;const oldname=req.body.oldname;
     const contactno=req.body.contactno;const email=req.body.email;
     try{
+        const updatecomplains= await Complain.updateMany(
+            {technicianid: id},{$set:{ technician: name,technicianno: contactno}}
+        );
         const updatedtechnician=await Technician.findByIdAndUpdate({_id: id},{name: name,email: email,contactno: contactno},
         { new:true,runValidators:true });
         if(!updatedtechnician){
@@ -125,9 +128,9 @@ router.put("/resetpassword", async(req,res)=>{
 })
 
 router.post("/fetchjobs",async(req,res)=>{
-    const name=req.body.name;
+    const id=req.body.id;
         try{
-            const complains= await Complain.find({ technician : name }).sort({_id: -1});
+            const complains= await Complain.find({ technicianid : id }).sort({_id: -1});
             return res.json(complains);
         }
         catch(err){

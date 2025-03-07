@@ -10,6 +10,7 @@ const ComplaintStatus = () => {
   const [statusFilter, setStatusFilter] = useState("All");
   const [technicians, settechnicians] = useState([]);
   const [selectedtechnician, setselectedtechnician] = useState('');
+  const [selectedtechid,setselectedtechid]=useState('');
   const [contact, setcontact] = useState('');
   const [isAssigned,setIsAssigned]=useState(false);
   const [name, setName] = useState("");
@@ -51,6 +52,7 @@ const ComplaintStatus = () => {
     setselectedtechnician(selectedname);
     const technician=technicians.find(t=> t.name === selectedname);
     setcontact(technician?technician.contactno:'');
+    setselectedtechid(technician?technician._id:'');
   };
   useEffect(() => {
     const lowerCaseSearch = searchText.toLowerCase();
@@ -102,7 +104,8 @@ const ComplaintStatus = () => {
          // console.log("working "+ res.data.roomno);
           setselectedtechnician(res.data.technician);
           setcontact(res.data.technicianno);
-          setIsAssigned(res.data.technician!==""); //Disable if technician name is assigned
+          setIsAssigned(res.data.technician!=="");//Disable if technician name is assigned
+          setselectedtechid(res.data.technicianid);
         }).catch(error => console.error('Error here:',error));
     setIsModalOpen(true);
   };
@@ -131,6 +134,7 @@ const ComplaintStatus = () => {
             id:selectedComplaint._id,
             technician:selectedtechnician,
             technicianno:contact,
+            techid:selectedtechid,
         }).then(res => {
           if(res.data.Status === true){
             alert(res.data.message)
