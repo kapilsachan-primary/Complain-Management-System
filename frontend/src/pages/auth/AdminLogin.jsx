@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import LoginValidate from "./LoginValidation";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -9,10 +9,22 @@ const AdminLogin = () => {
   });
   axios.defaults.withCredentials=true;
   const [errors, seterrors] = useState({});
+  const [name,setName]=useState('');
+  const [id,setId]=useState('');
   const navigate=useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  useEffect(()=>{
+    axios.get("http://localhost:3000/admin/status").then((res) => {
+      if (res.data.Status === "Success") {
+        setName(res.data.name);
+        setId(res.data.id);
+        navigate('/admin/dashboard');
+      }
+    });
+  },[])
 
   const handleSubmit = (e) => {
     e.preventDefault();

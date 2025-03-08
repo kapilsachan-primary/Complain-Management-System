@@ -25,21 +25,20 @@ const StatusCard = ({ count, head, icon, link }) => {
 
 
 const Dashboard = () => {
-  const [values,setvalues]=useState({najobs: 0,pendingjobs: 0,resolvedjobs: 0,onholdjobs: 0,technicians: 0});
+  const [values,setvalues]=useState({najobs: 0,pendingjobs: 0,resolvedjobs: 0,onholdjobs: 0});
   axios.defaults.withCredentials=true;
   useEffect(()=>{
-    axios.get('http://localhost:3000/admin/countjobs')
+    axios.get('http://localhost:3000/coordinator/countjobs')
     .then(res =>{
       setvalues(res.data)
       console.log(res.data)
     }).catch(err =>{console.log(err)})
   },[])
   const statusCards = [
-    { count: values.resolvedjobs, head: "Resolved Jobs", icon: "fa-solid fa-check-double", link: "./admin/dashboard" },
-    { count: values.pendingjobs, head: "Pending Jobs", icon: "fa-solid fa-clock-rotate-left", link: "./admin/dashboard" },
-    { count: values.onholdjobs, head: "On Hold Jobs", icon: "fa-solid fa-pause", link: "./admin/dashboard" },
-    { count: values.najobs, head: "Not Assigned", icon: "fa-solid fa-hourglass", link: "./admin/dashboard" },
-    { count: values.technicians, head: "Total Technicians", icon: "fa-solid fa-screwdriver-wrench", link: "./admin/dashboard" },
+    { count: values.resolvedjobs, head: "Resolved Jobs", icon: "fa-solid fa-check-double", link: "./coordinator/dashboard" },
+    { count: values.pendingjobs, head: "Pending Jobs", icon: "fa-solid fa-clock-rotate-left", link: "./coordinator/dashboard" },
+    { count: values.onholdjobs, head: "On Hold Jobs", icon: "fa-solid fa-pause", link: "./coordinator/dashboard" },
+    { count: values.najobs, head: "Not Assigned", icon: "fa-solid fa-hourglass", link: "./coordinator/dashboard" },
   ];
 
   return (

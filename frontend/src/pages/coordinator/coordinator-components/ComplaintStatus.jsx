@@ -8,11 +8,6 @@ const ComplaintStatus = () => {
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
-  const [technicians, settechnicians] = useState([]);
-  const [selectedtechnician, setselectedtechnician] = useState('');
-  const [selectedtechid,setselectedtechid]=useState('');
-  const [contact, setcontact] = useState('');
-  const [isAssigned,setIsAssigned]=useState(false);
   const [name, setName] = useState("");
   const [id, setId] = useState("");
   const [selectedComplaint, setSelectedComplaint] = useState(null);
@@ -37,24 +32,6 @@ const ComplaintStatus = () => {
   }, []);
 
   useEffect(() => {
-    axios.post('http://localhost:3000/admin/details', {
-      fetch: 'selecttech',
-    })
-      .then(res => {
-        settechnicians(res.data);
-        console.log("Technician= "+res.data);
-      })
-      .catch(err => { console.log(res.data.message) });
-  }, []);
-
-  const handleTechnicianChange=(event)=>{
-    const selectedname=event.target.value;
-    setselectedtechnician(selectedname);
-    const technician=technicians.find(t=> t.name === selectedname);
-    setcontact(technician?technician.contactno:'');
-    setselectedtechid(technician?technician._id:'');
-  };
-  useEffect(() => {
     const lowerCaseSearch = searchText.toLowerCase();
     let filtered = data.filter(
       (item) =>
@@ -74,12 +51,12 @@ const ComplaintStatus = () => {
   }, [searchText, statusFilter, data]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/admin/status").then((res) => {
+    axios.get("http://localhost:3000/coordinator/status").then((res) => {
       if (res.data.Status === "Success") {
         setName(res.data.name);
         setId(res.data.id);
       } else {
-        navigate("/admin-login");
+        navigate("/coordinator-login");
       }
     });
   }, []);
@@ -99,14 +76,6 @@ const ComplaintStatus = () => {
 
   const handleViewComplaint = (complaint) => {
     setSelectedComplaint(complaint);
-    axios.get(`http://localhost:3000/admin/complains/${complaint._id}`)
-      .then((res) => {
-         // console.log("working "+ res.data.roomno);
-          setselectedtechnician(res.data.technician);
-          setcontact(res.data.technicianno);
-          setIsAssigned(res.data.technician!=="");//Disable if technician name is assigned
-          setselectedtechid(res.data.technicianid);
-        }).catch(error => console.error('Error here:',error));
     setIsModalOpen(true);
   };
 
@@ -115,41 +84,7 @@ const ComplaintStatus = () => {
     setSelectedComplaint(null);
     seterrors({});
   };
-  function actionValidate(selectedtechnician,contact){
-    const errors={};
-    if(selectedtechnician===""){
-      errors.technician="Technician hasn't been assigned yet";
-    }
-    if(contact===""){
-      errors.contact="Technician hasn't been assigned yet";
-    }
-    return errors;
-  }
-  // const handlesubmit = (e) =>{
-  //   e.preventDefault();
-  //   const checkerr = actionValidate(selectedtechnician,contact);
-  //       seterrors(checkerr);
-  //       if (Object.entries(checkerr).length === 0) {
-  //         axios.put("http://localhost:3000/admin/assigntechnician",{
-  //           id:selectedComplaint._id,
-  //           technician:selectedtechnician,
-  //           technicianno:contact,
-  //           techid:selectedtechid,
-  //       }).then(res => {
-  //         if(res.data.Status === true){
-  //           alert(res.data.message)
-  //           setIsModalOpen(false);
-  //           fetchComplaints();
-  //         }
-  //         else{
-  //           alert(res.data.message)
-  //         }
-  //       }).catch(err => console.log(err));
-  //       }else {
-  //         setTimeout(() => seterrors({}), 3000);
-  //       }
-  // }
-
+  
   const columns = [
     {
       name: <span className="column_header">ID</span>,
@@ -191,7 +126,7 @@ const ComplaintStatus = () => {
       cell: (row) => <span className={`priority ${row.priority.toLowerCase()}`}>{row.priority}</span>,
     },
     {
-      name: <span className="column_header">Actions</span>,
+      name: <span className="column_header">View</span>,
       center: true,
       cell: (row) => (
         <button className="btn-view" onClick={() => handleViewComplaint(row)}>
@@ -359,27 +294,21 @@ const ComplaintStatus = () => {
                       <div className="input_label">
                         <label htmlFor="technician_name">Technician Name:</label>
                       </div>
-                      <div className="select_container">
-                        <select id="technician_name" name="technician_name" value={selectedtechnician} 
-                        onChange={handleTechnicianChange} disabled={isAssigned} // disable dropdown if technician is assigned
-                        > 
-                          <option value="" disabled hidden >
-                            Select Technician
-                          </option>
-                          {technicians.map((tech) =>(
-                            <option key={tech._id} value={tech.name}>{tech.name}</option>
-                          ))}
-                        </select>
-                      </div>
-                      {errors.technician && <div className='authform-error'>{errors.technician}</div>}
+                        <input
+                          type="text"
+                          id="technician"
+                          name="technician"
+                          className="custom-input"
+                          readOnly={true}
+                          value={selectedComplaint.technician}
+                        />
                     </section>
                     <section>
                       <div className="input_label">
                         <label htmlFor="technician_contact">Technician Contact:</label>
                       </div>
                       <input type="tel" id="technician_contact" name="technician_contact" className="custom-input" 
-                      value={contact} readOnly={true}/>
-                      {errors.contact && <div className='authform-error'>{errors.contact}</div>}
+                      value={selectedComplaint.technicianno} readOnly={true}/>
                     </section>
                   </div>
                   <section>
@@ -396,15 +325,6 @@ const ComplaintStatus = () => {
                   </section>
                 </section>
               </div>
-
-              {/* <section className="buttons_area_columns popup_button">
-                <section className="btn_fill_primary">
-                  <button type="submit" className="main_button" onClick={handlesubmit} disabled={isAssigned}>
-                    <span>Submit</span>
-                  </button>
-                </section>
-              </section> */}
-
             </form>
 
           </div>

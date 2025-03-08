@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import LoginValidate from "./LoginValidation";
 import RegisterValidate from "./RegistrationValidation";
 import axios from "axios";
@@ -11,6 +11,8 @@ const Auth = () => {
   });
   axios.defaults.withCredentials=true;
   const navigate=useNavigate();
+  const [name,setName]=useState('');
+  const [id,setId]=useState('');
   const [errors, seterrors] = useState({});
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,6 +26,16 @@ const Auth = () => {
   //     name: "", email: "", contactNo: "", password: "", confirmpass: "",
   //   })
   // };
+
+  useEffect(()=>{
+    axios.get("http://localhost:3000/technician/status").then((res) => {
+      if (res.data.Status === "Success") {
+        setName(res.data.name);
+        setId(res.data.id);
+        navigate('/technician/dashboard');
+      }
+    });
+  },[])
 
   const handleSubmit = (e) => {
     e.preventDefault();

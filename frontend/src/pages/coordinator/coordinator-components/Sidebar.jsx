@@ -9,12 +9,12 @@ const Sidebar = ({ activePage, setActivePage, isSidebarOpen, toggleSidebar }) =>
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("http://localhost:3000/technician/status").then((res) => {
+        axios.get("http://localhost:3000/coordinator/status").then((res) => {
             if (res.data.Status === "Success") {
                 setName(res.data.name);
                 setId(res.data.id);
             } else {
-                navigate("/technician-login");
+                navigate("/coordinator-login");
             }
         });
     }, []);
