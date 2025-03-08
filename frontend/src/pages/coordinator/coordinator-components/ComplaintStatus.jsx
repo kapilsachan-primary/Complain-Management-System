@@ -8,19 +8,22 @@ const ComplaintStatus = () => {
   const [searchText, setSearchText] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
-  const [status, setstatus] = useState('');
-  const [action, setaction] = useState('');
-  const [isResolved, setisResolved] = useState(false);
+  const [technicians, settechnicians] = useState([]);
+  const [selectedtechnician, setselectedtechnician] = useState('');
+  const [selectedtechid,setselectedtechid]=useState('');
+  const [contact, setcontact] = useState('');
+  const [isAssigned,setIsAssigned]=useState(false);
   const [name, setName] = useState("");
   const [id, setId] = useState("");
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [errors, seterrors] = useState({});
+  const [errors,seterrors]=useState({});
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
-  const fetchComplaints = (id) =>{
-    axios.post('http://localhost:3000/technician/fetchjobs', {
-      id: id,
+  
+  const fetchComplaints =()=>{
+    axios.post('http://localhost:3000/admin/details', {
+      fetch: 'complain',
     })
       .then(res => {
         setData(res.data);
@@ -29,12 +32,28 @@ const ComplaintStatus = () => {
       })
       .catch(err => { console.log(res.data.message) });
   };
+  useEffect(() => {
+    fetchComplaints();
+  }, []);
 
   useEffect(() => {
-    fetchComplaints(id);
-  }, [id]);
+    axios.post('http://localhost:3000/admin/details', {
+      fetch: 'selecttech',
+    })
+      .then(res => {
+        settechnicians(res.data);
+        console.log("Technician= "+res.data);
+      })
+      .catch(err => { console.log(res.data.message) });
+  }, []);
 
-  
+  const handleTechnicianChange=(event)=>{
+    const selectedname=event.target.value;
+    setselectedtechnician(selectedname);
+    const technician=technicians.find(t=> t.name === selectedname);
+    setcontact(technician?technician.contactno:'');
+    setselectedtechid(technician?technician._id:'');
+  };
   useEffect(() => {
     const lowerCaseSearch = searchText.toLowerCase();
     let filtered = data.filter(
@@ -55,38 +74,39 @@ const ComplaintStatus = () => {
   }, [searchText, statusFilter, data]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/technician/status").then((res) => {
+    axios.get("http://localhost:3000/admin/status").then((res) => {
       if (res.data.Status === "Success") {
         setName(res.data.name);
         setId(res.data.id);
       } else {
-        navigate("/technician-login");
+        navigate("/admin-login");
       }
     });
   }, []);
 
-  const getDate = (issuedate) => {
-    if (issuedate != null) {
-      const now = new Date(issuedate);
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const date = String(now.getDate()).padStart(2, '0');
-      return `${year}-${month}-${date}`;
+  const getDate =(issuedate)=>{
+    if(issuedate!=null){
+    const now=new Date(issuedate);
+    const year=now.getFullYear(); 
+    const month=String(now.getMonth()+1).padStart(2,'0');
+    const date=String(now.getDate()).padStart(2,'0');
+    return `${year}-${month}-${date}`;
     }
-    else {
-      return "";
+    else{
+    return "";
     }
   }
 
   const handleViewComplaint = (complaint) => {
     setSelectedComplaint(complaint);
-    axios.get(`http://localhost:3000/technician/complains/${complaint._id}`)
+    axios.get(`http://localhost:3000/admin/complains/${complaint._id}`)
       .then((res) => {
-      //  console.log("working "+ res.data.roomno);        
-        setstatus(res.data.status);
-        setaction(res.data.action);
-        setisResolved(res.data.status == "Resolved"); //Disable if the status is resolved.
-      }).catch(error => console.error('Error here:', error));
+         // console.log("working "+ res.data.roomno);
+          setselectedtechnician(res.data.technician);
+          setcontact(res.data.technicianno);
+          setIsAssigned(res.data.technician!=="");//Disable if technician name is assigned
+          setselectedtechid(res.data.technicianid);
+        }).catch(error => console.error('Error here:',error));
     setIsModalOpen(true);
   };
 
@@ -95,92 +115,41 @@ const ComplaintStatus = () => {
     setSelectedComplaint(null);
     seterrors({});
   };
-  function submitValidate(status, action) {
-    const errors = {};
-    if (status === "") {
-      errors.status = "Status has to be defined";
+  function actionValidate(selectedtechnician,contact){
+    const errors={};
+    if(selectedtechnician===""){
+      errors.technician="Technician hasn't been assigned yet";
     }
-    if (action === "") {
-      errors.action = "Note down the action taken";
-    }
-    return errors;
-  }
-  function f2aValidate(status, action) {
-    const errors = {};
-   if(status==="Resolved"){
-      errors.status = "Resolved job has to be submited";
-    }
-    if (action === "") {
-      errors.action = "Note down the action taken";
+    if(contact===""){
+      errors.contact="Technician hasn't been assigned yet";
     }
     return errors;
   }
+  // const handlesubmit = (e) =>{
+  //   e.preventDefault();
+  //   const checkerr = actionValidate(selectedtechnician,contact);
+  //       seterrors(checkerr);
+  //       if (Object.entries(checkerr).length === 0) {
+  //         axios.put("http://localhost:3000/admin/assigntechnician",{
+  //           id:selectedComplaint._id,
+  //           technician:selectedtechnician,
+  //           technicianno:contact,
+  //           techid:selectedtechid,
+  //       }).then(res => {
+  //         if(res.data.Status === true){
+  //           alert(res.data.message)
+  //           setIsModalOpen(false);
+  //           fetchComplaints();
+  //         }
+  //         else{
+  //           alert(res.data.message)
+  //         }
+  //       }).catch(err => console.log(err));
+  //       }else {
+  //         setTimeout(() => seterrors({}), 3000);
+  //       }
+  // }
 
-  const handlesubmit = (e) => {
-    e.preventDefault();
-    const checkerr = submitValidate(status, action);
-    seterrors(checkerr);
-    if (Object.entries(checkerr).length === 0) {
-      console.log("EveryThing OK!!");
-      if(status==="Resolved"){
-      axios.put("http://localhost:3000/technician/updateactionresolved", {
-        id: selectedComplaint._id,
-        status: status,
-        action: action,
-      }).then(res => {
-        if (res.data.Status === true) {
-          alert(res.data.message)
-          setIsModalOpen(false);
-          fetchComplaints(id);
-        }
-        else {
-          alert(res.data.message)
-        }
-      }).catch(err => console.log(err));
-    }
-    else{
-      axios.put("http://localhost:3000/technician/updateactionpending", {
-        id: selectedComplaint._id,
-        status: status,
-        action: action,
-      }).then(res => {
-        if (res.data.Status === true) {
-          alert(res.data.message)
-          setIsModalOpen(false);
-          fetchComplaints(id);
-        }
-        else {
-          alert(res.data.message)
-        }
-      }).catch(err => console.log(err));
-    }
-    } else {
-      setTimeout(() => seterrors({}), 3000);
-    }
-  }
-  const handlef2a = (e) => {
-    e.preventDefault();
-    const checkerr = f2aValidate(status, action);
-    seterrors(checkerr);
-    if (Object.entries(checkerr).length === 0) {
-      console.log("EveryThing OK!!");
-      axios.put("http://localhost:3000/technician/forward2admin", {
-        id: selectedComplaint._id,
-        action: action,
-      }).then(res => {
-        if (res.data.Status === true) {
-          alert(res.data.message)
-          setIsModalOpen(false);
-          fetchComplaints(id);
-        }
-        else {
-          alert(res.data.message)
-        }
-      }).catch(err => console.log(err));
-    } else {
-      setTimeout(() => seterrors({}), 3000);
-    }
-  }
   const columns = [
     {
       name: <span className="column_header">ID</span>,
@@ -322,6 +291,20 @@ const ComplaintStatus = () => {
                     </section>
                   </div>
 
+                  <div className="input_area_two_columns">
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="facility_name">Facility Name:</label>
+                      </div>
+                      <input type="text" id="facility_name" name="facility_name" readOnly={true} className="custom-input" value={selectedComplaint.name}/>
+                    </section>
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="facility_no">Facility No:</label>
+                      </div>
+                      <input type="text" id="facility_no" name="facility_no" className="custom-input" readOnly={true} value={selectedComplaint.contactno}/>
+                    </section>
+                  </div>
 
                   <div className="input_area_two_columns">
                     <section>
@@ -332,16 +315,15 @@ const ComplaintStatus = () => {
                         type="text"
                         id="department"
                         name="department"
-                        value={selectedComplaint.department}
                         readOnly={true}
+                        value={selectedComplaint.department}
                       />
                     </section>
                     <section>
                       <div className="input_label">
                         <label htmlFor="room_no">Room No:</label>
                       </div>
-                      <input type="text" id="room_no" name="room_no" className="custom-input" 
-                      value={selectedComplaint.roomno} readOnly={true}/>
+                      <input type="text" id="room_no" name="room_no" className="custom-input" readOnly={true} value={selectedComplaint.roomno}/>
                     </section>
                   </div>
 
@@ -354,7 +336,8 @@ const ComplaintStatus = () => {
                       id="subject"
                       name="subject"
                       className="custom-input"
-                      value={selectedComplaint.subject} readOnly={true}
+                      readOnly={true}
+                      value={selectedComplaint.subject}
                     />
                   </section>
 
@@ -366,24 +349,39 @@ const ComplaintStatus = () => {
                       name="complaintDes"
                       id="complaintDes"
                       className="custom-textarea"
-                      value={selectedComplaint.description} readOnly={true}
+                      readOnly={true}
+                      value={selectedComplaint.description}
                     ></textarea>
                   </section>
 
-                  <section>
-                    <div className="input_label">
-                      <label htmlFor="status">Status: </label>
-                    </div>
-                    <div className="select_container">
-                      <select id="status" name="status" value={status} onChange={(e)=> setstatus(e.target.value)}
-                        disabled={isResolved}>
-                        <option value="onHold" disabled hidden >Issue Priority</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Resolved">Resolved</option>
-                      </select>
-                    </div>
-                  </section>
-                  {errors.status && <div className='authform-error'>{errors.status}</div>}
+                  <div className="input_area_two_columns">
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="technician_name">Technician Name:</label>
+                      </div>
+                      <div className="select_container">
+                        <select id="technician_name" name="technician_name" value={selectedtechnician} 
+                        onChange={handleTechnicianChange} disabled={isAssigned} // disable dropdown if technician is assigned
+                        > 
+                          <option value="" disabled hidden >
+                            Select Technician
+                          </option>
+                          {technicians.map((tech) =>(
+                            <option key={tech._id} value={tech.name}>{tech.name}</option>
+                          ))}
+                        </select>
+                      </div>
+                      {errors.technician && <div className='authform-error'>{errors.technician}</div>}
+                    </section>
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="technician_contact">Technician Contact:</label>
+                      </div>
+                      <input type="tel" id="technician_contact" name="technician_contact" className="custom-input" 
+                      value={contact} readOnly={true}/>
+                      {errors.contact && <div className='authform-error'>{errors.contact}</div>}
+                    </section>
+                  </div>
                   <section>
                     <div className="input_label">
                       <label htmlFor="complaintAction">Action:</label>
@@ -392,27 +390,23 @@ const ComplaintStatus = () => {
                       name="complaintAction"
                       id="complaintAction"
                       className="custom-textarea"
-                      value={action} 
-                      onChange={(e)=> setaction(e.target.value)} disabled={isResolved}
+                      value={selectedComplaint.action}
+                      readOnly={true}
                     ></textarea>
-                    {errors.action && <div className='authform-error'>{errors.action}</div>}
                   </section>
                 </section>
               </div>
 
-              <section className="buttons_area_columns popup_button">
+              {/* <section className="buttons_area_columns popup_button">
                 <section className="btn_fill_primary">
-                  <button type="submit" className="main_button" onClick={handlesubmit} disabled={isResolved}>
+                  <button type="submit" className="main_button" onClick={handlesubmit} disabled={isAssigned}>
                     <span>Submit</span>
                   </button>
                 </section>
-                <section className="btn_outlined_primary">
-                  <button type="submit" className="main_button" onClick={handlef2a} disabled={isResolved}>
-                    <span>Forward To Admin</span>
-                  </button>
-                </section>
-              </section>
+              </section> */}
+
             </form>
+
           </div>
         </div>
       )}

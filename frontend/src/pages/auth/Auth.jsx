@@ -85,7 +85,7 @@ const Auth = () => {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h2>Login</h2>
+        <h2>Technician Login</h2>
         <form>
           {/* {isSignup && (
             <input type="text" placeholder="Full Name" className="auth-input" name="name" value={formData.name} onChange={handleChange} />
