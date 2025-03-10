@@ -91,12 +91,12 @@ router.post("/profile",async(req,res)=>{
 });
 
 router.put("/editprofile", async(req,res)=>{
-    const id=req.body.id;
-    const name=req.body.name;const oldname=req.body.oldname;
+    const id=req.body.id; const n=req.body.name;
+    const name=n.charAt(0).toUpperCase()+n.slice(1).toLowerCase(); const oldname=req.body.oldname;
     const contactno=req.body.contactno;const email=req.body.email;
     try{
         const updatecomplains= await Complain.updateMany(
-            {technicianid: id},{$set:{ technician: name,technicianno: contactno}}
+            {technicianid: id, status:{$in :["Pending","OnHold"]}},{$set:{ technician: name,technicianno: contactno}}
         );
         const updatedtechnician=await Technician.findByIdAndUpdate({_id: id},{name: name,email: email,contactno: contactno},
         { new:true,runValidators:true });
@@ -205,4 +205,32 @@ router.get('/countjobs/:name',async(req,res)=>{
     }
 });
 
+router.put("/clearstatus", async(req,res)=>{
+    const id=req.body.id;
+    try{
+        const updatedcomplains= await Complain.updateMany(
+            {technicianid: id, status:{$in :["Pending","OnHold"]}},{$set:{technicianid:"" ,technician:"",technicianno:"",status:"N/A"}}
+        ); 
+        if(!updatedcomplains){
+            return res.json({Status: false,message: "Technician's Complain not Updated"})       
+        }
+        return res.json({Status: true,message: "Complains Updated"})
+    }
+    catch(err){
+        return res.json({Status: false,message: "Server error"})
+    }
+});
+
+router.delete('/deletetechnician/:id',async(req,res)=>{
+    try{
+    const id=req.params.id;
+    const deletedtechnician=await Technician.findByIdAndDelete(id);
+    if(!deletedtechnician){
+        return res.json({Status: false,Message: "Technician not deleted"});
+    }
+    return res.json({Status: true,Message: "Technician Deleted"});
+    }catch(err){ 
+        return res.json({status: false,Message: "Differenrt error"})
+    }
+})
 export {router as TechnicianRouter}

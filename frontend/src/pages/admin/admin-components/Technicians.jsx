@@ -21,8 +21,7 @@ const Technician = () => {
   const [errors, seterrors] = useState({});
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
-
-  useEffect(() => {
+  const fetchtechnicians=()=>{
     axios.post('http://localhost:3000/admin/details', {
       fetch: 'technician',
     })
@@ -32,6 +31,9 @@ const Technician = () => {
         setFilteredData(res.data);
       })
       .catch(err => { console.log(res.data.message) });
+  }
+  useEffect(() => {
+    fetchtechnicians();
   }, []);
 
   useEffect(() => {
@@ -78,13 +80,13 @@ const Technician = () => {
           setShowPopup(false);
 
           // Update state to show new technician in the table immediately
-          const newTechnician = {
-            name: formData.name,
-            email: formData.email,
-            contactno: formData.contactNo,
-          };
-          setData((prevData) => [...prevData, newTechnician]);
-          setFilteredData((prevData) => [...prevData, newTechnician]);
+          // const newTechnician = {
+          //   name: formData.name,
+          //   email: formData.email,
+          //   contactno: formData.contactNo,
+          // };
+          // setData((prevData) => [...prevData, newTechnician]);
+          // setFilteredData((prevData) => [...prevData, newTechnician]);
 
           // Reset form data
           setFormData({
@@ -94,6 +96,7 @@ const Technician = () => {
             password: "",
             confirmpass: "",
           });
+          fetchtechnicians();
         } else {
           alert(res.data.message);
         }
@@ -111,20 +114,27 @@ const Technician = () => {
     setShowDeletePopup(true);
   };
 
-  const confirmDelete = async () => {
+  function confirmDelete() {
     if (!technicianToDelete) return;
 
-    try {
-      await axios.post("http://localhost:3000/technician/delete", { id: technicianToDelete.id });
-
-      setData((prevData) => prevData.filter((tech) => tech.id !== technicianToDelete.id));
-      setFilteredData((prevData) => prevData.filter((tech) => tech.id !== technicianToDelete.id));
-
-      setShowDeletePopup(false);
-      setTechnicianToDelete(null);
-    } catch (error) {
-      console.error("Error deleting technician:", error);
+    axios.put("http://localhost:3000/technician/clearstatus",{id:technicianToDelete._id,})
+    .then(res => {
+    if(res.data.Status === true){
+      axios.delete('http://localhost:3000/technician/deletetechnician/'+technicianToDelete._id)
+        .then( res =>{
+          if(res.data.Status === true){
+          alert(res.data.Message);setShowDeletePopup(false);
+          fetchtechnicians();
+        }
+          else
+          alert(res.data.Message);
+        })
+        .catch(err => console.log(err));
     }
+    else{
+      alert(res.data.message)
+    }
+  }).catch(err => console.log(err));
   };
 
   const columns = [
