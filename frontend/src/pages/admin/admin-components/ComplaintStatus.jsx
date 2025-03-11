@@ -362,7 +362,7 @@ const ComplaintStatus = () => {
                         <select id="technician_name" name="technician_name" value={selectedtechnician} 
                         onChange={handleTechnicianChange} disabled={isAssigned} // disable dropdown if technician is assigned
                         > 
-                          <option value={selectedtechnician.technician} disabled hidden >
+                          <option value="" disabled hidden >
                             Select Technician
                           </option>
                           {technicians.map((tech) =>(
