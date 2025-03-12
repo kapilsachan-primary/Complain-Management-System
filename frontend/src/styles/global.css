@@ -524,6 +524,14 @@ textarea:focus {
   color: var(--color-white);
 }
 
+/* ---------- Disabled Button (Style) ---------- */
+
+.disabled_button:disabled {
+  cursor: not-allowed;
+  background-color: var(--color-whitesmoke);
+  color: var(--color-gray);
+  border: 3px solid var(--color-silver);
+}
 
 
 
@@ -918,18 +926,21 @@ header .head_action_btns {
   gap: 4rem;
 }
 
-.dashboard_overview {
+.dashboard_overview ,
+.report_overview {
   display: flex;
   flex-direction: column;
 }
 
-.dashboard_overview .head_container h2 {
+.dashboard_overview .head_container h2 ,
+.report_overview .head_container h2 {
   font-size: 2.4rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
-.dashboard_overview .head_container p {
+.dashboard_overview .head_container p ,
+.report_overview .head_container p {
   font-size: 1.6rem;
   font-weight: 400;
   color: var(--color-deepskyblue);
@@ -1120,6 +1131,27 @@ header .head_action_btns {
   flex-direction: column;
   gap: 6rem;
 }
+
+
+/* ---------- Coordinator Dashboard ---------- */
+
+.coordinator_head_container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.coordinator_report_head_container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.download_report_cont{
+  margin-top: 4rem;
+}
+
 
 
 
