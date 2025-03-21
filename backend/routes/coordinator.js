@@ -134,4 +134,19 @@ router.get('/countjobs',async(req,res)=>{
     }
 });
 
+router.get('/report', async (req, res) => {
+    const { startDate, closeDate } = req.query;
+
+    try {
+        const complaints = await Complain.find({
+            status: 'Resolved',
+            closuredate: { $gte: new Date(startDate), $lte: new Date(closeDate) }
+        });
+
+        res.json(complaints);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 export {router as CoordinatorRouter}

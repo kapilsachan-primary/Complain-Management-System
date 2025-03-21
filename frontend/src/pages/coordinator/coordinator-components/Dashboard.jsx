@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import axios from "axios";
-
+import ReportValidate from "./ReportValidation";
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
 const StatusCard = ({ count, head, icon, link }) => (
   <section className="stats_card_wrapper">
     <section className="stats_card">
@@ -22,15 +24,15 @@ const StatusCard = ({ count, head, icon, link }) => (
   </section>
 );
 
-const ComplaintTable = () => {
-  const [data, setData] = useState([]);
+const ComplaintTable = ({data}) => {
+  // const [data, setData] = useState([]);
 
-  useEffect(() => {
-    fetch("/data/report-data.json")
-      .then((response) => response.json())
-      .then(setData)
-      .catch((error) => console.error("Error loading JSON data:", error));
-  }, []);
+  // useEffect(() => {
+  //   fetch("/data/report-data.json")
+  //     .then((response) => response.json())
+  //     .then(setData)
+  //     .catch((error) => console.error("Error loading JSON data:", error));
+  // }, []);
 
 
   const columns = [
@@ -105,14 +107,15 @@ const Dashboard = () => {
     resolvedjobs: 0,
     onholdjobs: 0,
   });
-
+  axios.defaults.withCredentials=true;
   const [showPopup, setShowPopup] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [closeDate, setCloseDate] = useState("");
   const [isGenerateDisabled, setIsGenerateDisabled] = useState(true);
   const [isReportButtonDisabled, setIsReportButtonDisabled] = useState(false);
   const [showDownload, setShowDownload] = useState(false);
-
+  const [complains,setComplains]=useState([]);
+  const [errors,seterrors]=useState({});
   useEffect(() => {
     axios
       .get("http://localhost:3000/coordinator/countjobs")
@@ -123,6 +126,13 @@ const Dashboard = () => {
   useEffect(() => {
     setIsGenerateDisabled(!(startDate && closeDate));
   }, [startDate, closeDate]);
+
+  const getLocalDate =()=>{
+    const now=new Date(); const year=now.getFullYear(); 
+    const month=String(now.getMonth()+1).padStart(2,'0');
+    const date=String(now.getDate()).padStart(2,'0');
+    return `${year}-${month}-${date}`;
+  }
 
   const handleOpenPopup = () => {
     setShowPopup(true);
@@ -142,13 +152,55 @@ const Dashboard = () => {
 
   const handleGenerateReport = (e) => {
     e.preventDefault();
-    setShowPopup(false);
-    setShowDownload(true);
+    seterrors(ReportValidate(startDate,closeDate))
+    const checkerr=ReportValidate(startDate,closeDate);
+    //console.log(checkerr)
+    if(Object.entries(checkerr).length=== 0){
+        console.log("Lets roll!")
+        axios.get("http://localhost:3000/coordinator/report", {
+                params: { startDate, closeDate }
+            }
+          ).then(res=>{
+            console.log(res.data);
+            setComplains(res.data);
+            setShowPopup(false);
+            setShowDownload(true);
+        }).catch(err =>{console.log(err)})
+    }else {
+      setTimeout(() => seterrors({}), 3000); // Clear errors after 3 seconds
+    }
   };
 
   const handleDownloadClick = () => {
-    alert("Report Downloaded");
-    setShowDownload(false);
+    const doc = new jsPDF();
+
+        // Title
+        doc.setFontSize(18);
+        doc.text('Resolved Complaints Report', 20, 20);
+
+        // Define table headers and data
+        const tableColumn = ['Token No.','Issue Date', 'Closure Date', 'Technician', 'Subject'];
+        const tableRows = complains.map(complaint => [
+            complaint.tokenno,
+            new Date(complaint.issuedate).toLocaleDateString(),
+            new Date(complaint.closuredate).toLocaleDateString(),
+            complaint.technician,
+            complaint.subject
+        ]);
+
+        // Create table using autoTable
+        autoTable(doc, {
+            head: [tableColumn],
+            body: tableRows,
+            startY: 30
+        });
+        //Making date in a specifeid pattern.
+        const issue=new Date(startDate).toLocaleDateString();
+        const close=new Date(closeDate).toLocaleDateString();
+        // Save PDF
+        doc.save(`Coordinator Report from ${issue} to ${close}.pdf`);
+       // alert("Report Downloaded");
+        setShowDownload(false);
   };
 
   const statusCards = [
@@ -208,7 +260,9 @@ const Dashboard = () => {
                         id="start_date"
                         name="start_date"
                         onChange={(e) => setStartDate(e.target.value)}
+                        max={getLocalDate()}
                       />
+                      {errors.startDate && <div style={{color:'red'}}>{errors.startDate}</div>}
                     </section>
                     <section>
                       <div className="input_label">
@@ -219,7 +273,9 @@ const Dashboard = () => {
                         id="close_date"
                         name="close_date"
                         onChange={(e) => setCloseDate(e.target.value)}
+                        max={getLocalDate()}
                       />
+                      {errors.closeDate && <div style={{color:'red'}}>{errors.closeDate}</div>}
                     </section>
                   </div>
                 </section>
@@ -250,15 +306,15 @@ const Dashboard = () => {
                 <h2>Report</h2>
                 <p>Overview</p>
               </section>
-              <div id="download_report_btn" className="icon_btn_fill_primary" onClick={handleDownloadClick}>
+              <div id="download_report_btn" className="icon_btn_fill_primary">
                 <i className="fa-solid fa-file-arrow-down"></i>
-                <button>
+                <button onClick={handleDownloadClick} disabled={complains.length === 0}>
                   <span>Download Report</span>
                 </button>
               </div>
             </section>
           </section>
-          <ComplaintTable />
+          <ComplaintTable data={complains}/>
         </section>
       )}
     </>
