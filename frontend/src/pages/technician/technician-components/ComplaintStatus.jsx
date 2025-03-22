@@ -183,7 +183,7 @@ const ComplaintStatus = () => {
   }
   const columns = [
     {
-      name: <span className="column_header">ID</span>,
+      name: <span className="column_header">Token no</span>,
       selector: (row) => row.tokenno,
       sortable: true,
       center: true,

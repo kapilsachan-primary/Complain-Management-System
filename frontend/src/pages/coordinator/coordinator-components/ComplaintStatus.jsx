@@ -87,7 +87,7 @@ const ComplaintStatus = () => {
   
   const columns = [
     {
-      name: <span className="column_header">ID</span>,
+      name: <span className="column_header">Token no</span>,
       selector: (row) => row.tokenno,
       sortable: true,
       center: true,
@@ -140,7 +140,7 @@ const ComplaintStatus = () => {
     <section>
       <div className="controls">
         <div className="filter-buttons">
-          {["All", "Resolved", "Pending", "OnHold", "N/A"].map((status) => (
+          {["All", "Resolved", "Pending", "OnHold", "Y/A"].map((status) => (
             <button key={status} className={statusFilter === status ? "active" : ""} onClick={() => setStatusFilter(status)}>
               {status}
             </button>

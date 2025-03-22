@@ -209,7 +209,7 @@ router.put("/clearstatus", async(req,res)=>{
     const id=req.body.id;
     try{
         const updatedcomplains= await Complain.updateMany(
-            {technicianid: id, status:{$in :["Pending","OnHold"]}},{$set:{technicianid:"" ,technician:"",technicianno:"",status:"N/A"}}
+            {technicianid: id, status:{$in :["Pending","OnHold"]}},{$set:{technicianid:"" ,technician:"",technicianno:"",status:"Y/A"}}
         ); 
         if(!updatedcomplains){
             return res.json({Status: false,message: "Technician's Complain not Updated"})       
@@ -232,5 +232,22 @@ router.delete('/deletetechnician/:id',async(req,res)=>{
     }catch(err){ 
         return res.json({status: false,Message: "Differenrt error"})
     }
-})
+});
+
+router.get('/report', async (req, res) => {
+    const { startDate, closeDate, id } = req.query;
+
+    try {
+        const complaints = await Complain.find({
+            technicianid: id,
+            status: 'Resolved',
+            closuredate: { $gte: new Date(startDate), $lte: new Date(closeDate) }
+        });
+
+        res.json(complaints);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 export {router as TechnicianRouter}

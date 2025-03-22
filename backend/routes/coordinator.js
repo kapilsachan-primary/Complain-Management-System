@@ -124,7 +124,7 @@ router.post("/details",async(req,res)=>{
 
 router.get('/countjobs',async(req,res)=>{
     try{
-        const najobs=await Complain.countDocuments({ status : "N/A" });
+        const najobs=await Complain.countDocuments({ status : "Y/A" });
         const pendingjobs=await Complain.countDocuments({ status: "Pending"});
         const resolvedjobs=await Complain.countDocuments({ status: "Resolved"});
         const onholdjobs=await Complain.countDocuments({ status: "OnHold"});

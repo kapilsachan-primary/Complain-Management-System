@@ -16,7 +16,7 @@ router.post('/complain',async (req,res)=>{
             subject: req.body.subject,
             description: req.body.description,
             priority: req.body.priority,
-            status: "N/A",
+            status: "Y/A",
         })
         await newComplain.save();
         return res.json({status: true,message: "Complain registered Token No. "+newtokenno+" generated"})

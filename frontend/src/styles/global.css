@@ -580,7 +580,7 @@ textarea:focus {
   border: 3px solid var(--color-silver);
 }
 
-.status[class*="n/a"] {
+.status[class*="y/a"] {
   background-color: var(--color-remy);
   color: var(--color-amaranth);
   border: 3px solid var(--color-crimson);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import axios from "axios";
-import ReportValidate from "./ReportValidation";
+import ReportValidate from "../../coordinator/coordinator-components/ReportValidation";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -163,7 +163,7 @@ const Dashboard = () => {
     //console.log(checkerr)
     if (Object.entries(checkerr).length === 0) {
       console.log("Lets roll!")
-      axios.get("http://localhost:3000/coordinator/report", {
+      axios.get("http://localhost:3000/admin/report", {
         params: { startDate, closeDate }
       }
       ).then(res => {
@@ -204,7 +204,7 @@ const Dashboard = () => {
     const issue = new Date(startDate).toLocaleDateString();
     const close = new Date(closeDate).toLocaleDateString();
     // Save PDF
-    doc.save(`Coordinator Report from ${issue} to ${close}.pdf`);
+    doc.save(`Admin Report from ${issue} to ${close}.pdf`);
     // alert("Report Downloaded");
     setShowDownload(false);
   };
