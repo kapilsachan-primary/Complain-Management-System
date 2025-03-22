@@ -10,18 +10,18 @@ const ComplaintStatus = () => {
   const [statusFilter, setStatusFilter] = useState("All");
   const [technicians, settechnicians] = useState([]);
   const [selectedtechnician, setselectedtechnician] = useState('');
-  const [selectedtechid,setselectedtechid]=useState('');
+  const [selectedtechid, setselectedtechid] = useState('');
   const [contact, setcontact] = useState('');
-  const [isAssigned,setIsAssigned]=useState(false);
+  const [isAssigned, setIsAssigned] = useState(false);
   const [name, setName] = useState("");
   const [id, setId] = useState("");
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [errors,seterrors]=useState({});
+  const [errors, seterrors] = useState({});
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
-  
-  const fetchComplaints =()=>{
+
+  const fetchComplaints = () => {
     axios.post('http://localhost:3000/admin/details', {
       fetch: 'complain',
     })
@@ -42,17 +42,17 @@ const ComplaintStatus = () => {
     })
       .then(res => {
         settechnicians(res.data);
-        console.log("Technician= "+res.data);
+        console.log("Technician= " + res.data);
       })
       .catch(err => { console.log(res.data.message) });
   }, []);
 
-  const handleTechnicianChange=(event)=>{
-    const selectedname=event.target.value;
+  const handleTechnicianChange = (event) => {
+    const selectedname = event.target.value;
     setselectedtechnician(selectedname);
-    const technician=technicians.find(t=> t.name === selectedname);
-    setcontact(technician?technician.contactno:'');
-    setselectedtechid(technician?technician._id:'');
+    const technician = technicians.find(t => t.name === selectedname);
+    setcontact(technician ? technician.contactno : '');
+    setselectedtechid(technician ? technician._id : '');
   };
   useEffect(() => {
     const lowerCaseSearch = searchText.toLowerCase();
@@ -84,16 +84,16 @@ const ComplaintStatus = () => {
     });
   }, []);
 
-  const getDate =(issuedate)=>{
-    if(issuedate!=null){
-    const now=new Date(issuedate);
-    const year=now.getFullYear(); 
-    const month=String(now.getMonth()+1).padStart(2,'0');
-    const date=String(now.getDate()).padStart(2,'0');
-    return `${year}-${month}-${date}`;
+  const getDate = (issuedate) => {
+    if (issuedate != null) {
+      const now = new Date(issuedate);
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const date = String(now.getDate()).padStart(2, '0');
+      return `${year}-${month}-${date}`;
     }
-    else{
-    return "";
+    else {
+      return "";
     }
   }
 
@@ -101,12 +101,12 @@ const ComplaintStatus = () => {
     setSelectedComplaint(complaint);
     axios.get(`http://localhost:3000/admin/complains/${complaint._id}`)
       .then((res) => {
-         // console.log("working "+ res.data.roomno);
-          setselectedtechnician(res.data.technician);
-          setcontact(res.data.technicianno);
-          setIsAssigned(res.data.technician!=="");//Disable if technician name is assigned
-          setselectedtechid(res.data.technicianid);
-        }).catch(error => console.error('Error here:',error));
+        // console.log("working "+ res.data.roomno);
+        setselectedtechnician(res.data.technician);
+        setcontact(res.data.technicianno);
+        setIsAssigned(res.data.technician !== "");//Disable if technician name is assigned
+        setselectedtechid(res.data.technicianid);
+      }).catch(error => console.error('Error here:', error));
     setIsModalOpen(true);
   };
 
@@ -115,39 +115,39 @@ const ComplaintStatus = () => {
     setSelectedComplaint(null);
     seterrors({});
   };
-  function actionValidate(selectedtechnician,contact){
-    const errors={};
-    if(selectedtechnician===""){
-      errors.technician="Technician hasn't been assigned yet";
+  function actionValidate(selectedtechnician, contact) {
+    const errors = {};
+    if (selectedtechnician === "") {
+      errors.technician = "Technician hasn't been assigned yet";
     }
-    if(contact===""){
-      errors.contact="Technician hasn't been assigned yet";
+    if (contact === "") {
+      errors.contact = "Technician hasn't been assigned yet";
     }
     return errors;
   }
-  const handlesubmit = (e) =>{
+  const handlesubmit = (e) => {
     e.preventDefault();
-    const checkerr = actionValidate(selectedtechnician,contact);
-        seterrors(checkerr);
-        if (Object.entries(checkerr).length === 0) {
-          axios.put("http://localhost:3000/admin/assigntechnician",{
-            id:selectedComplaint._id,
-            technician:selectedtechnician,
-            technicianno:contact,
-            techid:selectedtechid,
-        }).then(res => {
-          if(res.data.Status === true){
-            alert(res.data.message)
-            setIsModalOpen(false);
-            fetchComplaints();
-          }
-          else{
-            alert(res.data.message)
-          }
-        }).catch(err => console.log(err));
-        }else {
-          setTimeout(() => seterrors({}), 3000);
+    const checkerr = actionValidate(selectedtechnician, contact);
+    seterrors(checkerr);
+    if (Object.entries(checkerr).length === 0) {
+      axios.put("http://localhost:3000/admin/assigntechnician", {
+        id: selectedComplaint._id,
+        technician: selectedtechnician,
+        technicianno: contact,
+        techid: selectedtechid,
+      }).then(res => {
+        if (res.data.Status === true) {
+          alert(res.data.message)
+          setIsModalOpen(false);
+          fetchComplaints();
         }
+        else {
+          alert(res.data.message)
+        }
+      }).catch(err => console.log(err));
+    } else {
+      setTimeout(() => seterrors({}), 3000);
+    }
   }
   const columns = [
     {
@@ -295,13 +295,13 @@ const ComplaintStatus = () => {
                       <div className="input_label">
                         <label htmlFor="facility_name">Facility Name:</label>
                       </div>
-                      <input type="text" id="facility_name" name="facility_name" readOnly={true} className="custom-input" value={selectedComplaint.name}/>
+                      <input type="text" id="facility_name" name="facility_name" readOnly={true} className="custom-input" value={selectedComplaint.name} />
                     </section>
                     <section>
                       <div className="input_label">
                         <label htmlFor="facility_no">Facility No:</label>
                       </div>
-                      <input type="text" id="facility_no" name="facility_no" className="custom-input" readOnly={true} value={selectedComplaint.contactno}/>
+                      <input type="text" id="facility_no" name="facility_no" className="custom-input" readOnly={true} value={selectedComplaint.contactno} />
                     </section>
                   </div>
 
@@ -322,7 +322,7 @@ const ComplaintStatus = () => {
                       <div className="input_label">
                         <label htmlFor="room_no">Room No:</label>
                       </div>
-                      <input type="text" id="room_no" name="room_no" className="custom-input" readOnly={true} value={selectedComplaint.roomno}/>
+                      <input type="text" id="room_no" name="room_no" className="custom-input" readOnly={true} value={selectedComplaint.roomno} />
                     </section>
                   </div>
 
@@ -354,30 +354,67 @@ const ComplaintStatus = () => {
                   </section>
 
                   <div className="input_area_two_columns">
-                    <section>
+
+                    {/* ---------- OLD CODE ---------- */}
+                    {/* <section>
                       <div className="input_label">
                         <label htmlFor="technician_name">Technician Name:</label>
                       </div>
                       <div className="select_container">
-                        <select id="technician_name" name="technician_name" value={selectedtechnician} 
-                        onChange={handleTechnicianChange} disabled={isAssigned} // disable dropdown if technician is assigned
-                        > 
+                        <select id="technician_name" name="technician_name" value={selectedtechnician}
+                          onChange={handleTechnicianChange} disabled={isAssigned} // disable dropdown if technician is assigned
+                        >
                           <option value="" disabled hidden >
                             Select Technician
                           </option>
-                          {technicians.map((tech) =>(
+                          {technicians.map((tech) => (
                             <option key={tech._id} value={tech.name}>{tech.name}</option>
                           ))}
                         </select>
                       </div>
                       {errors.technician && <div className='authform-error'>{errors.technician}</div>}
+                    </section> */}
+
+                    {/* ---------- NEW CODE "Naitik" ---------- */}
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="technician_name">Technician Name:</label>
+                      </div>
+                      {isAssigned ? (
+                        <input
+                          type="text"
+                          id="technician_name"
+                          name="technician_name"
+                          className="custom-input cursor-no-drop"
+                          readOnly={true}
+                          value={selectedtechnician}
+                        />
+                      ) : (
+                        <div className="select_container">
+                          <select id="technician_name" name="technician_name" className="cursor-pointer" value={selectedtechnician}
+                            onChange={handleTechnicianChange} disabled={isAssigned} // disable dropdown if technician is assigned
+                          >
+                            <option value="" disabled hidden >
+                              Select Technician
+                            </option>
+                            {technicians.map((tech) => (
+                              <option key={tech._id} value={tech.name}>{tech.name}</option>
+                            ))}
+                          </select>
+                        </div>
+                      )
+                      }
+                      {errors.technician && <div className='authform-error'>{errors.technician}</div>}
                     </section>
+
+
+
                     <section>
                       <div className="input_label">
                         <label htmlFor="technician_contact">Technician Contact:</label>
                       </div>
-                      <input type="tel" id="technician_contact" name="technician_contact" className="custom-input" 
-                      value={contact} readOnly={true}/>
+                      <input type="tel" id="technician_contact" name="technician_contact" className="custom-input cursor-no-drop"
+                        value={contact} readOnly={true} />
                       {errors.contact && <div className='authform-error'>{errors.contact}</div>}
                     </section>
                   </div>

@@ -4,6 +4,7 @@ import axios from "axios";
 import ReportValidate from "./ReportValidation";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+
 const StatusCard = ({ count, head, icon, link }) => (
   <section className="stats_card_wrapper">
     <section className="stats_card">
@@ -23,6 +24,7 @@ const StatusCard = ({ count, head, icon, link }) => (
     </section>
   </section>
 );
+
 
 const ComplaintTable = ({data}) => {
   // const [data, setData] = useState([]);
@@ -101,12 +103,6 @@ const ComplaintTable = ({data}) => {
 };
 
 const Dashboard = () => {
-  const [values, setValues] = useState({
-    najobs: 0,
-    pendingjobs: 0,
-    resolvedjobs: 0,
-    onholdjobs: 0,
-  });
   axios.defaults.withCredentials=true;
   const [showPopup, setShowPopup] = useState(false);
   const [startDate, setStartDate] = useState("");
@@ -116,6 +112,13 @@ const Dashboard = () => {
   const [showDownload, setShowDownload] = useState(false);
   const [complains,setComplains]=useState([]);
   const [errors,seterrors]=useState({});
+  const [values, setValues] = useState({
+    najobs: 0,
+    pendingjobs: 0,
+    resolvedjobs: 0,
+    onholdjobs: 0,
+  });
+  
   useEffect(() => {
     axios
       .get("http://localhost:3000/coordinator/countjobs")
@@ -141,7 +144,6 @@ const Dashboard = () => {
     setCloseDate("");
     setIsGenerateDisabled(true);
   };
-
 
   const handleClosePopup = () => {
     setShowPopup(false);
@@ -306,12 +308,15 @@ const Dashboard = () => {
                 <h2>Report</h2>
                 <p>Overview</p>
               </section>
-              <div id="download_report_btn" className="icon_btn_fill_primary">
+              <button
+                id="download_report_btn"
+                className={`icon_btn_fill_primary ${complains.length === 0 ? 'disabled_button' : ''}`}
+                onClick={handleDownloadClick}
+                disabled={complains.length === 0}
+              >
                 <i className="fa-solid fa-file-arrow-down"></i>
-                <button onClick={handleDownloadClick} disabled={complains.length === 0}>
-                  <span>Download Report</span>
-                </button>
-              </div>
+                <span>Download Report</span>
+              </button>
             </section>
           </section>
           <ComplaintTable data={complains}/>

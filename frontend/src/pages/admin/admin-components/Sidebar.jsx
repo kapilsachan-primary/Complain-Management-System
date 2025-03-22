@@ -39,7 +39,8 @@ const Sidebar = ({ activePage, setActivePage, isSidebarOpen, toggleSidebar }) =>
 
                 {/* Sidebar Navigation Logo */}
                 <a href="./dashboard.html" className="sidebar_nav_logo">
-                    <h2>LOGO</h2>
+                    <img src="/assets/logos/ldce-logo.png" alt="LDEC-LOGO" />
+                    <span>L.D. College Of<br/> Engineering</span>
                 </a>
 
                 {/* Sidebar Navigation List */}

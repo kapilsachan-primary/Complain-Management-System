@@ -317,7 +317,8 @@ select {
   font-weight: 400;
   position: relative;
 }
-select.ezHLKS{
+
+select.ezHLKS {
   width: initial;
 }
 
@@ -550,6 +551,7 @@ textarea:focus {
   font-size: 1.6rem;
   font-weight: 600;
 }
+
 .priority {
   display: inline-flex;
   align-items: center;
@@ -650,7 +652,7 @@ inactive-dot {
   padding: 4.4rem 0 4.4rem 0;
   display: flex;
   flex-direction: column;
-  gap: 8rem;
+  gap: 6rem;
 }
 
 .sidebar_navigation_container::-webkit-scrollbar {
@@ -671,10 +673,46 @@ inactive-dot {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 4rem;
-  font-weight: 700;
+  padding: 0 1rem;
+  gap: 1rem;
+}
+
+.sidebar_navigation .sidebar_nav_logo img {
+  width: 8rem;
+}
+
+.sidebar_navigation .sidebar_nav_logo span {
+  font-size: 2.4rem;
+  font-weight: 600;
   color: var(--color-white);
-  text-decoration: line-through;
+  font-family: var(--font-primary);
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+
+/* Responsive Styles */
+@media (max-width: 1024px) {
+  .sidebar_navigation .sidebar_nav_logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2rem;
+    gap: 1rem;
+  }
+
+  .sidebar_navigation .sidebar_nav_logo img {
+    width: 11rem;
+  }
+
+  .sidebar_navigation .sidebar_nav_logo span {
+    text-align: center;
+    font-size: 3.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
 }
 
 .sidebar_navigation .nav_list {
@@ -926,20 +964,20 @@ header .head_action_btns {
   gap: 4rem;
 }
 
-.dashboard_overview ,
+.dashboard_overview,
 .report_overview {
   display: flex;
   flex-direction: column;
 }
 
-.dashboard_overview .head_container h2 ,
+.dashboard_overview .head_container h2,
 .report_overview .head_container h2 {
   font-size: 2.4rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
-.dashboard_overview .head_container p ,
+.dashboard_overview .head_container p,
 .report_overview .head_container p {
   font-size: 1.6rem;
   font-weight: 400;
@@ -1135,20 +1173,22 @@ header .head_action_btns {
 
 /* ---------- Coordinator Dashboard ---------- */
 
-.coordinator_head_container{
+.coordinator_head_container,
+.admin_head_container,
+.technician_head_container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
 }
 
-.coordinator_report_head_container{
+.coordinator_report_head_container {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.download_report_cont{
+.download_report_cont {
   margin-top: 4rem;
 }
 
@@ -1406,18 +1446,21 @@ header .head_action_btns {
 }
 
 .popup_content.delete_popup_content .popup_components {
-  padding: 0 ;
+  padding: 0;
 }
+
 .delete_popup_content .popup_components h2 {
   font-size: 3rem;
   font-weight: 600;
   margin-bottom: 2rem;
 }
+
 .delete_popup_content .popup_components p {
   font-size: 2rem;
   font-weight: 400;
   color: var(--color-dimgray);
 }
+
 .delete_popup_content .popup_components p span {
   font-size: 2rem;
   font-weight: 800;
@@ -1425,6 +1468,7 @@ header .head_action_btns {
   font-style: italic;
   color: var(--color-deepskyblue);
 }
+
 .delete_popup_content .popup_components .delete_user_popup_btns {
   margin-top: 4rem;
   display: flex;
