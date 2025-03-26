@@ -8,12 +8,38 @@ export default function UserDashboard() {
     contactNo: "",
     subject: "",
     department: "",
+    model: "",
     description: "",
     priority: "",
   });
   const [errors, seterrors] = useState({});
+
+  // Description & Model options based on Subject
+  const options = {
+    printer: {
+      descriptions: ["Printer refilling", "Printer repair"],
+      models: ["LaserJet Printer", "OfficeJet Printer"]
+    },
+    cctv: {
+      descriptions: ["Camera not working", "CCTV wiring issue"],
+      models: ["Dome Camera", "Bullet Camera"]
+    }
+  };
+
+  // ----- OLD CODE - (Kapil) -----
+  // const handleChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
+
+  // ----- NEW CODE - (Naitik) -----
+  // Modify handleChange function to reset description & model when subject changes
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+      ...(name === "subject" ? { description: "", model: "" } : {}) // Reset description & model if subject changes
+    }));
   };
 
   const handleSubmit = (e) => {
@@ -29,6 +55,7 @@ export default function UserDashboard() {
         contactno: formData.contactNo,
         subject: formData.subject,
         department: formData.department,
+        model: formData.model,
         description: formData.description,
         priority: formData.priority,
       }).then(res => {
@@ -93,14 +120,6 @@ export default function UserDashboard() {
 
               <section>
                 <div className="input_label">
-                  <label htmlFor="subject">Subject:</label>
-                </div>
-                <input type="text" id="subject" name="subject" placeholder="Enter issue subject" value={formData.subject} onChange={handleChange} />
-                {errors.subject && <div className='userform-error'>{errors.subject}</div>}
-              </section>
-
-              <section>
-                <div className="input_label">
                   <label htmlFor="department">Department:</label>
                 </div>
                 <div className="select_container">
@@ -132,13 +151,66 @@ export default function UserDashboard() {
 
               <section>
                 <div className="input_label">
+                  <label htmlFor="subject">Subject:</label>
+                </div>
+                <div className="select_container">
+                  <select id="subject" name="subject" value={formData.subject} onChange={handleChange}>
+                    <option value="" disabled hidden selected>Select Subject</option>
+                    <option value="printer">Printer</option>
+                    <option value="cctv">CCTV</option>
+                  </select>
+                </div>
+                {errors.subject && <div className='userform-error'>{errors.subject}</div>}
+              </section>
+
+              <section>
+                <div className="input_label">
                   <label htmlFor="description">Description:</label>
                 </div>
-                <textarea id="description" name="description" placeholder="Describe your issue" value={formData.description} onChange={handleChange} ></textarea>
+                <div className="select_container">
+                  <select
+                    id="description"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    disabled={!formData.subject}
+                    style={{ cursor: formData.subject ? "default" : "not-allowed" }}
+                  >
+                    <option value="" disabled hidden>Select Description</option>
+                    {formData.subject && options[formData.subject].descriptions.map((desc, index) => (
+                      <option key={index} value={desc}>{desc}</option>
+                    ))}
+                  </select>
+
+                </div>
                 {errors.description && <div className='userform-error'>{errors.description}</div>}
               </section>
 
               <section>
+                <div className="input_label">
+                  <label htmlFor="model">Model:</label>
+                </div>
+                <div className="select_container">
+                  <select
+                    id="model"
+                    name="model"
+                    value={formData.model}
+                    onChange={handleChange}
+                    disabled={!formData.subject}
+                    style={{ cursor: formData.subject ? "default" : "not-allowed" }}
+                  >
+                    <option value="" disabled hidden>Select Model</option>
+                    {formData.subject && options[formData.subject].models.map((mdl, index) => (
+                      <option key={index} value={mdl}>{mdl}</option>
+                    ))}
+                  </select>
+                </div>
+                {errors.model && <div className='userform-error'>{errors.model}</div>}
+              </section>
+
+
+              {/* OLD - Prioriy Select Input */}
+              {/* <section>
                 <div className="input_label">
                   <label htmlFor="priority">Priority:</label>
                 </div>
@@ -148,6 +220,21 @@ export default function UserDashboard() {
                     <option value="Low">Low</option>
                     <option value="Medium">Medium</option>
                     <option value="High">High</option>
+                  </select>
+                </div>
+                {errors.priority && <div className='userform-error'>{errors.priority}</div>}
+              </section> */}
+              
+              {/* NEW - Prioriy Select Input */}
+              <section>
+                <div className="input_label">
+                  <label htmlFor="priority">Priority:</label>
+                </div>
+                <div className="select_container">
+                  <select id="priority" name="priority" value={formData.priority} onChange={handleChange} disabled className="cursor-not-allowed">
+                    <option value="High" selected>High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low" >Low</option>
                   </select>
                 </div>
                 {errors.priority && <div className='userform-error'>{errors.priority}</div>}

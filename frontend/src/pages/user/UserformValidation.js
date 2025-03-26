@@ -13,14 +13,17 @@ export default function UserformValidate(formData){
     else if(!contact_pattern.test(formData.contactNo)){
         errors.contactNo="Contact no isn't correct";
     }
-    if(formData.subject===""){
-        errors.subject="Subject is reqired";
-    }
     if(formData.department===""){
         errors.department="Department is reqired";
     }
+    if(formData.subject===""){
+        errors.subject="Subject is reqired";
+    }
     if(formData.description===""){
         errors.description="Description is reqired";
+    }
+    if(formData.model===""){
+        errors.model="Model is reqired";
     }
     if(formData.priority===""){
         errors.priority="Priority has to be denoted";
