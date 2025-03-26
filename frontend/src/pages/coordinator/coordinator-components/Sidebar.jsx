@@ -77,6 +77,18 @@ const Sidebar = ({ activePage, setActivePage, isSidebarOpen, toggleSidebar }) =>
                             </div>
                         </div>
                     </li>
+
+                    <li className={`nav_item ${activePage === "Equipments" ? "active" : ""}`} onClick={() => handleNavClick("Equipments")}>
+                        <div className="link_style">
+                            <div className="nav_item_icon">
+                                <img src="/assets/icons/square-plus.svg" alt="" />
+                            </div>
+                            <div className="nav_item_text">
+                                <span> Equipments </span>
+                            </div>
+                        </div>
+                    </li>
+
                 </ul>
             </section>
         </aside>

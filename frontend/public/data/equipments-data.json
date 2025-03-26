@@ -1,0 +1,38 @@
+[
+    {
+      "id": 1,
+      "modelNo": "EQ-001",
+      "productName": "Drill Machine",
+      "department": "Engineering",
+      "category": "Tools"
+    },
+    {
+      "id": 2,
+      "modelNo": "EQ-002",
+      "productName": "Soldering Iron",
+      "department": "Electronics",
+      "category": "Repair"
+    },
+    {
+      "id": 3,
+      "modelNo": "EQ-003",
+      "productName": "Oscilloscope",
+      "department": "Testing",
+      "category": "Measurement"
+    },
+    {
+      "id": 4,
+      "modelNo": "EQ-004",
+      "productName": "Multimeter",
+      "department": "Electrical",
+      "category": "Measurement"
+    },
+    {
+      "id": 5,
+      "modelNo": "EQ-005",
+      "productName": "3D Printer",
+      "department": "Manufacturing",
+      "category": "Production"
+    }
+  ]
+  

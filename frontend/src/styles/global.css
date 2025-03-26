@@ -1170,8 +1170,7 @@ header .head_action_btns {
   gap: 6rem;
 }
 
-
-/* ---------- Coordinator Dashboard ---------- */
+/* ---------- Common ---------- */
 
 .coordinator_head_container,
 .admin_head_container,
@@ -1182,15 +1181,21 @@ header .head_action_btns {
   margin-bottom: 2rem;
 }
 
+.download_report_cont {
+  margin-top: 4rem;
+}
+
+/* ---------- Coordinator Dashboard ---------- */
+
 .coordinator_report_head_container {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.download_report_cont {
-  margin-top: 4rem;
-}
+
+/* ---------- Coordinator > Equipments ---------- */
+
 
 
 
@@ -1373,6 +1378,13 @@ header .head_action_btns {
   font-size: 2.4rem;
   font-weight: 600;
   margin-bottom: 4rem;
+}
+
+.popup_components .popup_tertiary_header_cont {
+  margin-bottom: 4rem;
+}
+.popup_components .popup_tertiary_header_cont .popup_tertiary_header {
+  font-size: 2rem;
 }
 
 .popup_components {

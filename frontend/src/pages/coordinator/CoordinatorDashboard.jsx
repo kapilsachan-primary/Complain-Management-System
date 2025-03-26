@@ -4,6 +4,7 @@ import Header from "./coordinator-components/Header";
 import Dashboard from "./coordinator-components/Dashboard";
 import MyProfile from "./coordinator-components/MyProfile";
 import ComplaintStatus from "./coordinator-components/ComplaintStatus";
+import Equipments from "./coordinator-components/Equipments";
 
 const CoordinatorDashboard = () => {
   // Sidebar Toggle
@@ -25,6 +26,8 @@ const CoordinatorDashboard = () => {
         return <MyProfile />;
       case "ComplaintStatus":
         return <ComplaintStatus />;
+      case "Equipments":
+        return <Equipments />;
       default:
         return <Dashboard />;
     }

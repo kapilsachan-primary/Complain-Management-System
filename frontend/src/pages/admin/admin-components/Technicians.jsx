@@ -138,11 +138,26 @@ const Technician = () => {
   };
 
   const columns = [
-    { name: "Name", selector: (row) => row.name, sortable: true, center: true },
-    { name: "Contact No", selector: (row) => row.contactno, sortable: true, center: true },
-    { name: "Email", selector: (row) => row.email, sortable: true, center: true },
     {
-      name: "Actions",
+      name: <span className="column_header">Name</span>,
+      selector: (row) => row.name,
+      sortable: true,
+      center: true
+    },
+    {
+      name: <span className="column_header">Contact No</span>,
+      selector: (row) => row.contactno,
+      sortable: true,
+      center: true
+    },
+    {
+      name: <span className="column_header">Email</span>,
+      selector: (row) => row.email,
+      sortable: true,
+      center: true
+    },
+    {
+      name: <span className="column_header">Actions</span>,
       center: true,
       cell: (row) => (
         <button className="btn-view" onClick={() => handleDeleteClick(row)}>
