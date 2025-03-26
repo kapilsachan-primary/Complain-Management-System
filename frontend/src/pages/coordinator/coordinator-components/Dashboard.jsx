@@ -26,7 +26,7 @@ const StatusCard = ({ count, head, icon, link }) => (
 );
 
 
-const ComplaintTable = ({data}) => {
+const ComplaintTable = ({ data }) => {
   // const [data, setData] = useState([]);
 
   // useEffect(() => {
@@ -103,22 +103,23 @@ const ComplaintTable = ({data}) => {
 };
 
 const Dashboard = () => {
-  axios.defaults.withCredentials=true;
+  axios.defaults.withCredentials = true;
   const [showPopup, setShowPopup] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [closeDate, setCloseDate] = useState("");
   const [isGenerateDisabled, setIsGenerateDisabled] = useState(true);
   const [isReportButtonDisabled, setIsReportButtonDisabled] = useState(false);
   const [showDownload, setShowDownload] = useState(false);
-  const [complains,setComplains]=useState([]);
-  const [errors,seterrors]=useState({});
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [complains, setComplains] = useState([]);
+  const [errors, seterrors] = useState({});
   const [values, setValues] = useState({
     najobs: 0,
     pendingjobs: 0,
     resolvedjobs: 0,
     onholdjobs: 0,
   });
-  
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/coordinator/countjobs")
@@ -130,10 +131,14 @@ const Dashboard = () => {
     setIsGenerateDisabled(!(startDate && closeDate));
   }, [startDate, closeDate]);
 
-  const getLocalDate =()=>{
-    const now=new Date(); const year=now.getFullYear(); 
-    const month=String(now.getMonth()+1).padStart(2,'0');
-    const date=String(now.getDate()).padStart(2,'0');
+  const filteredComplains = selectedStatus === "All"
+  ? complains
+  : complains.filter((item) => item.status.toLowerCase().trim() === selectedStatus.toLowerCase().trim());
+
+  const getLocalDate = () => {
+    const now = new Date(); const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const date = String(now.getDate()).padStart(2, '0');
     return `${year}-${month}-${date}`;
   }
 
@@ -154,21 +159,21 @@ const Dashboard = () => {
 
   const handleGenerateReport = (e) => {
     e.preventDefault();
-    seterrors(ReportValidate(startDate,closeDate))
-    const checkerr=ReportValidate(startDate,closeDate);
+    seterrors(ReportValidate(startDate, closeDate))
+    const checkerr = ReportValidate(startDate, closeDate);
     //console.log(checkerr)
-    if(Object.entries(checkerr).length=== 0){
-        console.log("Lets roll!")
-        axios.get("http://localhost:3000/coordinator/report", {
-                params: { startDate, closeDate }
-            }
-          ).then(res=>{
-            console.log(res.data);
-            setComplains(res.data);
-            setShowPopup(false);
-            setShowDownload(true);
-        }).catch(err =>{console.log(err)})
-    }else {
+    if (Object.entries(checkerr).length === 0) {
+      console.log("Lets roll!")
+      axios.get("http://localhost:3000/coordinator/report", {
+        params: { startDate, closeDate }
+      }
+      ).then(res => {
+        console.log(res.data);
+        setComplains(res.data);
+        setShowPopup(false);
+        setShowDownload(true);
+      }).catch(err => { console.log(err) })
+    } else {
       setTimeout(() => seterrors({}), 3000); // Clear errors after 3 seconds
     }
   };
@@ -176,33 +181,37 @@ const Dashboard = () => {
   const handleDownloadClick = () => {
     const doc = new jsPDF();
 
-        // Title
-        doc.setFontSize(18);
-        doc.text('Resolved Complaints Report', 20, 20);
+    // Title
+    doc.setFontSize(18);
+    doc.text('Coordinator Complaints Report', 20, 20);
 
-        // Define table headers and data
-        const tableColumn = ['Token No.','Issue Date', 'Closure Date', 'Technician', 'Subject'];
-        const tableRows = complains.map(complaint => [
-            complaint.tokenno,
-            new Date(complaint.issuedate).toLocaleDateString(),
-            new Date(complaint.closuredate).toLocaleDateString(),
-            complaint.technician,
-            complaint.subject
-        ]);
+    // Define table headers and data
+    const tableColumn = ['Token No.', 'Issue Date', 'Closure Date', 'Technician', 'Subject'];
+    const tableRows = filteredComplains.map(complaint => [
+      complaint.tokenno,
+      new Date(complaint.issuedate).toLocaleDateString(),
+      new Date(complaint.closuredate).toLocaleDateString(),
+      complaint.technician,
+      complaint.subject
+    ]);
 
-        // Create table using autoTable
-        autoTable(doc, {
-            head: [tableColumn],
-            body: tableRows,
-            startY: 30
-        });
-        //Making date in a specifeid pattern.
-        const issue=new Date(startDate).toLocaleDateString();
-        const close=new Date(closeDate).toLocaleDateString();
-        // Save PDF
-        doc.save(`Coordinator Report from ${issue} to ${close}.pdf`);
-       // alert("Report Downloaded");
-        setShowDownload(false);
+    // Create table using autoTable
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30
+    });
+
+    // Format date
+    const issue = new Date(startDate).toLocaleDateString();
+    const close = new Date(closeDate).toLocaleDateString();
+
+    // Save the PDF
+    doc.save(`Coordinator Report (${selectedStatus}) from ${issue} to ${close}.pdf`);
+
+    // Reset
+    setSelectedStatus("All");
+    setShowDownload(false);
   };
 
   const statusCards = [
@@ -264,7 +273,7 @@ const Dashboard = () => {
                         onChange={(e) => setStartDate(e.target.value)}
                         max={getLocalDate()}
                       />
-                      {errors.startDate && <div style={{color:'red'}}>{errors.startDate}</div>}
+                      {errors.startDate && <div style={{ color: 'red' }}>{errors.startDate}</div>}
                     </section>
                     <section>
                       <div className="input_label">
@@ -277,7 +286,7 @@ const Dashboard = () => {
                         onChange={(e) => setCloseDate(e.target.value)}
                         max={getLocalDate()}
                       />
-                      {errors.closeDate && <div style={{color:'red'}}>{errors.closeDate}</div>}
+                      {errors.closeDate && <div style={{ color: 'red' }}>{errors.closeDate}</div>}
                     </section>
                   </div>
                 </section>
@@ -308,18 +317,33 @@ const Dashboard = () => {
                 <h2>Report</h2>
                 <p>Overview</p>
               </section>
-              <button
-                id="download_report_btn"
-                className={`icon_btn_fill_primary ${complains.length === 0 ? 'disabled_button' : ''}`}
-                onClick={handleDownloadClick}
-                disabled={complains.length === 0}
-              >
-                <i className="fa-solid fa-file-arrow-down"></i>
-                <span>Download Report</span>
-              </button>
+              <div className="flex justify-center items-center gap-8">
+                <div className="select_container !w-60  ">
+                  <select
+                    className="!w-60 !h-[5rem]"
+                    value={selectedStatus}
+                    onChange={(e) => setSelectedStatus(e.target.value)}
+                  >
+                    <option value="All" selected>All</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Pending">Pending</option>
+                    <option value="OnHold">On Hold</option>
+                    <option value="Y/A">Y/A</option>
+                  </select>
+                </div>
+                <button
+                  id="download_report_btn"
+                  className={`icon_btn_fill_primary ${complains.length === 0 ? 'disabled_button' : ''}`}
+                  onClick={handleDownloadClick}
+                  disabled={complains.length === 0}
+                >
+                  <i className="fa-solid fa-file-arrow-down"></i>
+                  <span className="whitespace-nowrap">Download Report</span>
+                </button>
+              </div>
             </section>
           </section>
-          <ComplaintTable data={complains}/>
+          <ComplaintTable data={filteredComplains} />
         </section>
       )}
     </>

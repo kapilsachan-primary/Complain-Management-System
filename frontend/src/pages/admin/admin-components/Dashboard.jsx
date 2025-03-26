@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import axios from "axios";
-import ReportValidate from "../../coordinator/coordinator-components/ReportValidation";
+import ReportValidate from "./ReportValidation";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -112,6 +112,7 @@ const Dashboard = () => {
   const [isGenerateDisabled, setIsGenerateDisabled] = useState(true);
   const [isReportButtonDisabled, setIsReportButtonDisabled] = useState(false);
   const [showDownload, setShowDownload] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState("All");
   const [complains, setComplains] = useState([]);
   const [errors, seterrors] = useState({});
   const [values, setvalues] = useState({
@@ -133,6 +134,10 @@ const Dashboard = () => {
   useEffect(() => {
     setIsGenerateDisabled(!(startDate && closeDate));
   }, [startDate, closeDate]);
+
+  const filteredComplains = selectedStatus === "All"
+    ? complains
+    : complains.filter((item) => item.status.toLowerCase().trim() === selectedStatus.toLowerCase().trim());
 
   const getLocalDate = () => {
     const now = new Date(); const year = now.getFullYear();
@@ -182,11 +187,11 @@ const Dashboard = () => {
 
     // Title
     doc.setFontSize(18);
-    doc.text('Resolved Complaints Report', 20, 20);
+    doc.text('Admin Complaints Report', 20, 20);
 
     // Define table headers and data
     const tableColumn = ['Token No.', 'Issue Date', 'Closure Date', 'Technician', 'Subject'];
-    const tableRows = complains.map(complaint => [
+    const tableRows = filteredComplains.map(complaint => [
       complaint.tokenno,
       new Date(complaint.issuedate).toLocaleDateString(),
       new Date(complaint.closuredate).toLocaleDateString(),
@@ -200,12 +205,16 @@ const Dashboard = () => {
       body: tableRows,
       startY: 30
     });
-    //Making date in a specifeid pattern.
+
+    // Format date
     const issue = new Date(startDate).toLocaleDateString();
     const close = new Date(closeDate).toLocaleDateString();
-    // Save PDF
-    doc.save(`Admin Report from ${issue} to ${close}.pdf`);
-    // alert("Report Downloaded");
+
+    // Save the PDF
+    doc.save(`Admin Report (${selectedStatus}) from ${issue} to ${close}.pdf`);
+
+    // Reset
+    setSelectedStatus("All");
     setShowDownload(false);
   };
 
@@ -319,18 +328,33 @@ const Dashboard = () => {
                 <h2>Report</h2>
                 <p>Overview</p>
               </section>
-              <button
-                id="download_report_btn"
-                className={`icon_btn_fill_primary ${complains.length === 0 ? 'disabled_button' : ''}`}
-                onClick={handleDownloadClick}
-                disabled={complains.length === 0}
-              >
-                <i className="fa-solid fa-file-arrow-down"></i>
-                <span>Download Report</span>
-              </button>
+              <div className="flex justify-center items-center gap-8">
+                <div className="select_container !w-60  ">
+                  <select
+                    className="!w-60 !h-[5rem]"
+                    value={selectedStatus}
+                    onChange={(e) => setSelectedStatus(e.target.value)}
+                  >
+                    <option value="All" selected>All</option>
+                    <option value="Resolved">Resolved</option>
+                    <option value="Pending">Pending</option>
+                    <option value="OnHold">On Hold</option>
+                    <option value="Y/A">Y/A</option>
+                  </select>
+                </div>
+                <button
+                  id="download_report_btn"
+                  className={`icon_btn_fill_primary ${complains.length === 0 ? 'disabled_button' : ''}`}
+                  onClick={handleDownloadClick}
+                  disabled={complains.length === 0}
+                >
+                  <i className="fa-solid fa-file-arrow-down"></i>
+                  <span className="whitespace-nowrap">Download Report</span>
+                </button>
+              </div>
             </section>
           </section>
-          <ComplaintTable data={complains} />
+          <ComplaintTable data={filteredComplains} />
         </section>
       )}
     </>
