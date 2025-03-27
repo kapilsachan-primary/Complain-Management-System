@@ -21,9 +21,9 @@ const Equipments = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("http://localhost:3000/technician/status").then((res) => {
+    axios.get("http://localhost:3000/coordinator/status").then((res) => {
       if (res.data.Status !== "Success") {
-        navigate("/technician-login");
+        navigate("/coordinator-login");
       }
     });
   }, [navigate]);

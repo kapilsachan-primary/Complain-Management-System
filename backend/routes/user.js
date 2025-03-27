@@ -4,8 +4,25 @@ import { Complain } from '../models/Complain.js';
 
 router.post('/complain',async (req,res)=>{
     try{
-        const latesttoken=await Complain.findOne().sort({tokenno: -1});
-        const newtokenno=latesttoken?latesttoken.tokenno+1:1;
+        const today = new Date();
+        const yy = today.getFullYear().toString().slice(-2);
+        const mm = (today.getMonth() + 1).toString().padStart(2, '0');
+        const dd = (today.getDate()).toString().padStart(2, '0');
+        const datePrefix=yy+mm+dd; // Bringing Date in YYMMDD format
+        const datePrefixNum=parseInt(datePrefix); // For numerical comparison.
+        //Find latest tokenno starting with today's date
+        const latestTodayToken=await Complain.findOne({
+            tokenno:{
+                $gte: datePrefixNum * 1000,
+                $lt: (datePrefix+1)*1000
+            }
+        }).sort({tokenno: -1});
+        //Determine new counter
+        let counter=1;
+        if(latestTodayToken){
+            counter=(latestTodayToken.tokenno % 1000) +1;
+        }
+        const newtokenno=(datePrefixNum*1000)+counter;
         const newComplain= new Complain({
             tokenno:newtokenno,
             issuedate: new Date(),

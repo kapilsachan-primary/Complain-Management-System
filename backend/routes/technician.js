@@ -193,12 +193,12 @@ router.put('/forward2admin', async (req,res) =>{
     }
 });
 
-router.get('/countjobs/:name',async(req,res)=>{
+router.get('/countjobs/:id',async(req,res)=>{
     try{
-        const name=req.params.name;
-        const pendingjobs=await Complain.countDocuments({ status: "Pending",technician:name});
-        const resolvedjobs=await Complain.countDocuments({ status: "Resolved",technician:name});
-        const onholdjobs=await Complain.countDocuments({ status: "OnHold",technician:name});
+        const id=req.params.id;
+        const pendingjobs=await Complain.countDocuments({ status: "Pending",technicianid:id});
+        const resolvedjobs=await Complain.countDocuments({ status: "Resolved",technicianid:id});
+        const onholdjobs=await Complain.countDocuments({ status: "OnHold",technicianid:id});
         return res.json({pendingjobs,resolvedjobs,onholdjobs});
     }catch(err){
         return res.json({status: false,message: err})
@@ -236,12 +236,12 @@ router.delete('/deletetechnician/:id',async(req,res)=>{
 
 router.get('/report', async (req, res) => {
     const { startDate, closeDate, id } = req.query;
-
+    const start=new Date(startDate);start.setHours(0,0,0,0);
+    const end=new Date(closeDate);end.setHours(23,59,59,999);
     try {
         const complaints = await Complain.find({
             technicianid: id,
-            status: 'Resolved',
-            closuredate: { $gte: new Date(startDate), $lte: new Date(closeDate) }
+            issuedate: { $gte: start, $lte: end }
         });
 
         res.json(complaints);

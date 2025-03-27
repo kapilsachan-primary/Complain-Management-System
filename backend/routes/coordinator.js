@@ -136,11 +136,11 @@ router.get('/countjobs',async(req,res)=>{
 
 router.get('/report', async (req, res) => {
     const { startDate, closeDate } = req.query;
-
+    const start=new Date(startDate);start.setHours(0,0,0,0);
+    const end=new Date(closeDate);end.setHours(23,59,59,999);
     try {
         const complaints = await Complain.find({
-            status: 'Resolved',
-            closuredate: { $gte: new Date(startDate), $lte: new Date(closeDate) }
+            issuedate: { $gte: start, $lte: end }
         });
 
         res.json(complaints);

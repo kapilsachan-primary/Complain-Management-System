@@ -5,7 +5,7 @@ import axios from "axios";
 import ReportValidate from "./ReportValidation";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
-
+import * as XLSX from "xlsx";
 const StatusCard = ({ count, head, icon, link }) => {
   return (
     <section className="stats_card_wrapper">
@@ -130,7 +130,7 @@ const Dashboard = () => {
       if (res.data.Status === "Success") {
         setName(res.data.name);
         setId(res.data.id);
-        axios.get(`http://localhost:3000/technician/countjobs/${res.data.name}`)
+        axios.get(`http://localhost:3000/technician/countjobs/${res.data.id}`)
           .then(res => {
             setvalues(res.data)
             console.log(res.data)
@@ -197,16 +197,17 @@ const Dashboard = () => {
 
     // Title
     doc.setFontSize(18);
-    doc.text("Technician Complaints Report", 20, 20);
+    doc.text(`Technician - "${name}" ${selectedStatus} Complaints Report`, 20, 20);
 
     // Define table headers and data
-    const tableColumn = ['Token No.', 'Issue Date', 'Closure Date', 'Technician', 'Subject'];
+    const tableColumn = ['Token No.', 'Issue Date', 'Closure Date', 'Technician', 'Subject', 'Status'];
     const tableRows = filteredComplains.map(complaint => [
       complaint.tokenno,
       new Date(complaint.issuedate).toLocaleDateString(),
-      new Date(complaint.closuredate).toLocaleDateString(),
+      complaint.closuredate?new Date(complaint.closuredate).toLocaleDateString():"MM/DD/YYYY",
       complaint.technician,
-      complaint.subject
+      complaint.subject,
+      complaint.status
     ]);
 
     // Create table using autoTable
@@ -228,6 +229,44 @@ const Dashboard = () => {
     setShowDownload(false);
   };
 
+  const handleExcelDownload = () => {
+      //Step 1: Formatting data into rows.
+      const formattedData=filteredComplains.map((c) =>({
+      Token_No: c.tokenno,
+      Issue_Date: new Date(c.issuedate).toLocaleDateString(),
+      Closure_Date: c.closuredate?new Date(c.closuredate).toLocaleDateString():"MM/DD/YYYY",
+      Technician: c.technician,
+      Subject:c.subject,
+      Status: c.status
+      }))
+  
+      //Step 2: Create a worksheet from the formatted data
+      const worksheet= XLSX.utils.json_to_sheet(formattedData);
+      //Adding basic styling
+      worksheet['!cols']=[
+        {wch:13}, //Token no
+        {wch:12}, //Issue date
+        {wch:12}, //Closure date
+        {wch:10}, //Technician
+        {wch:45}, //Subject
+        {wch:8}, //Status
+      ];
+  
+      //Step 3: Create a workbook and append the worksheet
+      const workbook= XLSX.utils.book_new();
+      //Have to clean the sheet name as character like / []\ are not allowed 
+      XLSX.utils.book_append_sheet(workbook, worksheet, `Technician ${selectedStatus!=='Y/A'?selectedStatus:'Y-A'} Report`)
+  
+      //Step 5: Trigger download of the file 
+      // Format date
+      const issue = new Date(startDate).toLocaleDateString();
+      const close = new Date(closeDate).toLocaleDateString();
+      XLSX.writeFile(workbook,`Technician - "${name}" Report (${selectedStatus}) from ${issue} to ${close}.xlsx`)
+  
+      // Reset
+      setSelectedStatus("All");
+      setShowDownload(false);
+    };
 
   const statusCards = [
     { count: values.resolvedjobs, head: "Resolved Jobs", icon: "fa-solid fa-check-double", link: "./admin/dashboard" },
@@ -359,7 +398,16 @@ const Dashboard = () => {
                   disabled={complains.length === 0}
                 >
                   <i className="fa-solid fa-file-arrow-down"></i>
-                  <span className="whitespace-nowrap">Download Report</span>
+                  <span className="whitespace-nowrap">Download PDF</span>
+                </button>
+                <button
+                  id="download_report_btn"
+                  className={`icon_btn_fill_primary ${complains.length === 0 ? 'disabled_button' : ''}`}
+                  onClick={handleExcelDownload}
+                  disabled={complains.length === 0}
+                >
+                  <i className="fa-solid fa-file-arrow-down"></i>
+                  <span className="whitespace-nowrap">Download Excel</span>
                 </button>
               </div>
             </section>
