@@ -61,7 +61,7 @@ const ComplaintStatus = () => {
         item.department.toLowerCase().includes(lowerCaseSearch) ||
         item.category.toLowerCase().includes(lowerCaseSearch) ||
         item.status.toLowerCase().includes(lowerCaseSearch) ||
-       // item.priority.toLowerCase().includes(lowerCaseSearch) ||
+        // item.priority.toLowerCase().includes(lowerCaseSearch) ||
         item.tokenno.toString().includes(lowerCaseSearch) ||
         item.technician.toLowerCase().includes(lowerCaseSearch)
     );
@@ -240,10 +240,13 @@ const ComplaintStatus = () => {
               <h1 className="popup_primary_header">Complaint Status Details</h1>
 
               <div className="top_cont">
-                <div className="token_no_component">
-                  <p>
-                    Token No: <span>{selectedComplaint.tokenno}</span>
-                  </p>
+                <div className="flex flex-col gap-4">
+                  <div className="token_no_component">
+                    <p>
+                      Token No: <span>{selectedComplaint.tokenno}</span>
+                    </p>
+                  </div>
+                  <p className="text-2xl"><span className="font-bold">Email:</span> example@gmail.com</p>
                 </div>
                 <div className="status_component">
                   <div>
@@ -325,7 +328,7 @@ const ComplaintStatus = () => {
                       <input type="text" id="room_no" name="room_no" className="custom-input" readOnly={true} value={selectedComplaint.roomno} />
                     </section>
                   </div>
-                  
+
                   <div className="input_area_two_columns">
                     <section>
                       <div className="input_label">

@@ -7,6 +7,7 @@ export default function UserDashboard() {
     name: "",
     roomNo: "",
     contactNo: "",
+    email: "",
     category: "",
     department: "",
     productdescription: "",
@@ -107,6 +108,7 @@ export default function UserDashboard() {
         name: formData.name,
         roomno: formData.roomNo,
         contactno: formData.contactNo,
+        email: formData.email,
         category: formData.category,
         department: formData.department,
         productdescription: formData.productdescription,
@@ -163,12 +165,23 @@ export default function UserDashboard() {
                 </section>
               </section>
 
+
+              <section className="input_area_two_columns">
               <section>
                 <div className="input_label">
                   <label htmlFor="contactNo">Contact No:</label>
                 </div>
                 <input type="number" id="contactNo" name="contactNo" placeholder="Enter your contact number" value={formData.contactNo} onChange={handleChange} />
                 {errors.contactNo && <div className='userform-error'>{errors.contactNo}</div>}
+              </section>
+              <section>
+                <div className="input_label">
+                  <label htmlFor="email">Email:</label>
+                </div>
+                <input type="email" id="email" name="email" placeholder="Enter your contact number" value={formData.email} onChange={handleChange} />
+                {errors.email && <div className='userform-error'>{errors.email}</div>}
+              </section>
+
               </section>
 
               <section>

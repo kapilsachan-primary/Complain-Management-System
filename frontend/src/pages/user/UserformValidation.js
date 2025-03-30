@@ -10,6 +10,9 @@ export default function UserformValidate(formData,isServiceEnabled,products){
     if(formData.contactNo===""){
         errors.contactNo="Contact no. is required.";
     }
+    if(formData.email===""){
+        errors.email="Email is required.";
+    }
     else if(!contact_pattern.test(formData.contactNo)){
         errors.contactNo="Contact no isn't correct";
     }

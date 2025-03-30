@@ -12,11 +12,11 @@ const ComplaintStatus = () => {
   const [id, setId] = useState("");
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [errors,seterrors]=useState({});
+  const [errors, seterrors] = useState({});
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
-  
-  const fetchComplaints =()=>{
+
+  const fetchComplaints = () => {
     axios.post('http://localhost:3000/admin/details', {
       fetch: 'complain',
     })
@@ -61,16 +61,16 @@ const ComplaintStatus = () => {
     });
   }, []);
 
-  const getDate =(issuedate)=>{
-    if(issuedate!=null){
-    const now=new Date(issuedate);
-    const year=now.getFullYear(); 
-    const month=String(now.getMonth()+1).padStart(2,'0');
-    const date=String(now.getDate()).padStart(2,'0');
-    return `${year}-${month}-${date}`;
+  const getDate = (issuedate) => {
+    if (issuedate != null) {
+      const now = new Date(issuedate);
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const date = String(now.getDate()).padStart(2, '0');
+      return `${year}-${month}-${date}`;
     }
-    else{
-    return "";
+    else {
+      return "";
     }
   }
 
@@ -84,7 +84,7 @@ const ComplaintStatus = () => {
     setSelectedComplaint(null);
     seterrors({});
   };
-  
+
   const columns = [
     {
       name: <span className="column_header">Token no</span>,
@@ -176,10 +176,13 @@ const ComplaintStatus = () => {
               <h1 className="popup_primary_header">Complaint Status Details</h1>
 
               <div className="top_cont">
-                <div className="token_no_component">
-                  <p>
-                    Token No: <span>{selectedComplaint.tokenno}</span>
-                  </p>
+                <div className="flex flex-col gap-4">
+                  <div className="token_no_component">
+                    <p>
+                      Token No: <span>{selectedComplaint.tokenno}</span>
+                    </p>
+                  </div>
+                  <p className="text-2xl"><span className="font-bold">Email:</span> example@gmail.com</p>
                 </div>
                 <div className="status_component">
                   <div>
@@ -231,13 +234,13 @@ const ComplaintStatus = () => {
                       <div className="input_label">
                         <label htmlFor="facility_name">Facility Name:</label>
                       </div>
-                      <input type="text" id="facility_name" name="facility_name" readOnly={true} className="custom-input" value={selectedComplaint.name}/>
+                      <input type="text" id="facility_name" name="facility_name" readOnly={true} className="custom-input" value={selectedComplaint.name} />
                     </section>
                     <section>
                       <div className="input_label">
                         <label htmlFor="facility_no">Facility No:</label>
                       </div>
-                      <input type="text" id="facility_no" name="facility_no" className="custom-input" readOnly={true} value={selectedComplaint.contactno}/>
+                      <input type="text" id="facility_no" name="facility_no" className="custom-input" readOnly={true} value={selectedComplaint.contactno} />
                     </section>
                   </div>
 
@@ -258,25 +261,25 @@ const ComplaintStatus = () => {
                       <div className="input_label">
                         <label htmlFor="room_no">Room No:</label>
                       </div>
-                      <input type="text" id="room_no" name="room_no" className="custom-input" readOnly={true} value={selectedComplaint.roomno}/>
+                      <input type="text" id="room_no" name="room_no" className="custom-input" readOnly={true} value={selectedComplaint.roomno} />
                     </section>
                   </div>
-                  
+
                   <div className="input_area_two_columns">
-                  <section>
-                    <div className="input_label">
-                      <label htmlFor="category">Category:</label>
-                    </div>
-                    <input
-                      type="text"
-                      id="category"
-                      name="category"
-                      className="custom-input"
-                      readOnly={true}
-                      value={selectedComplaint.category}
-                    />
-                  </section>
-                  <section>
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="category">Category:</label>
+                      </div>
+                      <input
+                        type="text"
+                        id="category"
+                        name="category"
+                        className="custom-input"
+                        readOnly={true}
+                        value={selectedComplaint.category}
+                      />
+                    </section>
+                    <section>
                       <div className="input_label">
                         <label htmlFor="department">Services:</label>
                       </div>
@@ -307,21 +310,21 @@ const ComplaintStatus = () => {
                       <div className="input_label">
                         <label htmlFor="technician_name">Technician Name:</label>
                       </div>
-                        <input
-                          type="text"
-                          id="technician"
-                          name="technician"
-                          className="custom-input"
-                          readOnly={true}
-                          value={selectedComplaint.technician}
-                        />
+                      <input
+                        type="text"
+                        id="technician"
+                        name="technician"
+                        className="custom-input"
+                        readOnly={true}
+                        value={selectedComplaint.technician}
+                      />
                     </section>
                     <section>
                       <div className="input_label">
                         <label htmlFor="technician_contact">Technician Contact:</label>
                       </div>
-                      <input type="tel" id="technician_contact" name="technician_contact" className="custom-input" 
-                      value={selectedComplaint.technicianno} readOnly={true}/>
+                      <input type="tel" id="technician_contact" name="technician_contact" className="custom-input"
+                        value={selectedComplaint.technicianno} readOnly={true} />
                     </section>
                   </div>
                   <section>

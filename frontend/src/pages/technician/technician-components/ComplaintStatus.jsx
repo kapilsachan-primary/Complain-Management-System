@@ -18,7 +18,7 @@ const ComplaintStatus = () => {
   const [errors, seterrors] = useState({});
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
-  const fetchComplaints = (id) =>{
+  const fetchComplaints = (id) => {
     axios.post('http://localhost:3000/technician/fetchjobs', {
       id: id,
     })
@@ -34,7 +34,7 @@ const ComplaintStatus = () => {
     fetchComplaints(id);
   }, [id]);
 
-  
+
   useEffect(() => {
     const lowerCaseSearch = searchText.toLowerCase();
     let filtered = data.filter(
@@ -82,7 +82,7 @@ const ComplaintStatus = () => {
     setSelectedComplaint(complaint);
     axios.get(`http://localhost:3000/technician/complains/${complaint._id}`)
       .then((res) => {
-      //  console.log("working "+ res.data.roomno);        
+        //  console.log("working "+ res.data.roomno);        
         setstatus(res.data.status);
         setaction(res.data.action);
         setisResolved(res.data.status == "Resolved"); //Disable if the status is resolved.
@@ -107,7 +107,7 @@ const ComplaintStatus = () => {
   }
   function f2aValidate(status, action) {
     const errors = {};
-   if(status==="Resolved"){
+    if (status === "Resolved") {
       errors.status = "Resolved job has to be submited";
     }
     if (action === "") {
@@ -122,38 +122,38 @@ const ComplaintStatus = () => {
     seterrors(checkerr);
     if (Object.entries(checkerr).length === 0) {
       console.log("EveryThing OK!!");
-      if(status==="Resolved"){
-      axios.put("http://localhost:3000/technician/updateactionresolved", {
-        id: selectedComplaint._id,
-        status: status,
-        action: action,
-      }).then(res => {
-        if (res.data.Status === true) {
-          alert(res.data.message)
-          setIsModalOpen(false);
-          fetchComplaints(id);
-        }
-        else {
-          alert(res.data.message)
-        }
-      }).catch(err => console.log(err));
-    }
-    else{
-      axios.put("http://localhost:3000/technician/updateactionpending", {
-        id: selectedComplaint._id,
-        status: status,
-        action: action,
-      }).then(res => {
-        if (res.data.Status === true) {
-          alert(res.data.message)
-          setIsModalOpen(false);
-          fetchComplaints(id);
-        }
-        else {
-          alert(res.data.message)
-        }
-      }).catch(err => console.log(err));
-    }
+      if (status === "Resolved") {
+        axios.put("http://localhost:3000/technician/updateactionresolved", {
+          id: selectedComplaint._id,
+          status: status,
+          action: action,
+        }).then(res => {
+          if (res.data.Status === true) {
+            alert(res.data.message)
+            setIsModalOpen(false);
+            fetchComplaints(id);
+          }
+          else {
+            alert(res.data.message)
+          }
+        }).catch(err => console.log(err));
+      }
+      else {
+        axios.put("http://localhost:3000/technician/updateactionpending", {
+          id: selectedComplaint._id,
+          status: status,
+          action: action,
+        }).then(res => {
+          if (res.data.Status === true) {
+            alert(res.data.message)
+            setIsModalOpen(false);
+            fetchComplaints(id);
+          }
+          else {
+            alert(res.data.message)
+          }
+        }).catch(err => console.log(err));
+      }
     } else {
       setTimeout(() => seterrors({}), 3000);
     }
@@ -272,10 +272,13 @@ const ComplaintStatus = () => {
               <h1 className="popup_primary_header">Complaint Status Details</h1>
 
               <div className="top_cont">
-                <div className="token_no_component">
-                  <p>
-                    Token No: <span>{selectedComplaint.tokenno}</span>
-                  </p>
+                <div className="flex flex-col gap-4">
+                  <div className="token_no_component">
+                    <p>
+                      Token No: <span>{selectedComplaint.tokenno}</span>
+                    </p>
+                  </div>
+                  <p className="text-2xl"><span className="font-bold">Email:</span> example@gmail.com</p>
                 </div>
                 <div className="status_component">
                   <div>
@@ -340,37 +343,37 @@ const ComplaintStatus = () => {
                       <div className="input_label">
                         <label htmlFor="room_no">Room No:</label>
                       </div>
-                      <input type="text" id="room_no" name="room_no" className="custom-input" 
-                      value={selectedComplaint.roomno} readOnly={true}/>
+                      <input type="text" id="room_no" name="room_no" className="custom-input"
+                        value={selectedComplaint.roomno} readOnly={true} />
                     </section>
                   </div>
 
                   <div className="input_area_two_columns">
-                  <section>
-                    <div className="input_label">
-                      <label htmlFor="category">Category:</label>
-                    </div>
-                    <input
-                      type="text"
-                      id="category"
-                      name="category"
-                      className="custom-input"
-                      value={selectedComplaint.category} readOnly={true}
-                    />
-                  </section>
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="category">Category:</label>
+                      </div>
+                      <input
+                        type="text"
+                        id="category"
+                        name="category"
+                        className="custom-input"
+                        value={selectedComplaint.category} readOnly={true}
+                      />
+                    </section>
 
-                  <section>
-                    <div className="input_label">
-                      <label htmlFor="category">Services:</label>
-                    </div>
-                    <input
-                      type="text"
-                      id="services"
-                      name="services"
-                      className="custom-input"
-                      value={selectedComplaint.services} readOnly={true}
-                    />
-                  </section>
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="category">Services:</label>
+                      </div>
+                      <input
+                        type="text"
+                        id="services"
+                        name="services"
+                        className="custom-input"
+                        value={selectedComplaint.services} readOnly={true}
+                      />
+                    </section>
                   </div>
                   <section>
                     <div className="input_label">
@@ -389,7 +392,7 @@ const ComplaintStatus = () => {
                       <label htmlFor="status">Status: </label>
                     </div>
                     <div className="select_container">
-                      <select id="status" name="status" value={status} onChange={(e)=> setstatus(e.target.value)}
+                      <select id="status" name="status" value={status} onChange={(e) => setstatus(e.target.value)}
                         disabled={isResolved}>
                         <option value="onHold" disabled hidden >Issue Priority</option>
                         <option value="Pending">Pending</option>
@@ -406,8 +409,8 @@ const ComplaintStatus = () => {
                       name="complaintAction"
                       id="complaintAction"
                       className="custom-textarea"
-                      value={action} 
-                      onChange={(e)=> setaction(e.target.value)} disabled={isResolved}
+                      value={action}
+                      onChange={(e) => setaction(e.target.value)} disabled={isResolved}
                     ></textarea>
                     {errors.action && <div className='authform-error'>{errors.action}</div>}
                   </section>
