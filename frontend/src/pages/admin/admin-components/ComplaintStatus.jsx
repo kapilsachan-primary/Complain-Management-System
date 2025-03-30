@@ -59,9 +59,9 @@ const ComplaintStatus = () => {
     let filtered = data.filter(
       (item) =>
         item.department.toLowerCase().includes(lowerCaseSearch) ||
-        item.subject.toLowerCase().includes(lowerCaseSearch) ||
+        item.category.toLowerCase().includes(lowerCaseSearch) ||
         item.status.toLowerCase().includes(lowerCaseSearch) ||
-        item.priority.toLowerCase().includes(lowerCaseSearch) ||
+       // item.priority.toLowerCase().includes(lowerCaseSearch) ||
         item.tokenno.toString().includes(lowerCaseSearch) ||
         item.technician.toLowerCase().includes(lowerCaseSearch)
     );
@@ -171,8 +171,8 @@ const ComplaintStatus = () => {
       cell: (row) => <span className={`status ${row.status.toLowerCase().replace(" ", "-")}`}>{row.status}</span>,
     },
     {
-      name: <span className="column_header">Subject</span>,
-      selector: (row) => row.subject,
+      name: <span className="column_header">Category</span>,
+      selector: (row) => row.category,
       sortable: true,
       center: true,
     },
@@ -182,13 +182,13 @@ const ComplaintStatus = () => {
       sortable: true,
       center: true,
     },
-    {
-      name: <span className="column_header">Priority</span>,
-      selector: (row) => row.priority,
-      sortable: true,
-      center: true,
-      cell: (row) => <span className={`priority ${row.priority.toLowerCase()}`}>{row.priority}</span>,
-    },
+    // {
+    //   name: <span className="column_header">Priority</span>,
+    //   selector: (row) => row.priority,
+    //   sortable: true,
+    //   center: true,
+    //   cell: (row) => <span className={`priority ${row.priority.toLowerCase()}`}>{row.priority}</span>,
+    // },
     {
       name: <span className="column_header">Actions</span>,
       center: true,
@@ -252,12 +252,12 @@ const ComplaintStatus = () => {
                       {selectedComplaint.status}
                     </span>
                   </div>
-                  <div>
+                  {/* <div>
                     <p>Priority:</p>
                     <span className={`priority ${selectedComplaint.priority.toLowerCase()}`}>
                       {selectedComplaint.priority}
                     </span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -325,31 +325,45 @@ const ComplaintStatus = () => {
                       <input type="text" id="room_no" name="room_no" className="custom-input" readOnly={true} value={selectedComplaint.roomno} />
                     </section>
                   </div>
+                  
+                  <div className="input_area_two_columns">
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="category">Category:</label>
+                      </div>
+                      <input
+                        type="text"
+                        id="category"
+                        name="category"
+                        className="custom-input"
+                        readOnly={true}
+                        value={selectedComplaint.category}
+                      />
+                    </section>
+                    <section>
+                      <div className="input_label">
+                        <label htmlFor="department">Services:</label>
+                      </div>
+                      <input
+                        type="text"
+                        id="department"
+                        name="department"
+                        readOnly={true}
+                        value={selectedComplaint.services}
+                      />
+                    </section>
+                  </div>
 
                   <section>
                     <div className="input_label">
-                      <label htmlFor="subject">Subject:</label>
-                    </div>
-                    <input
-                      type="text"
-                      id="subject"
-                      name="subject"
-                      className="custom-input"
-                      readOnly={true}
-                      value={selectedComplaint.subject}
-                    />
-                  </section>
-
-                  <section>
-                    <div className="input_label">
-                      <label htmlFor="complaintDes">Description:</label>
+                      <label htmlFor="complaintDes">Product Description:</label>
                     </div>
                     <textarea
                       name="complaintDes"
                       id="complaintDes"
                       className="custom-textarea"
                       readOnly={true}
-                      value={selectedComplaint.description}
+                      value={selectedComplaint.productdescription}
                     ></textarea>
                   </section>
 

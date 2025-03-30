@@ -5,6 +5,8 @@ import { Coordinator } from "../models/Coordinator.js";
 import jwt from 'jsonwebtoken';
 import { Technician} from "../models/Technician.js";
 import { Complain } from "../models/Complain.js";
+import { Category } from "../models/Category.js";
+import { Product } from "../models/Product.js";
 router.post('/login', async(req,res)=>{
     const email=req.body.email;
     const password=req.body.password;
@@ -134,6 +136,19 @@ router.get('/countjobs',async(req,res)=>{
     }
 });
 
+router.delete('/deleteproduct/:id',async(req,res)=>{
+    try{
+    const id=req.params.id;
+    const deletedproduct=await Product.findByIdAndDelete(id);
+    if(!deletedproduct){
+        return res.json({Status: false,Message: "Product not deleted"});
+    }
+    return res.json({Status: true,Message: "Product Deleted"});
+    }catch(err){ 
+        return res.json({status: false,Message: err.message})
+    }
+});
+
 router.get('/report', async (req, res) => {
     const { startDate, closeDate } = req.query;
     const start=new Date(startDate);start.setHours(0,0,0,0);
@@ -148,5 +163,136 @@ router.get('/report', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
+//Show all the Categories and send them to frontend
+router.get('/allcategories',async(req,res)=>{
+    try{
+        const categories= await Category.find();
+        return res.json(categories);
+    }
+    catch(err){
+        return res.json({Status: false,message: "Server error"}) 
+    }
+    
+});
+ 
+//Show all the Products and send them to frontend
+router.get('/allproducts',async(req,res)=>{
+    try{
+        const products= await Product.find();
+        const productCategories= await Product.distinct("categoryName");
+        return res.json({products:products,productCategories:productCategories});
+    }
+    catch(err){
+        return res.json({Status: false,message: "Server error"}) 
+    }
+    
+});
+
+// Add a new category
+router.post("/addcategory", async (req, res) => {
+    try {
+        const { name, hasServices } = req.body;
+        // Check if category already exists
+        const existingCategory = await Category.findOne({ name });
+        if (existingCategory) {
+          return res.json({Status:false, message: "Category already exists" });
+        }
+    
+        // Create new category
+        const newCategory = new Category({
+          name,
+          hasServices,
+          services: hasServices ? [] : undefined, // Initialize empty array if hasServices is true
+        });
+        await newCategory.save();
+        res.json({Status:true, message: "Category added successfully"});
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    
+  });
+
+// Add a new service to a category
+router.post("/:categoryId/add-service", async (req, res) => {
+    try {
+      const { categoryId } = req.params;
+      const { serviceName } = req.body;
+      const category = await Category.findById(categoryId);
+      if (!category) return res.json({Status:false, message: "Category not found" });
+  
+      // If category doesn't support services, enable it
+      if (!category.hasServices) {
+        category.hasServices = true;
+      }
+
+      category.services.push(serviceName);
+      await category.save();
+  
+      res.json({ Status:true,message: "Service added successfully"});
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+// Add a new product to a category
+router.post("/addproduct", async (req, res) => {
+    try {
+      const { name,categoryName, categoryId, department } = req.body;
+  
+      const newProduct = new Product({ name,categoryName:categoryName, category: categoryId, department });
+      await newProduct.save();
+  
+      res.json({Status:true, message: "Product added successfully"});
+    } catch (error) {
+      res.json({Status:false, error: error.message });
+    }
+  });
+  
+  router.delete("/deleteCategory/:categoryId",async(req,res) => {
+    try{    
+    const { categoryId }= req.params;
+        //Checking if category exists
+        const category = await Category.findById(categoryId);
+        if(!category) {
+            return res.status(404).json({ message: "Category not found"})
+        }
+        const deleteProducts=await Product.deleteMany({category: categoryId});
+        const deletedCategory=await Category.findByIdAndDelete(categoryId);
+        if(!deletedCategory) {
+            return res.status(422).json({ message: "Category not deleted"})
+        }
+        return res.status(200).json({message: "Category and its products are deleted"})
+    }catch(error){
+        return res.status(500).json({error : error.message});
+    }
+    })
+
+    // Delete a specific service from a category
+router.delete("/:categoryId/remove-service", async (req, res) => {
+    try {
+      const { categoryId } = req.params;
+      const { serviceName } = req.body;
+  
+      const category = await Category.findById(categoryId);
+      if (!category) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+  
+      // Remove the service from the services array
+      category.services = category.services.filter(service => service !== serviceName);
+  
+      // If no services remain, set hasServices to false
+      if (category.services.length === 0) {
+        category.hasServices = false;
+      }
+  
+      await category.save();
+  
+      res.status(200).json({ message: "Service removed successfully"});
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
 
 export {router as CoordinatorRouter}

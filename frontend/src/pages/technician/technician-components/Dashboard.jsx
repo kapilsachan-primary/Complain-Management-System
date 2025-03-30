@@ -42,7 +42,7 @@ const ComplaintTable = ({ data }) => {
 
   const columns = [
     {
-      name: <span className="column_header">ID</span>,
+      name: <span className="column_header">Token No</span>,
       selector: (row) => row.tokenno,
       sortable: true,
       center: true,
@@ -66,8 +66,8 @@ const ComplaintTable = ({ data }) => {
       ),
     },
     {
-      name: <span className="column_header">Subject</span>,
-      selector: (row) => row.subject,
+      name: <span className="column_header">Category</span>,
+      selector: (row) => row.category,
       sortable: true,
       center: true,
     },
@@ -77,17 +77,17 @@ const ComplaintTable = ({ data }) => {
       sortable: true,
       center: true,
     },
-    {
-      name: <span className="column_header">Priority</span>,
-      selector: (row) => row.priority,
-      sortable: true,
-      center: true,
-      cell: (row) => (
-        <span className={`priority ${row.priority.toLowerCase()}`}>
-          {row.priority}
-        </span>
-      ),
-    },
+    // {
+    //   name: <span className="column_header">Priority</span>,
+    //   selector: (row) => row.priority,
+    //   sortable: true,
+    //   center: true,
+    //   cell: (row) => (
+    //     <span className={`priority ${row.priority.toLowerCase()}`}>
+    //       {row.priority}
+    //     </span>
+    //   ),
+    // },
   ];
 
   return (
@@ -200,13 +200,13 @@ const Dashboard = () => {
     doc.text(`Technician - "${name}" ${selectedStatus} Complaints Report`, 20, 20);
 
     // Define table headers and data
-    const tableColumn = ['Token No.', 'Issue Date', 'Closure Date', 'Technician', 'Subject', 'Status'];
+    const tableColumn = ['Token No.', 'Issue Date', 'Closure Date', 'Technician', 'Category', 'Status'];
     const tableRows = filteredComplains.map(complaint => [
       complaint.tokenno,
       new Date(complaint.issuedate).toLocaleDateString(),
       complaint.closuredate?new Date(complaint.closuredate).toLocaleDateString():"MM/DD/YYYY",
       complaint.technician,
-      complaint.subject,
+      complaint.category,
       complaint.status
     ]);
 
@@ -236,7 +236,7 @@ const Dashboard = () => {
       Issue_Date: new Date(c.issuedate).toLocaleDateString(),
       Closure_Date: c.closuredate?new Date(c.closuredate).toLocaleDateString():"MM/DD/YYYY",
       Technician: c.technician,
-      Subject:c.subject,
+      Category:c.category,
       Status: c.status
       }))
   
@@ -248,7 +248,7 @@ const Dashboard = () => {
         {wch:12}, //Issue date
         {wch:12}, //Closure date
         {wch:10}, //Technician
-        {wch:45}, //Subject
+        {wch:45}, //category
         {wch:8}, //Status
       ];
   

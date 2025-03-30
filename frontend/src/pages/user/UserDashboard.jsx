@@ -1,63 +1,116 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import UserformValidate from "./UserformValidation";
 import axios from "axios";
 export default function UserDashboard() {
+  axios.defaults.withCredentials=true;
   const [formData, setFormData] = useState({
     name: "",
     roomNo: "",
     contactNo: "",
-    subject: "",
+    category: "",
     department: "",
-    model: "",
-    description: "",
-    priority: "",
+    productdescription: "",
+    services: "",
   });
   const [errors, seterrors] = useState({});
+  const [categories, setCategories] = useState([]);
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [services, setServices] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [isServiceEnabled, setIsServiceEnabled] = useState(false);
 
-  // Description & Model options based on Subject
-  const options = {
-    printer: {
-      descriptions: ["Printer refilling", "Printer repair"],
-      models: ["LaserJet Printer", "OfficeJet Printer"]
-    },
-    cctv: {
-      descriptions: ["Camera not working", "CCTV wiring issue"],
-      models: ["Dome Camera", "Bullet Camera"]
+  // Fetch categories on mount
+  useEffect(() => {
+    axios.get("http://localhost:3000/user/categories")
+      .then(response => setCategories(response.data))
+      .catch(error => console.error("Error fetching categories:", error));
+  }, []);
+
+  // Fetch products when department or category changes
+  useEffect(() => {
+    if (selectedDepartment && selectedCategory) {
+      axios.get("http://localhost:3000/user/products", {
+        params: { department: selectedDepartment, categoryname: selectedCategory }
+      })
+      .then(response => {
+        setProducts(response.data.products)
+      })
+      .catch(error => console.error("Error fetching products:", error));
+    } else {
+      setProducts([]); // Reset products if no selection
     }
-  };
+  }, [selectedDepartment, selectedCategory]);
 
-  // ----- OLD CODE - (Kapil) -----
+  useEffect(()=>{
+    setFormData((prev)=>({
+      ...prev,
+      productdescription:"",
+    }));
+  },[formData.category,formData.department])
+
+  // // services & productdescription options based on category
+  // const options = {
+  //   printer: {
+  //     servicess: ["Printer refilling", "Printer repair"],
+  //     productdescriptions: ["LaserJet Printer", "OfficeJet Printer"]
+  //   },
+  //   cctv: {
+  //     servicess: ["Camera not working", "CCTV wiring issue"],
+  //     productdescriptions: ["Dome Camera", "Bullet Camera"]
+  //   }
+  // };
+
+ // ----- OLD CODE - (Kapil) -----
   // const handleChange = (e) => {
   //   setFormData({ ...formData, [e.target.name]: e.target.value });
   // };
 
   // ----- NEW CODE - (Naitik) -----
-  // Modify handleChange function to reset description & model when subject changes
+  // Modify handleChange function to reset services & productdescription when category changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-      ...(name === "subject" ? { description: "", model: "" } : {}) // Reset description & model if subject changes
+      //...(name === "category" ? { services: "", productdescription: "" } : {}) // Reset services & productdescription if category changes
     }));
+    if(name === "category"){
+      setSelectedCategory(value);
+      const category = categories.find(cat => cat.name === value);
+    if (category?.hasServices) {
+      setIsServiceEnabled(true);
+      setServices(category.services);
+    } else {
+      setIsServiceEnabled(false);
+      setServices([]);
+      setFormData((prev) => ({
+        ...prev,
+        services:"",
+      }));
+    }
+    }
+    else if(name === "department"){
+      setSelectedDepartment(value);
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    //console.log("Form Submitted", formData);
-    const checkerr = UserformValidate(formData);
+    console.log("Form Submitted", formData);
+    const checkerr = UserformValidate(formData,isServiceEnabled,products);
     seterrors(checkerr);
     console.log(Object.entries(checkerr).length);
     if (Object.entries(checkerr).length === 0) {
+      console.log("Good to goo")
       axios.post("http://localhost:3000/user/complain", {
         name: formData.name,
         roomno: formData.roomNo,
         contactno: formData.contactNo,
-        subject: formData.subject,
+        category: formData.category,
         department: formData.department,
-        model: formData.model,
-        description: formData.description,
-        priority: formData.priority,
+        productdescription: formData.productdescription,
+        services: formData.services,
       }).then(res => {
         console.log(res);
         if (res.data.status) {
@@ -151,61 +204,70 @@ export default function UserDashboard() {
 
               <section>
                 <div className="input_label">
-                  <label htmlFor="subject">Subject:</label>
+                  <label htmlFor="category">Category:</label>
                 </div>
                 <div className="select_container">
-                  <select id="subject" name="subject" value={formData.subject} onChange={handleChange}>
-                    <option value="" disabled hidden selected>Select Subject</option>
-                    <option value="printer">Printer</option>
-                    <option value="cctv">CCTV</option>
+                  <select id="category" name="category" value={formData.category} onChange={handleChange}>
+                    <option value="" disabled hidden selected>Select Category</option>
+                    {/* <option value="printer">Printer</option>
+                    <option value="cctv">CCTV</option> */}
+                    {categories.map((cat) => (
+                      <option key={cat._id} value={cat.name}>{cat.name}</option>
+                    ))}
                   </select>
                 </div>
-                {errors.subject && <div className='userform-error'>{errors.subject}</div>}
+                {errors.category && <div className='userform-error'>{errors.category}</div>}
               </section>
-
+              {isServiceEnabled && (
               <section>
                 <div className="input_label">
-                  <label htmlFor="description">Description:</label>
+                  <label htmlFor="services">Services:</label>
                 </div>
                 <div className="select_container">
                   <select
-                    id="description"
-                    name="description"
-                    value={formData.description}
+                    id="services"
+                    name="services"
+                    value={formData.services}
                     onChange={handleChange}
-                    disabled={!formData.subject}
-                    style={{ cursor: formData.subject ? "default" : "not-allowed" }}
+                    // disabled={!formData.category}
+                    // style={{ cursor: formData.category ? "default" : "not-allowed" }}
                   >
-                    <option value="" disabled hidden>Select Description</option>
-                    {formData.subject && options[formData.subject].descriptions.map((desc, index) => (
+                    <option value="" disabled hidden>Select Services</option>
+                    {/* {formData.category && options[formData.category].servicess.map((desc, index) => (
                       <option key={index} value={desc}>{desc}</option>
+                    ))} */}
+                    {services.map((service, index) => (
+                      <option key={index} value={service}>{service}</option>
                     ))}
                   </select>
 
                 </div>
-                {errors.description && <div className='userform-error'>{errors.description}</div>}
+                {errors.services && <div className='userform-error'>{errors.services}</div>}
               </section>
-
+              )}
               <section>
                 <div className="input_label">
-                  <label htmlFor="model">Model:</label>
+                  <label htmlFor="productdescription">Product Description:</label>
                 </div>
                 <div className="select_container">
                   <select
-                    id="model"
-                    name="model"
-                    value={formData.model}
+                    id="productdescription"
+                    name="productdescription"
+                    value={formData.productdescription}
                     onChange={handleChange}
-                    disabled={!formData.subject}
-                    style={{ cursor: formData.subject ? "default" : "not-allowed" }}
+                    disabled={products.length === 0}
+                    style={{ cursor: products.length !== 0 ? "default" : "not-allowed" }}
                   >
-                    <option value="" disabled hidden>Select Model</option>
-                    {formData.subject && options[formData.subject].models.map((mdl, index) => (
+                    <option value="" disabled hidden>Select Product</option>
+                    {/* {formData.category && options[formData.category].productdescriptions.map((mdl, index) => (
                       <option key={index} value={mdl}>{mdl}</option>
+                    ))} */}
+                    {products.map((prod) => (
+                      <option key={prod._id} value={prod.name}>{prod.name}</option>
                     ))}
                   </select>
                 </div>
-                {errors.model && <div className='userform-error'>{errors.model}</div>}
+                {errors.productdescription && <div className='userform-error'>{errors.productdescription}</div>}
               </section>
 
 
@@ -226,7 +288,7 @@ export default function UserDashboard() {
               </section> */}
               
               {/* NEW - Prioriy Select Input */}
-              <section>
+              {/* <section>
                 <div className="input_label">
                   <label htmlFor="priority">Priority:</label>
                 </div>
@@ -238,7 +300,7 @@ export default function UserDashboard() {
                   </select>
                 </div>
                 {errors.priority && <div className='userform-error'>{errors.priority}</div>}
-              </section>
+              </section> */}
 
             </section>
           </div>

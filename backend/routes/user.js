@@ -1,7 +1,8 @@
 import express from "express";
 const router=express.Router();
 import { Complain } from '../models/Complain.js';
-
+import { Product } from "../models/Product.js";
+import { Category } from "../models/Category.js";
 router.post('/complain',async (req,res)=>{
     try{
         const today = new Date();
@@ -30,9 +31,9 @@ router.post('/complain',async (req,res)=>{
             roomno: req.body.roomno,
             department:req.body.department,
             contactno: req.body.contactno,
-            subject: req.body.subject,
-            description: req.body.description,
-            priority: req.body.priority,
+            category: req.body.category,
+            services: req.body.services,
+            productdescription: req.body.productdescription,
             status: "Y/A",
         })
         await newComplain.save();
@@ -41,5 +42,28 @@ router.post('/complain',async (req,res)=>{
         return res.json({status: false,message: err.message})
     }
 });
+
+router.get("/categories", async (req, res) => {
+    try {
+      const categories = await Category.find();
+      res.json(categories);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
+  // Get products based on department and category
+router.get("/products", async (req, res) => {
+    try {
+      const { department, categoryname } = req.query;
+      const products = await Product.find({ department, categoryName: categoryname });
+      if(!products)
+        return res.json({Status:false,products:products})
+      return res.json({Status:true,products:products});
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+  
 
 export {router as UserRouter}
