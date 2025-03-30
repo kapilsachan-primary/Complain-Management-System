@@ -305,11 +305,11 @@ const Equipments = () => {
 
               <div className="popup_tertiary_header_cont flex gap-8 flex-col sm:flex-row sm:items-center">
                 <h1 className={`popup_tertiary_header ${step === 1 ? "font-bold" : "font-light"}`}>
-                  Step 1: Add Category
+                  Add Category
                 </h1>
-                <i className="fa-solid fa-angle-right text-[2rem]"></i>
+                <i class="fa-solid fa-grip-lines-vertical text-[2rem]"></i>
                 <h1 className={`popup_tertiary_header ${step === 2 ? "font-bold" : "font-light"}`}>
-                  Step 2: Add Product
+                  Add Product
                 </h1>
               </div>
 
