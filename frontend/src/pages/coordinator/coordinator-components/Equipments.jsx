@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { AddProductorService,AddCategory } from "./AddEquipment";
+import { AddProductorService, AddCategory } from "./AddEquipment";
 const Equipments = () => {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -14,9 +14,9 @@ const Equipments = () => {
   const [equipmentToDelete, setEquipmentToDelete] = useState(null);
   const [showAddPopup, setShowAddPopup] = useState(false);
   const [step, setStep] = useState(1); // Track step for Add Equipment popup
-  const [errors,seterrors]=useState({});
+  const [errors, seterrors] = useState({});
   const [newCategory, setNewCategory] = useState('');
-  const [newProductorService, setNewProductorService] = useState({department: "",category: {_id: "",name: ""},type: "", modelNo: ""});
+  const [newProductorService, setNewProductorService] = useState({ department: "", category: { _id: "", name: "" }, type: "", modelNo: "" });
 
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
@@ -28,18 +28,18 @@ const Equipments = () => {
       }
     });
   }, []);
-  const fetchProducts = () =>{
+  const fetchProducts = () => {
     axios.get("http://localhost:3000/coordinator/allproducts").then((res) => {
       setData(res.data.products);
       setFilteredData(res.data.products);
       setproductCategories(res.data.productCategories);
-      console.log("Product Categories",res.data.productCategories);
-    }).catch((err)=> console.log(err));
+      console.log("Product Categories", res.data.productCategories);
+    }).catch((err) => console.log(err));
   }
-  const fetchCategories = () =>{
+  const fetchCategories = () => {
     axios.get("http://localhost:3000/coordinator/allcategories").then((res) => {
       setCategories(res.data);
-    }).catch((err)=> console.log(err));
+    }).catch((err) => console.log(err));
   }
   useEffect(() => {
     // fetch("/data/equipments-data.json")
@@ -55,14 +55,14 @@ const Equipments = () => {
     fetchCategories();
   }, []);
   // useEffect(()=>{
-    
+
   // },[])
   useEffect(() => {
     const lowerCaseSearch = searchText.toLowerCase();
     let filtered = data.filter(
       (item) =>
         item.name.toLowerCase().includes(lowerCaseSearch) ||
-       // item.name.toLowerCase().includes(lowerCaseSearch) ||
+        // item.name.toLowerCase().includes(lowerCaseSearch) ||
         item.department.toLowerCase().includes(lowerCaseSearch) ||
         item.categoryName.toLowerCase().includes(lowerCaseSearch)
     );
@@ -85,66 +85,68 @@ const Equipments = () => {
     // setData(updatedData);
     // setFilteredData(updatedData);
     // setShowDeletePopup(false);
-    axios.delete('http://localhost:3000/coordinator/deleteproduct/'+equipmentToDelete._id)
-        .then( res =>{
-          if(res.data.Status === true){
-          alert(res.data.Message);setShowDeletePopup(false);
-          fetchCategories();fetchProducts();
+    axios.delete('http://localhost:3000/coordinator/deleteproduct/' + equipmentToDelete._id)
+      .then(res => {
+        if (res.data.Status === true) {
+          alert(res.data.Message); setShowDeletePopup(false);
+          fetchCategories(); fetchProducts();
         }
-          else
+        else
           alert(res.data.Message);
-        })
-        .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
   };
 
-  const handleNextStep = () => {setNewCategory('');setStep(2);};
-  const handlePreviousStep = () => {setNewProductorService({ department: "", category:{_id:"",name:""},type: "", modelNo: "" });setStep(1);};
+  const handleNextStep = () => { setNewCategory(''); setStep(2); };
+  const handlePreviousStep = () => { setNewProductorService({ department: "", category: { _id: "", name: "" }, type: "", modelNo: "" }); setStep(1); };
 
   const handleAddProductorService = (e) => {
-      //alert("clicked");
-      e.preventDefault();
-      const checkerr = AddProductorService(newProductorService);
-      seterrors(checkerr);
-      console.log(checkerr)
-      if (Object.entries(checkerr).length === 0) {
-        if(newProductorService.type=="Services"){
+    //alert("clicked");
+    e.preventDefault();
+    const checkerr = AddProductorService(newProductorService);
+    seterrors(checkerr);
+    console.log(checkerr)
+    if (Object.entries(checkerr).length === 0) {
+      if (newProductorService.type == "Services") {
         console.log("No Error in services");
-        axios.post(`http://localhost:3000/coordinator/${newProductorService.category._id}/add-service`,{
-          serviceName:newProductorService.modelNo,
-      }).then(res => {
-        if(res.data.Status === true){
-          alert(res.data.message)
-        }
-        else{
-          alert(res.data.message)
-        }
-      }).catch(err => console.log(err));
-        }
-        else if(newProductorService.type =="Product"){
-          console.log("No error in Products")
-        axios.post("http://localhost:3000/coordinator/addproduct",{
-          name:newProductorService.modelNo,
-          categoryName:newProductorService.category.name,
-          categoryId:newProductorService.category._id,
-          department:newProductorService.department
-      }).then(res => {
-        if(res.data.Status === true){
-          alert(res.data.message);
-          console.log("Product Added:", newProductorService);
-          setShowAddPopup(false);
-          setStep(1);
-          // Reset values ONLY when the product is added
-          setNewCategory('');
-          setNewProductorService({ department: "", category: {_id:"",name:""},type: "", modelNo: "" });
-          fetchProducts();
-        }
-        else{
-          alert(res.data.message)
-        }
-      }).catch(err => console.log(err));
-        }
-       }
-    else{
+        axios.post(`http://localhost:3000/coordinator/${newProductorService.category._id}/add-service`, {
+          serviceName: newProductorService.modelNo,
+        }).then(res => {
+          if (res.data.Status === true) {
+            alert(res.data.message)
+            setShowAddPopup(false);
+            setStep(1);
+          }
+          else {
+            alert(res.data.message)
+          }
+        }).catch(err => console.log(err));
+      }
+      else if (newProductorService.type == "Product") {
+        console.log("No error in Products")
+        axios.post("http://localhost:3000/coordinator/addproduct", {
+          name: newProductorService.modelNo,
+          categoryName: newProductorService.category.name,
+          categoryId: newProductorService.category._id,
+          department: newProductorService.department
+        }).then(res => {
+          if (res.data.Status === true) {
+            alert(res.data.message);
+            console.log("Product Added:", newProductorService);
+            setShowAddPopup(false);
+            setStep(1);
+            // Reset values ONLY when the product is added
+            setNewCategory('');
+            setNewProductorService({ department: "", category: { _id: "", name: "" }, type: "", modelNo: "" });
+            fetchProducts();
+          }
+          else {
+            alert(res.data.message)
+          }
+        }).catch(err => console.log(err));
+      }
+    }
+    else {
       setTimeout(() => seterrors({}), 3000)
     }
   };
@@ -155,38 +157,38 @@ const Equipments = () => {
 
     // Reset values ONLY when the popup is closed
     setNewCategory('');
-    setNewProductorService({ department: "", category: {_id:"",name:""},type: "", modelNo: "" });
+    setNewProductorService({ department: "", category: { _id: "", name: "" }, type: "", modelNo: "" });
   };
 
   const handleAddCategory = (e) => {
-      e.preventDefault();
-      const checkerr = AddCategory(newCategory);
-      seterrors(checkerr);
-      console.log(checkerr)
-      if (Object.entries(checkerr).length === 0) {
-        console.log("No error for category addition");
-        axios.post("http://localhost:3000/coordinator/addcategory",{
-          name:newCategory,
-          hasServices:false
+    e.preventDefault();
+    const checkerr = AddCategory(newCategory);
+    seterrors(checkerr);
+    console.log(checkerr)
+    if (Object.entries(checkerr).length === 0) {
+      console.log("No error for category addition");
+      axios.post("http://localhost:3000/coordinator/addcategory", {
+        name: newCategory,
+        hasServices: false
       }).then(res => {
-        if(res.data.Status === true){
+        if (res.data.Status === true) {
           alert(res.data.message)
-          setShowAddPopup(false);
-          setStep(1);
+          // setShowAddPopup(false);
+          setTimeout(() => setStep(2), 500);
 
           // Reset values ONLY when the Category is added
           setNewCategory('');
-          setNewProductorService({ department: "", category: {_id:"",name:""},type: "", modelNo: "" });
+          setNewProductorService({ department: "", category: { _id: "", name: "" }, type: "", modelNo: "" });
           fetchCategories();
         }
-        else{
+        else {
           alert(res.data.message)
         }
       }).catch(err => console.log(err));
-      }
-      else{
-        setTimeout(() => seterrors({}), 3000)
-      }
+    }
+    else {
+      setTimeout(() => seterrors({}), 3000)
+    }
   };
 
   const columns = [
@@ -234,7 +236,7 @@ const Equipments = () => {
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
           >
-            <option value="All" selected>All</option> 
+            <option value="All" selected>All</option>
             {productCategories.map((category, index) => (
               <option key={index} value={category}>
                 {category}
@@ -327,8 +329,8 @@ const Equipments = () => {
                           name="all"
                           placeholder="All"
                           className="custom-input"
-                           value="All" // Controlled input
-                          // onChange={(e) => setNewCategory({ ...newCategory, all: e.target.value })} // Keep state updated
+                          value="All" // Controlled input
+                        // onChange={(e) => setNewCategory({ ...newCategory, all: e.target.value })} // Keep state updated
                         />
                       </section>
 
@@ -345,23 +347,23 @@ const Equipments = () => {
                           value={newCategory} // Controlled input
                           onChange={(e) => setNewCategory(e.target.value.toUpperCase())}// Keep state updated
                         />
+                        {errors.newCategory && <div className="popupform-error">{errors.newCategory}</div>}
                       </section>
-                      {errors.newCategory && <div className="userform-error">{errors.newCategory}</div>}
                     </section>
                   </div>
-                
+
                   <section className="buttons_area_columns popup_button">
-                  <section className="btn_fill_primary" onClick={handleAddCategory}>
+                    <section className="btn_outlined_primary" onClick={handleNextStep}>
+                      <button type="submit" className="main_button">
+                        <span>Next</span>
+                      </button>
+                    </section>
+                    <section className="btn_fill_primary" onClick={handleAddCategory}>
                       <button type="submit" className="main_button">
                         <span>Add</span>
                       </button>
                     </section>
 
-                    <section className="btn_fill_primary" onClick={handleNextStep}>
-                      <button type="submit" className="main_button">
-                        <span>Next</span>
-                      </button>
-                    </section>
                   </section>
 
                 </>
@@ -404,10 +406,9 @@ const Equipments = () => {
                             <option value="science-humanities">Science and Humanities</option>
                             <option value="textile-technology">Textile Technology</option>
                           </select>
-
+                          {errors.department && <div className="popupform-error">{errors.department}</div>}
                         </div>
                       </section>
-                      {errors.department && <div className="userform-error">{errors.department}</div>}
                       <section>
                         <div className="input_label">
                           <label htmlFor="department">Category:</label>
@@ -417,21 +418,25 @@ const Equipments = () => {
                             id="category"
                             name="category"
                             value={newProductorService.category?._id || ""}
-                            onChange={(e) => {const selectcateg=categories.find(cat => cat._id === e.target.value)
-                              setNewProductorService({ ...newProductorService,
-                              category: selectcateg?{_id:selectcateg._id,name:selectcateg.name}:null })}} // Keep state updated
+                            onChange={(e) => {
+                              const selectcateg = categories.find(cat => cat._id === e.target.value)
+                              setNewProductorService({
+                                ...newProductorService,
+                                category: selectcateg ? { _id: selectcateg._id, name: selectcateg.name } : null
+                              })
+                            }} // Keep state updated
                           >
                             <option value="" disabled>Select Category</option>
                             {categories.map((category) => (
-                              <option key={category._id} 
-                              value={category._id}>
+                              <option key={category._id}
+                                value={category._id}>
                                 {category.name}
                               </option>
                             ))}
                           </select>
+                          {errors.category && <div className="popupform-error">{errors.category}</div>}
                         </div>
                       </section>
-                      {errors.category && <div className="userform-error">{errors.category}</div>}
                       <section>
                         <div className="input_label">
                           <label htmlFor="department">Type:</label>
@@ -447,9 +452,9 @@ const Equipments = () => {
                             <option value="Services">Services</option>
                             <option value="Product">Product</option>
                           </select>
+                          {errors.type && <div className="popupform-error">{errors.type}</div>}
                         </div>
                       </section>
-                      {errors.type && <div className="userform-error">{errors.type}</div>}
                       <section>
                         <div className="input_label">
                           <label htmlFor="modelNo">Service Name/Model No.</label>
@@ -463,8 +468,8 @@ const Equipments = () => {
                           value={newProductorService.modelNo} // Controlled input
                           onChange={(e) => setNewProductorService({ ...newProductorService, modelNo: e.target.value })} // Keep state updated
                         />
+                        {errors.modelNo && <div className="popupform-error">{errors.modelNo}</div>}
                       </section>
-                      {errors.modelNo && <div className="userform-error">{errors.modelNo}</div>}
                     </section>
                   </div>
 
