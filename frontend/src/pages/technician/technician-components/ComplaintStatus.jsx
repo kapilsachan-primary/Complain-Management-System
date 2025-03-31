@@ -434,12 +434,12 @@ const ComplaintStatus = () => {
 
               <section className="buttons_area_columns popup_button">
                 <section className="btn_fill_primary">
-                  <button type="submit" className="main_button" onClick={handlesubmit} disabled={loading}>
+                  <button type="submit" className="main_button" onClick={handlesubmit} disabled={loading || isResolved}>
                     <span>{loading?"Submitting":"Submit"}</span>
                   </button>
                 </section>
                 <section className="btn_outlined_primary">
-                  <button type="submit" className="main_button" onClick={handlef2a} disabled={f2Aloading}>
+                  <button type="submit" className="main_button" onClick={handlef2a} disabled={f2Aloading || isResolved}>
                     <span>{f2Aloading?"Forwarding":"Forward To Admin"}</span>
                   </button>
                 </section>

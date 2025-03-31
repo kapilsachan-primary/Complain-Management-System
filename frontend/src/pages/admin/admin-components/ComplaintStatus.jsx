@@ -458,7 +458,7 @@ const ComplaintStatus = () => {
 
               <section className="buttons_area_columns popup_button">
                 <section className="btn_fill_primary">
-                  <button type="submit" className="main_button" onClick={handlesubmit} disabled={loading}>
+                  <button type="submit" className="main_button" onClick={handlesubmit} disabled={loading || isAssigned}>
                     <span>{loading?"Submitting":"Submit"}</span>
                   </button>
                 </section>
