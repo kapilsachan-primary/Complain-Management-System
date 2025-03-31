@@ -10,7 +10,7 @@ const Technician = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [technicianToDelete, setTechnicianToDelete] = useState(null);
-
+  const [loading,setLoading] = useState(false); 
   const [formData, setFormData] = useState({
     name: "",
     contactNo: "",
@@ -67,6 +67,7 @@ const Technician = () => {
     seterrors(checkerr);
 
     if (Object.entries(checkerr).length === 0) {
+      setLoading(true);
       try {
         const res = await axios.post("http://localhost:3000/technician/register", {
           name: formData.name,
@@ -102,6 +103,8 @@ const Technician = () => {
         }
       } catch (err) {
         console.log(err);
+      } finally{
+        setLoading(false);
       }
     } else {
       setTimeout(() => seterrors({}), 3000);
@@ -215,8 +218,8 @@ const Technician = () => {
               {errors.confirmpass && <div className='authform-error'>{errors.confirmpass}</div>}
               <section className="buttons_area_columns popup_button">
                 <section className="btn_fill_primary">
-                  <button type="submit" className="main_button" onClick={handleAddTechnician}>
-                    <span>Add</span>
+                  <button type="submit" className="main_button" onClick={handleAddTechnician} disabled={loading}>
+                    <span>{loading?"Adding":"Add"}</span>
                   </button>
                 </section>
               </section>
