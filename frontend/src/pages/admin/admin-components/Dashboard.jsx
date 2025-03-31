@@ -182,19 +182,73 @@ const Dashboard = () => {
     }
   };
 
+  // OLD CODE 
+  // const handleDownloadClick = () => {
+  //   const doc = new jsPDF();
+
+  //   // Title
+  //   doc.setFontSize(18);
+  //   doc.text(`Admin ${selectedStatus} Complaints Report`, 20, 20);
+
+  //   // Define table headers and data
+  //   const tableColumn = ['Token No.', 'Issue Date', 'Closure Date', 'Technician', 'Category', ' Status'];
+  //   const tableRows = filteredComplains.map(complaint => [
+  //     complaint.tokenno,
+  //     new Date(complaint.issuedate).toLocaleDateString(),
+  //     complaint.closuredate ? new Date(complaint.closuredate).toLocaleDateString() : "MM/DD/YYYY",
+  //     complaint.technician,
+  //     complaint.category,
+  //     complaint.status
+  //   ]);
+
+  //   // Create table using autoTable
+  //   autoTable(doc, {
+  //     head: [tableColumn],
+  //     body: tableRows,
+  //     startY: 30
+  //   });
+
+  //   // Format date
+  //   const issue = new Date(startDate).toLocaleDateString();
+  //   const close = new Date(closeDate).toLocaleDateString();
+
+  //   // Save the PDF
+  //   doc.save(`Admin Report (${selectedStatus}) from ${issue} to ${close}.pdf`);
+
+  //   // Reset
+  //   setSelectedStatus("All");
+  //   setShowDownload(false);
+  // };
+
+  // NEW CODE 
   const handleDownloadClick = () => {
     const doc = new jsPDF();
 
-    // Title
-    doc.setFontSize(18);
-    doc.text(`Admin ${selectedStatus} Complaints Report`, 20, 20);
+    // Add logo image (Make sure to include the correct path or base64 encoded image)
+    const logoPath = '/assets/logos/ldce-logo.png'; // Replace with actual path or base64 encoded logo
+    doc.addImage(logoPath, 'PNG', 20, 10, 20, 20); // Adjust the position and size of the logo
+
+    // Add Logo Name
+    doc.setFontSize(20); // Adjusted size for better readability
+    doc.text("L.D. College Of Engineering", 50, 22); // Position the name near the logo
+
+    // Add Role, Name, Status
+    doc.setFontSize(12);
+    doc.text(`Role: Admin`, 20, 40); // Adjusted Y position for better spacing
+    doc.text(`Name: ${name}`, 20, 50); // Replace with actual name variable
+    doc.text(`Status: ${selectedStatus}`, 20, 60); // Replace with actual status variable
+
+    // Add Report Summary (Date Range)
+    const issue = new Date(startDate).toLocaleDateString();
+    const close = new Date(closeDate).toLocaleDateString();
+    doc.text(`Report Summary: ${issue} to ${close}`, 20, 70); // Adjusted Y position for better spacing
 
     // Define table headers and data
-    const tableColumn = ['Token No.', 'Issue Date', 'Closure Date', 'Technician', 'Category',' Status'];
+    const tableColumn = ['Token No.', 'Issue Date', 'Closure Date', 'Technician', 'Category', 'Status'];
     const tableRows = filteredComplains.map(complaint => [
       complaint.tokenno,
       new Date(complaint.issuedate).toLocaleDateString(),
-      complaint.closuredate?new Date(complaint.closuredate).toLocaleDateString():"MM/DD/YYYY",
+      complaint.closuredate ? new Date(complaint.closuredate).toLocaleDateString() : "MM/DD/YYYY",
       complaint.technician,
       complaint.category,
       complaint.status
@@ -204,12 +258,8 @@ const Dashboard = () => {
     autoTable(doc, {
       head: [tableColumn],
       body: tableRows,
-      startY: 30
+      startY: 80 // Adjusted to provide space between report summary and table
     });
-
-    // Format date
-    const issue = new Date(startDate).toLocaleDateString();
-    const close = new Date(closeDate).toLocaleDateString();
 
     // Save the PDF
     doc.save(`Admin Report (${selectedStatus}) from ${issue} to ${close}.pdf`);
@@ -219,39 +269,40 @@ const Dashboard = () => {
     setShowDownload(false);
   };
 
+
   const handleExcelDownload = () => {
     //Step 1: Formatting data into rows.
-    const formattedData=filteredComplains.map((c) =>({
-    Token_No: c.tokenno,
-    Issue_Date: new Date(c.issuedate).toLocaleDateString(),
-    Closure_Date: c.closuredate?new Date(c.closuredate).toLocaleDateString():"MM/DD/YYYY",
-    Technician: c.technician,
-    Category:c.category,
-    Status: c.status
+    const formattedData = filteredComplains.map((c) => ({
+      Token_No: c.tokenno,
+      Issue_Date: new Date(c.issuedate).toLocaleDateString(),
+      Closure_Date: c.closuredate ? new Date(c.closuredate).toLocaleDateString() : "MM/DD/YYYY",
+      Technician: c.technician,
+      Category: c.category,
+      Status: c.status
     }))
 
     //Step 2: Create a worksheet from the formatted data
-    const worksheet= XLSX.utils.json_to_sheet(formattedData);
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
     //Adding basic styling
-    worksheet['!cols']=[
-      {wch:13}, //Token no
-      {wch:12}, //Issue date
-      {wch:12}, //Closure date
-      {wch:10}, //Technician
-      {wch:45}, //category
-      {wch:8}, //Status
+    worksheet['!cols'] = [
+      { wch: 13 }, //Token no
+      { wch: 12 }, //Issue date
+      { wch: 12 }, //Closure date
+      { wch: 10 }, //Technician
+      { wch: 45 }, //category
+      { wch: 8 }, //Status
     ];
 
     //Step 3: Create a workbook and append the worksheet
-    const workbook= XLSX.utils.book_new();
+    const workbook = XLSX.utils.book_new();
     //Have to clean the sheet name as character like / []\ are not allowed 
-    XLSX.utils.book_append_sheet(workbook, worksheet, `Admin ${selectedStatus!=='Y/A'?selectedStatus:'Y-A'} Report`)
+    XLSX.utils.book_append_sheet(workbook, worksheet, `Admin ${selectedStatus !== 'Y/A' ? selectedStatus : 'Y-A'} Report`)
 
     //Step 5: Trigger download of the file 
     // Format date
     const issue = new Date(startDate).toLocaleDateString();
     const close = new Date(closeDate).toLocaleDateString();
-    XLSX.writeFile(workbook,`Admin Report (${selectedStatus}) from ${issue} to ${close}.xlsx`)
+    XLSX.writeFile(workbook, `Admin Report (${selectedStatus}) from ${issue} to ${close}.xlsx`)
 
     // Reset
     setSelectedStatus("All");

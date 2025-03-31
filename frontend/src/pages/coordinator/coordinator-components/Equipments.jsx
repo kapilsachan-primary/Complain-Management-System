@@ -17,8 +17,8 @@ const Equipments = () => {
   const [errors, seterrors] = useState({});
   const [newCategory, setNewCategory] = useState('');
   const [newProductorService, setNewProductorService] = useState({ department: "", category: { _id: "", name: "" }, type: "", modelNo: "" });
-  const [categoryLoading,setCategotyLoading]= useState(false);
-  const [serprodLoading,setServprodLoading]= useState(false);
+  const [categoryLoading, setCategotyLoading] = useState(false);
+  const [serprodLoading, setServprodLoading] = useState(false);
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
 
@@ -123,9 +123,9 @@ const Equipments = () => {
             alert(res.data.message)
           }
         }).catch(err => console.log(err)
-      ).finally(() =>{
-        setServprodLoading(false);
-      })
+        ).finally(() => {
+          setServprodLoading(false);
+        })
       }
       else if (newProductorService.type == "Product") {
         console.log("No error in Products")
@@ -150,9 +150,9 @@ const Equipments = () => {
             alert(res.data.message)
           }
         }).catch(err => console.log(err)
-      ).finally(() =>{
-        setServprodLoading(false);
-      })
+        ).finally(() => {
+          setServprodLoading(false);
+        })
       }
     }
     else {
@@ -195,7 +195,7 @@ const Equipments = () => {
           alert(res.data.message)
         }
       }).catch(err => console.log(err)
-    ).finally(()=>{ setCategotyLoading(false)});
+      ).finally(() => { setCategotyLoading(false) });
     }
     else {
       setTimeout(() => seterrors({}), 3000)
@@ -366,12 +366,12 @@ const Equipments = () => {
                   <section className="buttons_area_columns popup_button">
                     <section className="btn_outlined_primary" onClick={handleNextStep} disabled={categoryLoading}>
                       <button type="submit" className="main_button">
-                        <span>{categoryLoading?"Adding":"Next"}</span>
+                        <span>{categoryLoading ? "Adding" : "Next"}</span>
                       </button>
                     </section>
                     <section className="btn_fill_primary" onClick={handleAddCategory} disabled={categoryLoading}>
                       <button type="submit" className="main_button">
-                        <span>{categoryLoading?"Adding":"Add"}</span>
+                        <span>{categoryLoading ? "Adding" : "Add"}</span>
                       </button>
                     </section>
 
@@ -388,6 +388,26 @@ const Equipments = () => {
 
                       <section>
                         <div className="input_label">
+                          <label htmlFor="type">Type:</label>
+                        </div>
+                        <div className="select_container">
+                          <select
+                            id="type"
+                            name="type"
+                            value={newProductorService.type} // Controlled select
+                            onChange={(e) => setNewProductorService({ ...newProductorService, type: e.target.value })} // Keep state updated
+                          >
+                            <option value="" disabled hidden>Select Type:</option>
+                            <option value="Services">Services</option>
+                            <option value="Product">Product</option>
+                          </select>
+                          {errors.type && <div className="popupform-error">{errors.type}</div>}
+                        </div>
+                      </section>
+
+                      {/* Conditional rendering based on the Type selection */}
+                      <section>
+                        <div className="input_label">
                           <label htmlFor="department">Department:</label>
                         </div>
                         <div className="select_container">
@@ -398,28 +418,35 @@ const Equipments = () => {
                             onChange={(e) => setNewProductorService({ ...newProductorService, department: e.target.value })} // Keep state updated
                           >
                             <option value="" disabled hidden>Select department</option>
-                            <option value="applied-mechanics">Applied Mechanics</option>
-                            <option value="artificial-intelligence">Artificial Intelligence and Machine Learning</option>
-                            <option value="automobile-engineering">Automobile Engineering</option>
-                            <option value="biomedical-engineering">Biomedical Engineering</option>
-                            <option value="chemical-engineering">Chemical Engineering</option>
-                            <option value="civil-engineering">Civil Engineering</option>
-                            <option value="computer-engineering">Computer Engineering</option>
-                            <option value="electrical-engineering">Electrical Engineering</option>
-                            <option value="electronics-communication">Electronics and Communication Engineering</option>
-                            <option value="environment-engineering">Environment Engineering</option>
-                            <option value="information-technology">Information Technology</option>
-                            <option value="instrumentation-control">Instrumentation & Control Engineering</option>
-                            <option value="mechanical-engineering">Mechanical Engineering</option>
-                            <option value="plastic-technology">Plastic Technology</option>
-                            <option value="robotics-automation">Robotics and Automation</option>
-                            <option value="rubber-technology">Rubber Technology</option>
-                            <option value="science-humanities">Science and Humanities</option>
-                            <option value="textile-technology">Textile Technology</option>
+                            {newProductorService.type === "Services" ? (
+                              <option value="all">All</option>
+                            ) : (
+                              <>
+                                <option value="applied-mechanics">Applied Mechanics</option>
+                                <option value="artificial-intelligence">Artificial Intelligence and Machine Learning</option>
+                                <option value="automobile-engineering">Automobile Engineering</option>
+                                <option value="biomedical-engineering">Biomedical Engineering</option>
+                                <option value="chemical-engineering">Chemical Engineering</option>
+                                <option value="civil-engineering">Civil Engineering</option>
+                                <option value="computer-engineering">Computer Engineering</option>
+                                <option value="electrical-engineering">Electrical Engineering</option>
+                                <option value="electronics-communication">Electronics and Communication Engineering</option>
+                                <option value="environment-engineering">Environment Engineering</option>
+                                <option value="information-technology">Information Technology</option>
+                                <option value="instrumentation-control">Instrumentation & Control Engineering</option>
+                                <option value="mechanical-engineering">Mechanical Engineering</option>
+                                <option value="plastic-technology">Plastic Technology</option>
+                                <option value="robotics-automation">Robotics and Automation</option>
+                                <option value="rubber-technology">Rubber Technology</option>
+                                <option value="science-humanities">Science and Humanities</option>
+                                <option value="textile-technology">Textile Technology</option>
+                              </>
+                            )}
                           </select>
                           {errors.department && <div className="popupform-error">{errors.department}</div>}
                         </div>
                       </section>
+
                       <section>
                         <div className="input_label">
                           <label htmlFor="department">Category:</label>
@@ -448,24 +475,7 @@ const Equipments = () => {
                           {errors.category && <div className="popupform-error">{errors.category}</div>}
                         </div>
                       </section>
-                      <section>
-                        <div className="input_label">
-                          <label htmlFor="department">Type:</label>
-                        </div>
-                        <div className="select_container">
-                          <select
-                            id="type"
-                            name="type"
-                            value={newProductorService.type} // Controlled select
-                            onChange={(e) => setNewProductorService({ ...newProductorService, type: e.target.value })} // Keep state updated
-                          >
-                            <option value="" disabled hidden>Select Type:</option>
-                            <option value="Services">Services</option>
-                            <option value="Product">Product</option>
-                          </select>
-                          {errors.type && <div className="popupform-error">{errors.type}</div>}
-                        </div>
-                      </section>
+
                       <section>
                         <div className="input_label">
                           <label htmlFor="modelNo">Service Name/Model No.</label>
@@ -481,19 +491,20 @@ const Equipments = () => {
                         />
                         {errors.modelNo && <div className="popupform-error">{errors.modelNo}</div>}
                       </section>
+
                     </section>
                   </div>
 
                   <section className="buttons_area_columns">
                     <section className="btn_outlined_primary">
                       <button className="main_button" onClick={handlePreviousStep} disabled={serprodLoading}>
-                        <span>{categoryLoading?"Adding":"Back"}</span>
+                        <span>{categoryLoading ? "Adding" : "Back"}</span>
                       </button>
                     </section>
 
                     <section className="btn_fill_primary">
                       <button className="main_button" onClick={handleAddProductorService} disabled={serprodLoading}>
-                        <span>{serprodLoading?"Adding":"Add"}</span>
+                        <span>{serprodLoading ? "Adding" : "Add"}</span>
                       </button>
                     </section>
 
