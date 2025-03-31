@@ -18,6 +18,7 @@ const ComplaintStatus = () => {
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errors, seterrors] = useState({});
+  const [loading,setLoading] =useState(false);
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
 
@@ -127,9 +128,11 @@ const ComplaintStatus = () => {
   }
   const handlesubmit = (e) => {
     e.preventDefault();
+    if(isAssigned){ return;}
     const checkerr = actionValidate(selectedtechnician, contact);
     seterrors(checkerr);
     if (Object.entries(checkerr).length === 0) {
+      setLoading(true);
       axios.put("http://localhost:3000/admin/assigntechnician", {
         id: selectedComplaint._id,
         technician: selectedtechnician,
@@ -144,7 +147,10 @@ const ComplaintStatus = () => {
         else {
           alert(res.data.message)
         }
-      }).catch(err => console.log(err));
+      }).catch(err => console.log(err)
+    ).finally(() =>{
+      setLoading(false);
+    })
     } else {
       setTimeout(() => seterrors({}), 3000);
     }
@@ -452,8 +458,8 @@ const ComplaintStatus = () => {
 
               <section className="buttons_area_columns popup_button">
                 <section className="btn_fill_primary">
-                  <button type="submit" className="main_button" onClick={handlesubmit} disabled={isAssigned}>
-                    <span>Submit</span>
+                  <button type="submit" className="main_button" onClick={handlesubmit} disabled={loading}>
+                    <span>{loading?"Submitting":"Submit"}</span>
                   </button>
                 </section>
               </section>

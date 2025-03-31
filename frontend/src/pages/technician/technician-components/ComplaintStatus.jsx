@@ -16,6 +16,8 @@ const ComplaintStatus = () => {
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [errors, seterrors] = useState({});
+  const [loading,setLoading] =useState(false);
+  const [f2Aloading,setf2ALoading] = useState(false);
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const fetchComplaints = (id) => {
@@ -118,10 +120,12 @@ const ComplaintStatus = () => {
 
   const handlesubmit = (e) => {
     e.preventDefault();
+    if(isResolved){ return;}
     const checkerr = submitValidate(status, action);
     seterrors(checkerr);
     if (Object.entries(checkerr).length === 0) {
       console.log("EveryThing OK!!");
+      setLoading(true);
       if (status === "Resolved") {
         axios.put("http://localhost:3000/technician/updateactionresolved", {
           id: selectedComplaint._id,
@@ -136,7 +140,10 @@ const ComplaintStatus = () => {
           else {
             alert(res.data.message)
           }
-        }).catch(err => console.log(err));
+        }).catch(err => console.log(err)
+      ).finally(() =>{
+        setLoading(false);
+      })
       }
       else {
         axios.put("http://localhost:3000/technician/updateactionpending", {
@@ -152,7 +159,10 @@ const ComplaintStatus = () => {
           else {
             alert(res.data.message)
           }
-        }).catch(err => console.log(err));
+        }).catch(err => console.log(err)
+      ).finally(() =>{
+        setLoading(false);
+      })
       }
     } else {
       setTimeout(() => seterrors({}), 3000);
@@ -160,10 +170,12 @@ const ComplaintStatus = () => {
   }
   const handlef2a = (e) => {
     e.preventDefault();
+    if(isResolved){ return;}
     const checkerr = f2aValidate(status, action);
     seterrors(checkerr);
     if (Object.entries(checkerr).length === 0) {
       console.log("EveryThing OK!!");
+      setf2ALoading(true);
       axios.put("http://localhost:3000/technician/forward2admin", {
         id: selectedComplaint._id,
         action: action,
@@ -176,7 +188,10 @@ const ComplaintStatus = () => {
         else {
           alert(res.data.message)
         }
-      }).catch(err => console.log(err));
+      }).catch(err => console.log(err)
+    ).finally(() =>{
+      setf2ALoading(false);
+    })
     } else {
       setTimeout(() => seterrors({}), 3000);
     }
@@ -419,13 +434,13 @@ const ComplaintStatus = () => {
 
               <section className="buttons_area_columns popup_button">
                 <section className="btn_fill_primary">
-                  <button type="submit" className="main_button" onClick={handlesubmit} disabled={isResolved}>
-                    <span>Submit</span>
+                  <button type="submit" className="main_button" onClick={handlesubmit} disabled={loading}>
+                    <span>{loading?"Submitting":"Submit"}</span>
                   </button>
                 </section>
                 <section className="btn_outlined_primary">
-                  <button type="submit" className="main_button" onClick={handlef2a} disabled={isResolved}>
-                    <span>Forward To Admin</span>
+                  <button type="submit" className="main_button" onClick={handlef2a} disabled={f2Aloading}>
+                    <span>{f2Aloading?"Forwarding":"Forward To Admin"}</span>
                   </button>
                 </section>
               </section>
