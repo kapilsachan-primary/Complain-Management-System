@@ -11,6 +11,7 @@ const AdminLogin = () => {
   const [errors, seterrors] = useState({});
   const [name,setName]=useState('');
   const [id,setId]=useState('');
+  const [loading,setLoading]=useState(false);
   const navigate=useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,6 +34,7 @@ const AdminLogin = () => {
     console.log(Object.entries(checkerr).length);
 
     if (Object.entries(checkerr).length === 0) {
+      setLoading(true);
       axios.post("http://localhost:3000/admin/login",{
         email:formData.email,
         password:formData.password,
@@ -48,6 +50,8 @@ const AdminLogin = () => {
           }
       }).catch(err =>{
         console.log(err);
+      }).finally(() =>{
+        setLoading(false);
       })
     } else {
       setTimeout(() => seterrors({}), 3000); // Clear errors after 3 seconds
@@ -58,7 +62,7 @@ const AdminLogin = () => {
     <div className="auth-container">
       <div className="auth-box">
         <h2>Admin Login</h2>
-        <form onSubmit={handleSubmit}>
+        <form>
           <input
             type="email"
             placeholder="Email"
@@ -79,8 +83,8 @@ const AdminLogin = () => {
           />
           {errors.password && <div className="authform-error">{errors.password}</div>}
 
-          <button type="submit" className="auth-button">
-            Login
+          <button type="submit" className="auth-button" onClick={handleSubmit} disabled={loading}>
+            {loading?"Verifing":"Login"}
           </button>
         </form>
       </div>

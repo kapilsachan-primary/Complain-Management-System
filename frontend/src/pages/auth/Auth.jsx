@@ -14,6 +14,7 @@ const Auth = () => {
   const [name,setName]=useState('');
   const [id,setId]=useState('');
   const [errors, seterrors] = useState({});
+  const [loading,setLoading]= useState(false);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -72,6 +73,7 @@ const Auth = () => {
       console.log(Object.entries(checkerr).length);
 
       if (Object.entries(checkerr).length === 0) {
+        setLoading(true);
         axios.post("http://localhost:3000/technician/login",{
           email:formData.email,
           password:formData.password,
@@ -87,6 +89,8 @@ const Auth = () => {
             }
         }).catch(err =>{
           console.log(err);
+        }).finally(() =>{
+          setLoading(false);
         })
       } else {
         setTimeout(() => seterrors({}), 3000); // Clear errors after 3 seconds
@@ -120,8 +124,8 @@ const Auth = () => {
           )}
           {errors.confirmpass && <div className='authform-error'>{errors.confirmpass}</div>} */}
 
-          <button type="submit" className="auth-button" onClick={handleSubmit}>
-            {/* {isSignup ? "Sign Up" : "Login"} */}Login
+          <button type="submit" className="auth-button" onClick={handleSubmit} disabled={loading}>
+            {loading?"Verifing":"Login"}
           </button>
         </form>
         {/* <p className="toggle-text" onClick={toggleForm}>

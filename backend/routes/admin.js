@@ -5,6 +5,7 @@ import { Admin } from "../models/Admin.js";
 import jwt from 'jsonwebtoken';
 import { Technician} from "../models/Technician.js";
 import { Complain } from "../models/Complain.js";
+import { sendEmail } from "../services/EmailService.js";
 router.post('/login', async(req,res)=>{
     const email=req.body.email;
     const password=req.body.password;
@@ -149,8 +150,25 @@ router.put('/assigntechnician', async (req,res) =>{
             if(!updatedcomplain){
                 return res.json({Status: false,message: "Complaint Not Found"})       
             }
-            return res.json({Status: true,message: "Technician assigned"})
-    }catch(err){
+            const complaintData={
+                title:"New Complaint Assigned",
+                tokenno:updatedcomplain.tokenno,
+                name: updatedcomplain.name,
+                roomno: updatedcomplain.roomno,
+                department:updatedcomplain.department,
+                category: updatedcomplain.category,
+                services: updatedcomplain.services,
+                productdescription: updatedcomplain.productdescription,
+                status: "Pending",
+                technician:technician,
+                action:"Yet to be Taken",
+            };
+            res.json({Status: true,message: "Technician assigned"})
+            const findTechnician= await Technician.findById(techid);
+            if(findTechnician){
+            await sendEmail(process.env.ComplaintRegister_Email, process.env.ComplaintRegister_Pass, findTechnician.email, "Complaint Assigned", complaintData);
+            }
+        }catch(err){
         return res.json({Status: false,message: "Server error"})
     }
 });

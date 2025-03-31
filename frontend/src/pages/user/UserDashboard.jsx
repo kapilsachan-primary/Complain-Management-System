@@ -20,7 +20,7 @@ export default function UserDashboard() {
   const [services, setServices] = useState([]);
   const [products, setProducts] = useState([]);
   const [isServiceEnabled, setIsServiceEnabled] = useState(false);
-
+  const [loading,setLoading]= useState(false);
   // Fetch categories on mount
   useEffect(() => {
     axios.get("http://localhost:3000/user/categories")
@@ -104,6 +104,7 @@ export default function UserDashboard() {
     console.log(Object.entries(checkerr).length);
     if (Object.entries(checkerr).length === 0) {
       console.log("Good to goo")
+      setLoading(true);
       axios.post("http://localhost:3000/user/complain", {
         name: formData.name,
         roomno: formData.roomNo,
@@ -115,12 +116,18 @@ export default function UserDashboard() {
         services: formData.services,
       }).then(res => {
         console.log(res);
-        if (res.data.status) {
+        if (res.status==200 || res.status==422) {
           alert(res.data.message);
           window.location.reload();
         }
+        else if (res.status==500) {
+          alert(res.data.message);
+          //window.location.reload();
+        }
       }).catch(err => {
         console.log(err);
+      }).finally(() => {
+        setLoading(false);
       })
     } else {
       setTimeout(() => seterrors({}), 3000); // Clear errors after 3 seconds
@@ -141,7 +148,7 @@ export default function UserDashboard() {
 
       {/* User Form */}
       <section className="form_section">
-        <form onSubmit={handleSubmit} className="issue_form">
+        <form className="issue_form">
 
           <div className="input_area_wrapper">
             <section className="input_area_columns">
@@ -320,8 +327,8 @@ export default function UserDashboard() {
 
           <section className="buttons_area_columns">
             <section className="btn_fill_primary">
-              <button type="submit" className="main_button">
-                <span>Add</span>
+              <button type="submit" className="main_button" onClick={handleSubmit} disabled={loading}>
+                <span>{loading?"Submiting":"Add"}</span>
               </button>
             </section>
           </section>

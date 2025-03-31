@@ -17,7 +17,8 @@ const Equipments = () => {
   const [errors, seterrors] = useState({});
   const [newCategory, setNewCategory] = useState('');
   const [newProductorService, setNewProductorService] = useState({ department: "", category: { _id: "", name: "" }, type: "", modelNo: "" });
-
+  const [categoryLoading,setCategotyLoading]= useState(false);
+  const [serprodLoading,setServprodLoading]= useState(false);
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
 
@@ -109,6 +110,7 @@ const Equipments = () => {
     if (Object.entries(checkerr).length === 0) {
       if (newProductorService.type == "Services") {
         console.log("No Error in services");
+        setServprodLoading(true);
         axios.post(`http://localhost:3000/coordinator/${newProductorService.category._id}/add-service`, {
           serviceName: newProductorService.modelNo,
         }).then(res => {
@@ -120,10 +122,14 @@ const Equipments = () => {
           else {
             alert(res.data.message)
           }
-        }).catch(err => console.log(err));
+        }).catch(err => console.log(err)
+      ).finally(() =>{
+        setServprodLoading(false);
+      })
       }
       else if (newProductorService.type == "Product") {
         console.log("No error in Products")
+        setServprodLoading(true);
         axios.post("http://localhost:3000/coordinator/addproduct", {
           name: newProductorService.modelNo,
           categoryName: newProductorService.category.name,
@@ -143,7 +149,10 @@ const Equipments = () => {
           else {
             alert(res.data.message)
           }
-        }).catch(err => console.log(err));
+        }).catch(err => console.log(err)
+      ).finally(() =>{
+        setServprodLoading(false);
+      })
       }
     }
     else {
@@ -167,6 +176,7 @@ const Equipments = () => {
     console.log(checkerr)
     if (Object.entries(checkerr).length === 0) {
       console.log("No error for category addition");
+      setCategotyLoading(true);
       axios.post("http://localhost:3000/coordinator/addcategory", {
         name: newCategory,
         hasServices: false
@@ -184,7 +194,8 @@ const Equipments = () => {
         else {
           alert(res.data.message)
         }
-      }).catch(err => console.log(err));
+      }).catch(err => console.log(err)
+    ).finally(()=>{ setCategotyLoading(false)});
     }
     else {
       setTimeout(() => seterrors({}), 3000)
@@ -353,14 +364,14 @@ const Equipments = () => {
                   </div>
 
                   <section className="buttons_area_columns popup_button">
-                    <section className="btn_outlined_primary" onClick={handleNextStep}>
+                    <section className="btn_outlined_primary" onClick={handleNextStep} disabled={categoryLoading}>
                       <button type="submit" className="main_button">
-                        <span>Next</span>
+                        <span>{categoryLoading?"Adding":"Next"}</span>
                       </button>
                     </section>
-                    <section className="btn_fill_primary" onClick={handleAddCategory}>
+                    <section className="btn_fill_primary" onClick={handleAddCategory} disabled={categoryLoading}>
                       <button type="submit" className="main_button">
-                        <span>Add</span>
+                        <span>{categoryLoading?"Adding":"Add"}</span>
                       </button>
                     </section>
 
@@ -475,14 +486,14 @@ const Equipments = () => {
 
                   <section className="buttons_area_columns">
                     <section className="btn_outlined_primary">
-                      <button className="main_button" onClick={handlePreviousStep}>
-                        <span>Back</span>
+                      <button className="main_button" onClick={handlePreviousStep} disabled={serprodLoading}>
+                        <span>{categoryLoading?"Adding":"Back"}</span>
                       </button>
                     </section>
 
                     <section className="btn_fill_primary">
-                      <button className="main_button" onClick={handleAddProductorService}>
-                        <span>Add</span>
+                      <button className="main_button" onClick={handleAddProductorService} disabled={serprodLoading}>
+                        <span>{serprodLoading?"Adding":"Add"}</span>
                       </button>
                     </section>
 

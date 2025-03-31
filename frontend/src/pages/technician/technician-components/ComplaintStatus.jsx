@@ -278,7 +278,7 @@ const ComplaintStatus = () => {
                       Token No: <span>{selectedComplaint.tokenno}</span>
                     </p>
                   </div>
-                  <p className="text-2xl"><span className="font-bold">Email:</span> example@gmail.com</p>
+                  <p className="text-2xl"><span className="font-bold">Faculty Email:</span>{selectedComplaint.email}</p>
                 </div>
                 <div className="status_component">
                   <div>

@@ -4,7 +4,8 @@ const router=express.Router();
 import { Technician } from "../models/Technician.js";
 import { Complain } from "../models/Complain.js";
 import jwt from 'jsonwebtoken';
-
+import { sendEmail } from "../services/EmailService.js";
+import { Admin } from "../models/Admin.js";
 router.post('/register',async (req,res)=>{
     const name=req.body.name;
     const email=req.body.email;
@@ -157,7 +158,21 @@ router.put('/updateactionresolved', async (req,res) =>{
             if(!updatedcomplain){
                 return res.json({Status: false,message: "Complaint Not Found"})       
             }
-            return res.json({Status: true,message: "Complaint Updated"})
+            res.json({Status: true,message: "Complaint Updated"})
+            const complaintData={
+                title:"Complain Resolved",
+                tokenno:updatedcomplain.tokenno,
+                name: updatedcomplain.name,
+                roomno: updatedcomplain.roomno,
+                department:updatedcomplain.department,
+                category: updatedcomplain.category,
+                services: updatedcomplain.services,
+                productdescription: updatedcomplain.productdescription,
+                status: status,
+                technician: updatedcomplain.technician,
+                action:action,
+            };
+            await sendEmail(process.env.ComplaintRegister_Email, process.env.ComplaintRegister_Pass, updatedcomplain.email, "Complaint Resolved", complaintData);
     }catch(err){
         return res.json({Status: false,message: "Server error"})
     }
@@ -172,7 +187,21 @@ router.put('/updateactionpending', async (req,res) =>{
             if(!updatedcomplain){
                 return res.json({Status: false,message: "Complaint Not Found"})       
             }
-            return res.json({Status: true,message: "Complaint Updated"})
+            res.json({Status: true,message: "Complaint Updated"})
+            const complaintData={
+                title:"Complain Update",
+                tokenno:updatedcomplain.tokenno,
+                name: updatedcomplain.name,
+                roomno: updatedcomplain.roomno,
+                department:updatedcomplain.department,
+                category: updatedcomplain.category,
+                services: updatedcomplain.services,
+                productdescription: updatedcomplain.productdescription,
+                status: status,
+                technician: updatedcomplain.technician,
+                action:action,
+            };
+            await sendEmail(process.env.ComplaintRegister_Email, process.env.ComplaintRegister_Pass, updatedcomplain.email, "Complaint Update", complaintData);
     }catch(err){
         return res.json({Status: false,message: "Server error"})
     }
@@ -187,7 +216,23 @@ router.put('/forward2admin', async (req,res) =>{
             if(!updatedcomplain){
                 return res.json({Status: false,message: "Complaint Not Found"})       
             }
-            return res.json({Status: true,message: "Complaint Updated"})
+            res.json({Status: true,message: "Complaint Updated"})
+            const complaintData={
+                title:"Complain Kept on hold",
+                tokenno:updatedcomplain.tokenno,
+                name: updatedcomplain.name,
+                roomno: updatedcomplain.roomno,
+                department:updatedcomplain.department,
+                category: updatedcomplain.category,
+                services: updatedcomplain.services,
+                productdescription: updatedcomplain.productdescription,
+                status: "On Hold",
+                technician: updatedcomplain.technician,
+                action:action,
+            };
+            const findAdmin=await Admin.find();
+            await sendEmail(process.env.ComplaintRegister_Email, process.env.ComplaintRegister_Pass, updatedcomplain.email, "Complaint Update", complaintData);
+            await sendEmail(process.env.ComplaintRegister_Email, process.env.ComplaintRegister_Pass, findAdmin[0].email, "Assistance needed", complaintData);
     }catch(err){
         return res.json({Status: false,message: "Server error"})
     }

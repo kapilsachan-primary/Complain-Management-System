@@ -7,6 +7,7 @@ const ComplainSchema = new mongoose.Schema({
     roomno:{type: String, required: true},
     department:{type: String, required: true},
     contactno:{type: Number, required: true},
+    email:{type: String,required: true},
     category:{type: String, required: true},
     services:{type: String, required: false, default:''},
     productdescription:{type: String, required: false, default:""},

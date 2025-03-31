@@ -3,6 +3,8 @@ const router=express.Router();
 import { Complain } from '../models/Complain.js';
 import { Product } from "../models/Product.js";
 import { Category } from "../models/Category.js";
+import { sendEmail } from "../services/EmailService.js";
+import { Admin } from "../models/Admin.js";
 router.post('/complain',async (req,res)=>{
     try{
         const today = new Date();
@@ -30,6 +32,7 @@ router.post('/complain',async (req,res)=>{
             name: req.body.name,
             roomno: req.body.roomno,
             department:req.body.department,
+            email:req.body.email,
             contactno: req.body.contactno,
             category: req.body.category,
             services: req.body.services,
@@ -37,9 +40,32 @@ router.post('/complain',async (req,res)=>{
             status: "Y/A",
         })
         await newComplain.save();
-        return res.json({status: true,message: "Complain registered Token No. "+newtokenno+" generated"})
+        const complaintData={
+            title:"New Complaint Registered",
+            tokenno:newtokenno,
+            name: req.body.name,
+            roomno: req.body.roomno,
+            department:req.body.department,
+            category: req.body.category,
+            services: req.body.services,
+            productdescription: req.body.productdescription,
+            status: "Y/A",
+            technician:"Yet to be Assigned",
+            action:"Yet to be Taken",
+        };
+         res.status(200).json({ message: "Token No. "+newtokenno+ " generated" });
+        // Send emails from the provided sender email
+        //try {
+        const findAdmin = await Admin.find();
+          await sendEmail(process.env.ComplaintRegister_Email, process.env.ComplaintRegister_Pass, req.body.email, "Complaint Registered", complaintData);
+          await sendEmail(process.env.ComplaintRegister_Email, process.env.ComplaintRegister_Pass, findAdmin[0].email, "New Complaint Received", complaintData);
+          //return res.status(200).json({ message: "Token No. "+newtokenno+ " generated and Emails sent" });
+
+     // } catch (emailError) {
+         //return res.status(422).json({ message:  "Token No. "+newtokenno+" generated, but email not sent" });
+      //}
     } catch(err){
-        return res.json({status: false,message: err.message})
+        return res.status(500).json({message: err.message})
     }
 });
 
