@@ -276,7 +276,7 @@ const Dashboard = () => {
     
     // Reset
     setSelectedStatus("All");
-    setShowDownload(false);
+    // setShowDownload(false);
   };
   
   
@@ -317,7 +317,7 @@ const Dashboard = () => {
   
       // Reset
       setSelectedStatus("All");
-      setShowDownload(false);
+      // setShowDownload(false);
     };
 
   const statusCards = [
@@ -340,7 +340,7 @@ const Dashboard = () => {
               className={`icon_btn_fill_primary ${isReportButtonDisabled ? "disabled" : ""}`}
               onClick={!isReportButtonDisabled ? handleOpenPopup : undefined}
             >
-              <i className="fa-solid fa-file-pdf"></i>
+              <i className="fa-solid fa-file-arrow-down"></i>
               <button disabled={isReportButtonDisabled}>
                 <span>Generate Report</span>
               </button>
@@ -449,7 +449,7 @@ const Dashboard = () => {
                   onClick={handleDownloadClick}
                   disabled={complains.length === 0}
                 >
-                  <i className="fa-solid fa-file-arrow-down"></i>
+                  <i className="fa-solid fa-file-pdf"></i>
                   <span className="whitespace-nowrap">Download PDF</span>
                 </button>
                 <button
@@ -458,9 +458,14 @@ const Dashboard = () => {
                   onClick={handleExcelDownload}
                   disabled={complains.length === 0}
                 >
-                  <i className="fa-solid fa-file-arrow-down"></i>
+                  <i class="fa-solid fa-file-excel"></i>
                   <span className="whitespace-nowrap">Download Excel</span>
                 </button>
+                <div className="x_icon" onClick={() => setShowDownload(false)}>
+                  <button className="close_popup">
+                    <img src="/assets/icons/x-icon.svg" alt="Close Sidebar" className="w-14 h-14" />
+                  </button>
+                </div>
               </div>
             </section>
           </section>

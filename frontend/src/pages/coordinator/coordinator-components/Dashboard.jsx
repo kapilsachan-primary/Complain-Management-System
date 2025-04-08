@@ -132,8 +132,8 @@ const Dashboard = () => {
   }, [startDate, closeDate]);
 
   const filteredComplains = selectedStatus === "All"
-  ? complains
-  : complains.filter((item) => item.status.toLowerCase().trim() === selectedStatus.toLowerCase().trim());
+    ? complains
+    : complains.filter((item) => item.status.toLowerCase().trim() === selectedStatus.toLowerCase().trim());
 
   const getLocalDate = () => {
     const now = new Date(); const year = now.getFullYear();
@@ -219,26 +219,26 @@ const Dashboard = () => {
   // NEW CODE 
   const handleDownloadClick = () => {
     const doc = new jsPDF();
-  
+
     // Add logo image (Make sure to include the correct path or base64 encoded image)
     const logoPath = '/assets/logos/ldce-logo.png'; // Replace with actual path or base64 encoded logo
     doc.addImage(logoPath, 'PNG', 20, 10, 20, 20); // Adjust the position and size of the logo
-  
+
     // Add Logo Name
     doc.setFontSize(20); // Adjusted size for better readability
     doc.text("L.D. College Of Engineering", 50, 22); // Position the name near the logo
-  
+
     // Add Role, Name, Status
     doc.setFontSize(12);
     doc.text(`Role: Coordinator`, 20, 40); // Adjusted Y position for better spacing
     doc.text(`Name: ${name}`, 20, 50); // Replace with actual name variable
     doc.text(`Status: ${selectedStatus}`, 20, 60); // Replace with actual status variable
-  
+
     // Add Report Summary (Date Range)
     const issue = new Date(startDate).toLocaleDateString();
     const close = new Date(closeDate).toLocaleDateString();
     doc.text(`Report Summary: ${issue} to ${close}`, 20, 70); // Adjusted Y position for better spacing
-  
+
     // Define table headers and data
     const tableColumn = ['Token No.', 'Issue Date', 'Closure Date', 'Technician', 'Category', 'Status'];
     const tableRows = filteredComplains.map(complaint => [
@@ -249,62 +249,62 @@ const Dashboard = () => {
       complaint.category,
       complaint.status
     ]);
-  
+
     // Create table using autoTable
     autoTable(doc, {
       head: [tableColumn],
       body: tableRows,
       startY: 80 // Adjusted to provide space between report summary and table
     });
-  
+
     // Save the PDF
     doc.save(`Coordinator Report (${selectedStatus}) from ${issue} to ${close}.pdf`);
-  
+
     // Reset
     setSelectedStatus("All");
-    setShowDownload(false);
+    // setShowDownload(false);
   };
-  
+
 
 
   const handleExcelDownload = () => {
-        //Step 1: Formatting data into rows.
-        const formattedData=filteredComplains.map((c) =>({
-        Token_No: c.tokenno,
-        Issue_Date: new Date(c.issuedate).toLocaleDateString(),
-        Closure_Date: c.closuredate?new Date(c.closuredate).toLocaleDateString():"MM/DD/YYYY",
-        Technician: c.technician,
-        Category:c.category,
-        Status: c.status
-        }))
-    
-        //Step 2: Create a worksheet from the formatted data
-        const worksheet= XLSX.utils.json_to_sheet(formattedData);
-        //Adding basic styling
-        worksheet['!cols']=[
-          {wch:13}, //Token no
-          {wch:12}, //Issue date
-          {wch:12}, //Closure date
-          {wch:10}, //Technician
-          {wch:45}, //category
-          {wch:8}, //Status
-        ];
-    
-        //Step 3: Create a workbook and append the worksheet
-        const workbook= XLSX.utils.book_new();
-        //Have to clean the sheet name as character like / []\ are not allowed 
-        XLSX.utils.book_append_sheet(workbook, worksheet, `Coordinator ${selectedStatus!=='Y/A'?selectedStatus:'Y-A'} Report`)
-    
-        //Step 5: Trigger download of the file 
-        // Format date
-        const issue = new Date(startDate).toLocaleDateString();
-        const close = new Date(closeDate).toLocaleDateString();
-        XLSX.writeFile(workbook,`Coordinater Report (${selectedStatus}) from ${issue} to ${close}.xlsx`)
-    
-        // Reset
-        setSelectedStatus("All");
-        setShowDownload(false);
-      };
+    //Step 1: Formatting data into rows.
+    const formattedData = filteredComplains.map((c) => ({
+      Token_No: c.tokenno,
+      Issue_Date: new Date(c.issuedate).toLocaleDateString(),
+      Closure_Date: c.closuredate ? new Date(c.closuredate).toLocaleDateString() : "MM/DD/YYYY",
+      Technician: c.technician,
+      Category: c.category,
+      Status: c.status
+    }))
+
+    //Step 2: Create a worksheet from the formatted data
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    //Adding basic styling
+    worksheet['!cols'] = [
+      { wch: 13 }, //Token no
+      { wch: 12 }, //Issue date
+      { wch: 12 }, //Closure date
+      { wch: 10 }, //Technician
+      { wch: 45 }, //category
+      { wch: 8 }, //Status
+    ];
+
+    //Step 3: Create a workbook and append the worksheet
+    const workbook = XLSX.utils.book_new();
+    //Have to clean the sheet name as character like / []\ are not allowed 
+    XLSX.utils.book_append_sheet(workbook, worksheet, `Coordinator ${selectedStatus !== 'Y/A' ? selectedStatus : 'Y-A'} Report`)
+
+    //Step 5: Trigger download of the file 
+    // Format date
+    const issue = new Date(startDate).toLocaleDateString();
+    const close = new Date(closeDate).toLocaleDateString();
+    XLSX.writeFile(workbook, `Coordinater Report (${selectedStatus}) from ${issue} to ${close}.xlsx`)
+
+    // Reset
+    setSelectedStatus("All");
+    // setShowDownload(false);
+  };
 
   const statusCards = [
     { count: values.resolvedjobs, head: "Resolved Jobs", icon: "fa-solid fa-check-double", link: "./coordinator/dashboard" },
@@ -327,7 +327,7 @@ const Dashboard = () => {
               className={`icon_btn_fill_primary ${isReportButtonDisabled ? "disabled" : ""}`}
               onClick={!isReportButtonDisabled ? handleOpenPopup : undefined}
             >
-              <i className="fa-solid fa-file-pdf"></i>
+              <i className="fa-solid fa-file-arrow-down"></i>
               <button disabled={isReportButtonDisabled}>
                 <span>Generate Report</span>
               </button>
@@ -429,7 +429,7 @@ const Dashboard = () => {
                   onClick={handleDownloadClick}
                   disabled={complains.length === 0}
                 >
-                  <i className="fa-solid fa-file-arrow-down"></i>
+                  <i className="fa-solid fa-file-pdf"></i>
                   <span className="whitespace-nowrap">Download PDF</span>
                 </button>
                 <button
@@ -438,9 +438,14 @@ const Dashboard = () => {
                   onClick={handleExcelDownload}
                   disabled={complains.length === 0}
                 >
-                  <i className="fa-solid fa-file-arrow-down"></i>
+                  <i class="fa-solid fa-file-excel"></i>
                   <span className="whitespace-nowrap">Download Excel</span>
                 </button>
+                <div className="x_icon" onClick={() => setShowDownload(false)}>
+                  <button className="close_popup">
+                    <img src="/assets/icons/x-icon.svg" alt="Close Sidebar" className="w-14 h-14" />
+                  </button>
+                </div>
               </div>
             </section>
           </section>
