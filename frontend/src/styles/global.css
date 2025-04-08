@@ -524,6 +524,20 @@ textarea:focus {
   background-color: var(--color-deepskyblue);
   color: var(--color-white);
 }
+.icon_btn_fill_primary_danger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  height: 5rem;
+  border-radius: 0.8rem;
+  font-size: 2rem;
+  font-weight: 500;
+  padding: 1rem 2rem;
+  border: 1px solid var(--color-crimson);
+  background-color: var(--transparent);
+  color: var(--color-amaranth);
+}
 
 /* ---------- Disabled Button (Style) ---------- */
 
@@ -944,6 +958,14 @@ header .head_action_btns {
   color: var(--color-white);
   background: var(--color-amaranth);
   border: 1px solid var(--color-amaranth);
+  border-radius: 1rem;
+  padding: 1rem;
+  font-size: 1.8rem;
+}
+#equipments_delete_popup .fa-trash-can {
+  color: var(--color-amaranth);
+  background: var(--transparent);
+  border: 0px solid var(--color-amaranth);
   border-radius: 1rem;
   padding: 1rem;
   font-size: 1.8rem;
