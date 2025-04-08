@@ -690,8 +690,18 @@ inactive-dot {
   padding: 0 1rem;
   gap: 1rem;
 }
+#user_dashboard_header .sidebar_nav_logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem;
+  gap: 1.5rem;
+}
 
 .sidebar_navigation .sidebar_nav_logo img {
+  width: 8rem;
+}
+#user_dashboard_header .sidebar_nav_logo img {
   width: 8rem;
 }
 
@@ -699,6 +709,14 @@ inactive-dot {
   font-size: 2.4rem;
   font-weight: 600;
   color: var(--color-white);
+  font-family: var(--font-primary);
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+#user_dashboard_header .sidebar_nav_logo span {
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: var(--color-black);
   font-family: var(--font-primary);
   line-height: 1.2;
   letter-spacing: -0.5px;

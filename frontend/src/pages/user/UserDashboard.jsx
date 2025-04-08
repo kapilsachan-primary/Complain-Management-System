@@ -1,8 +1,8 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import UserformValidate from "./UserformValidation";
 import axios from "axios";
 export default function UserDashboard() {
-  axios.defaults.withCredentials=true;
+  axios.defaults.withCredentials = true;
   const [formData, setFormData] = useState({
     name: "",
     roomNo: "",
@@ -20,7 +20,7 @@ export default function UserDashboard() {
   const [services, setServices] = useState([]);
   const [products, setProducts] = useState([]);
   const [isServiceEnabled, setIsServiceEnabled] = useState(false);
-  const [loading,setLoading]= useState(false);
+  const [loading, setLoading] = useState(false);
   // Fetch categories on mount
   useEffect(() => {
     axios.get("http://localhost:3000/user/categories")
@@ -34,21 +34,21 @@ export default function UserDashboard() {
       axios.get("http://localhost:3000/user/products", {
         params: { department: selectedDepartment, categoryname: selectedCategory }
       })
-      .then(response => {
-        setProducts(response.data.products)
-      })
-      .catch(error => console.error("Error fetching products:", error));
+        .then(response => {
+          setProducts(response.data.products)
+        })
+        .catch(error => console.error("Error fetching products:", error));
     } else {
       setProducts([]); // Reset products if no selection
     }
   }, [selectedDepartment, selectedCategory]);
 
-  useEffect(()=>{
-    setFormData((prev)=>({
+  useEffect(() => {
+    setFormData((prev) => ({
       ...prev,
-      productdescription:"",
+      productdescription: "",
     }));
-  },[formData.category,formData.department])
+  }, [formData.category, formData.department])
 
   // // services & productdescription options based on category
   // const options = {
@@ -62,7 +62,7 @@ export default function UserDashboard() {
   //   }
   // };
 
- // ----- OLD CODE - (Kapil) -----
+  // ----- OLD CODE - (Kapil) -----
   // const handleChange = (e) => {
   //   setFormData({ ...formData, [e.target.name]: e.target.value });
   // };
@@ -76,22 +76,22 @@ export default function UserDashboard() {
       [name]: value,
       //...(name === "category" ? { services: "", productdescription: "" } : {}) // Reset services & productdescription if category changes
     }));
-    if(name === "category"){
+    if (name === "category") {
       setSelectedCategory(value);
       const category = categories.find(cat => cat.name === value);
-    if (category?.hasServices) {
-      setIsServiceEnabled(true);
-      setServices(category.services);
-    } else {
-      setIsServiceEnabled(false);
-      setServices([]);
-      setFormData((prev) => ({
-        ...prev,
-        services:"",
-      }));
+      if (category?.hasServices) {
+        setIsServiceEnabled(true);
+        setServices(category.services);
+      } else {
+        setIsServiceEnabled(false);
+        setServices([]);
+        setFormData((prev) => ({
+          ...prev,
+          services: "",
+        }));
+      }
     }
-    }
-    else if(name === "department"){
+    else if (name === "department") {
       setSelectedDepartment(value);
     }
   };
@@ -99,7 +99,7 @@ export default function UserDashboard() {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Submitted", formData);
-    const checkerr = UserformValidate(formData,isServiceEnabled,products);
+    const checkerr = UserformValidate(formData, isServiceEnabled, products);
     seterrors(checkerr);
     console.log(Object.entries(checkerr).length);
     if (Object.entries(checkerr).length === 0) {
@@ -116,11 +116,11 @@ export default function UserDashboard() {
         services: formData.services,
       }).then(res => {
         console.log(res);
-        if (res.status==200 || res.status==422) {
+        if (res.status == 200 || res.status == 422) {
           alert(res.data.message);
           window.location.reload();
         }
-        else if (res.status==500) {
+        else if (res.status == 500) {
           alert(res.data.message);
           //window.location.reload();
         }
@@ -136,21 +136,30 @@ export default function UserDashboard() {
 
 
   return (
-    <main className="main_content">
+    <main id="user_dashboard" className="main_content">
 
       {/* Header */}
-      <header>
-        <section className="page_content_header">
+      <header id="user_dashboard_header" className="flex justify-between">
+        {/* Sidebar Navigation Logo */}
+        <a href="./dashboard.html" className="sidebar_nav_logo">
+          <img src="/assets/logos/ldce-logo.png" alt="LDEC-LOGO" />
+          <span>L.D. College Of<br /> Engineering</span>
+        </a>
+
+        <section className="page_content_header text-end">
           <h1>User Dashboard</h1>
           <p>Raise Issues with Ease – Get Quick Resolutions Fast!</p>
         </section>
+
       </header>
 
       {/* User Form */}
-      <section className="form_section">
-        <form className="issue_form">
+      <section className="form_section flex justify-center items-center flex-grow w-full px-4 py-8">
+      <div className="w-full max-w-[80vw]">
 
-          <div className="input_area_wrapper">
+        <form className="issue_form w-full">
+
+          <div className="input_area_wrapper !max-w-full">
             <section className="input_area_columns">
 
               <section className="input_area_two_columns">
@@ -174,20 +183,20 @@ export default function UserDashboard() {
 
 
               <section className="input_area_two_columns">
-              <section>
-                <div className="input_label">
-                  <label htmlFor="contactNo">Contact No:</label>
-                </div>
-                <input type="number" id="contactNo" name="contactNo" placeholder="Enter your contact number" value={formData.contactNo} onChange={handleChange} />
-                {errors.contactNo && <div className='userform-error'>{errors.contactNo}</div>}
-              </section>
-              <section>
-                <div className="input_label">
-                  <label htmlFor="email">Email:</label>
-                </div>
-                <input type="email" id="email" name="email" placeholder="Enter your contact number" value={formData.email} onChange={handleChange} />
-                {errors.email && <div className='userform-error'>{errors.email}</div>}
-              </section>
+                <section>
+                  <div className="input_label">
+                    <label htmlFor="contactNo">Contact No:</label>
+                  </div>
+                  <input type="number" id="contactNo" name="contactNo" placeholder="Enter your contact number" value={formData.contactNo} onChange={handleChange} />
+                  {errors.contactNo && <div className='userform-error'>{errors.contactNo}</div>}
+                </section>
+                <section>
+                  <div className="input_label">
+                    <label htmlFor="email">Email:</label>
+                  </div>
+                  <input type="email" id="email" name="email" placeholder="Enter your contact number" value={formData.email} onChange={handleChange} />
+                  {errors.email && <div className='userform-error'>{errors.email}</div>}
+                </section>
 
               </section>
 
@@ -239,31 +248,31 @@ export default function UserDashboard() {
                 {errors.category && <div className='userform-error'>{errors.category}</div>}
               </section>
               {isServiceEnabled && (
-              <section>
-                <div className="input_label">
-                  <label htmlFor="services">Services:</label>
-                </div>
-                <div className="select_container">
-                  <select
-                    id="services"
-                    name="services"
-                    value={formData.services}
-                    onChange={handleChange}
+                <section>
+                  <div className="input_label">
+                    <label htmlFor="services">Services:</label>
+                  </div>
+                  <div className="select_container">
+                    <select
+                      id="services"
+                      name="services"
+                      value={formData.services}
+                      onChange={handleChange}
                     // disabled={!formData.category}
                     // style={{ cursor: formData.category ? "default" : "not-allowed" }}
-                  >
-                    <option value="" disabled hidden>Select Services</option>
-                    {/* {formData.category && options[formData.category].servicess.map((desc, index) => (
+                    >
+                      <option value="" disabled hidden>Select Services</option>
+                      {/* {formData.category && options[formData.category].servicess.map((desc, index) => (
                       <option key={index} value={desc}>{desc}</option>
                     ))} */}
-                    {services.map((service, index) => (
-                      <option key={index} value={service}>{service}</option>
-                    ))}
-                  </select>
+                      {services.map((service, index) => (
+                        <option key={index} value={service}>{service}</option>
+                      ))}
+                    </select>
 
-                </div>
-                {errors.services && <div className='userform-error'>{errors.services}</div>}
-              </section>
+                  </div>
+                  {errors.services && <div className='userform-error'>{errors.services}</div>}
+                </section>
               )}
               <section>
                 <div className="input_label">
@@ -306,7 +315,7 @@ export default function UserDashboard() {
                 </div>
                 {errors.priority && <div className='userform-error'>{errors.priority}</div>}
               </section> */}
-              
+
               {/* NEW - Prioriy Select Input */}
               {/* <section>
                 <div className="input_label">
@@ -325,15 +334,17 @@ export default function UserDashboard() {
             </section>
           </div>
 
-          <section className="buttons_area_columns">
+          <section className="buttons_area_columns flex justify-end">
             <section className="btn_fill_primary">
               <button type="submit" className="main_button" onClick={handleSubmit} disabled={loading}>
-                <span>{loading?"Submiting":"Add"}</span>
+                <span>{loading ? "Submiting" : "Add"}</span>
               </button>
             </section>
           </section>
 
         </form>
+
+        </div>
       </section>
 
     </main>
