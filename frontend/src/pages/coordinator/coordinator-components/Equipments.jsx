@@ -103,6 +103,36 @@ const Equipments = () => {
       .catch(err => console.log(err));
   };
 
+  const categoryDelete = (categoryId) => {
+    // console.log("the category id is", categoryId);
+    axios.delete('http://localhost:3000/coordinator/deleteCategory/' + categoryId)
+      .then(res => {
+        if (res.status === 200) {
+          alert(res.data.message); setDeleteInvPopup(false);
+          fetchCategories(); fetchProducts(); setSelectContainer("All");
+        }
+        else
+          alert(res.data.message);
+      })
+      .catch(err => console.log(err));
+  };
+
+  const serviceDelete =(categoryId,serviceName) =>{
+    console.log("category id "+categoryId+"service "+serviceName);
+    axios.delete(`http://localhost:3000/coordinator/${categoryId}/remove-service`, {
+      data:{ serviceName: serviceName}
+    }).then(res => {
+      if (res.status === 200) {
+        alert(res.data.message);  setDeleteInvPopup(false);
+        fetchCategories(); fetchProducts(); setSelectContainer("All");
+      }
+      else {
+        alert(res.data.message)
+      }
+    }).catch(err => console.log(err)
+    )
+  }
+
   const handleNextStep = () => { setNewCategory(''); setStep(2); };
   const handlePreviousStep = () => { setNewProductorService({ department: "", category: { _id: "", name: "" }, type: "", modelNo: "" }); setStep(1); };
 
@@ -122,7 +152,10 @@ const Equipments = () => {
           if (res.data.Status === true) {
             alert(res.data.message)
             setShowAddPopup(false);
-            setStep(1);
+            setStep(1);fetchCategories();
+            // Reset values ONLY when the product is added
+            setNewCategory('');
+            setNewProductorService({ department: "", category: { _id: "", name: "" }, type: "", modelNo: "" });
           }
           else {
             alert(res.data.message)
@@ -245,8 +278,8 @@ const Equipments = () => {
 
 
   const filteredPopupData = select_container === "All"
-    ? data
-    : data.filter((item) => item.categoryName === select_container);
+    ? categories.flatMap((category) => category.services || [])
+    : categories.find((item) => item._id === select_container)?.services ||[];
 
 
 
@@ -517,7 +550,7 @@ const Equipments = () => {
               <section className="buttons_area_columns">
                 <section className="btn_outlined_primary">
                   <button className="main_button" onClick={handlePreviousStep} disabled={serprodLoading}>
-                    <span>{categoryLoading ? "Adding" : "Back"}</span>
+                    <span>{serprodLoading ? "Adding" : "Back"}</span>
                   </button>
                 </section>
 
@@ -545,7 +578,7 @@ const Equipments = () => {
           <div className="popup_content bg-white rounded-xl shadow-lg w-[90%] max-w-4xl p-6 relative flex flex-col gap-6">
 
             {/* Close Button */}
-            <div className="x_icon" onClick={() => setDeleteInvPopup(false)}>
+            <div className="x_icon" onClick={() => {setDeleteInvPopup(false); setSelectContainer("All")}}>
               <button className="close_popup">
                 <img src="/assets/icons/x-icon.svg" alt="Close Sidebar" />
               </button>
@@ -563,9 +596,9 @@ const Equipments = () => {
                     onChange={(e) => setSelectContainer(e.target.value)}
                   >
                     <option value="All">All</option>
-                    {productCategories.map((category, index) => (
-                      <option key={index} value={category}>
-                        {category}
+                    {categories.map((category, index) => (
+                      <option key={index} value={category._id}>
+                        {category.name}
                       </option>
                     ))}
                   </select>
@@ -582,13 +615,14 @@ const Equipments = () => {
                   <div className="mb-2">
                     <div className="flex items-center justify-between">
                       <span className="text-4xl font-bold text-gray-800">
-                        {select_container === "All" ? "All Categories" : select_container}
+                        {select_container === "All" ? "All Categories" : categories.find((item) => item._id === select_container)?.name}
                       </span>
-                      <button className="text-red-600 hover:text-red-800 text-lg">
+                      <button type="button" 
+                      className="text-red-600 hover:text-red-800 text-lg" disabled={select_container === "All"} onClick={() =>categoryDelete(select_container)}>
                         <i className="fa-regular fa-trash-can"></i>
                       </button>
                     </div>
-                    <p className="text-gray-500 text-xl mt-1">Products under this category:</p>
+                    <p className="text-gray-500 text-xl mt-1">Services under this category:</p>
                   </div>
 
                   {/* Child Items */}
@@ -598,10 +632,10 @@ const Equipments = () => {
                         key={index}
                         className="flex items-center justify-between !py-2.5 !px-5 border border-gray-500 rounded-lg bg-gray-200/50"
                       >
-                        <h4 className="text-3xl font-medium text-gray-700">{item.name}</h4>
-                        <button
+                        <h4 className="text-3xl font-medium text-gray-700">{item}</h4>
+                        <button type="button"
                           className="text-red-600 hover:text-red-800 text-2xl p-0 bg-transparent border-none focus:outline-none"
-                          onClick={() => handleDeleteClick(item)}
+                          onClick={() => serviceDelete(select_container,item)} disabled={select_container === "All"}
                         >
                           <i className="fa-regular fa-trash-can"></i>
                         </button>

@@ -273,22 +273,21 @@ router.delete("/:categoryId/remove-service", async (req, res) => {
     try {
       const { categoryId } = req.params;
       const { serviceName } = req.body;
-  
       const category = await Category.findById(categoryId);
       if (!category) {
         return res.status(404).json({ message: "Category not found" });
       }
-  
+      //console.log("category Id",categoryId);
+      //console.log("serviceName",serviceName);
       // Remove the service from the services array
-      category.services = category.services.filter(service => service !== serviceName);
-  
+      category.services = category.services.filter(service => service.trim() !== serviceName.trim());
       // If no services remain, set hasServices to false
       if (category.services.length === 0) {
         category.hasServices = false;
       }
-  
+      //console.log("Before save",category.services)
       await category.save();
-  
+      //console.log("After save",category.services)
       res.status(200).json({ message: "Service removed successfully"});
     } catch (error) {
       res.status(500).json({ error: error.message });
