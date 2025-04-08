@@ -55,9 +55,12 @@ const Equipments = () => {
     fetchProducts();
     fetchCategories();
   }, []);
-  // useEffect(()=>{
-
-  // },[])
+   useEffect(()=>{
+    setNewProductorService((prev)=>({
+      ...prev,
+      department:"",
+    }));
+   },[newProductorService.type])
   useEffect(() => {
     const lowerCaseSearch = searchText.toLowerCase();
     let filtered = data.filter(

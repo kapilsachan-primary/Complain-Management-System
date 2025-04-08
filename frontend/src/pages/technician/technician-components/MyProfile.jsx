@@ -10,6 +10,8 @@ const MyProfile = () => {
   const [name, setname] = useState('');
   const [id, setid] = useState('');
   const [password,setpassword]=useState('');
+  const [loading,setLoading]=useState(false);
+  const [resetLoading,setResetLoading]=useState(false);
   useEffect(() => {
     axios.get('http://localhost:3000/technician/status')
       .then(res => {
@@ -41,6 +43,7 @@ const MyProfile = () => {
       console.log(Object.entries(checkerr).length);
       console.log(checkerr)
       if (Object.entries(checkerr).length === 0) {
+        setLoading(true);
         axios.put("http://localhost:3000/technician/editprofile",{
           id:id,
           name:formData.name,
@@ -54,8 +57,8 @@ const MyProfile = () => {
         else{
           alert(res.data.message)
         }
-      }).catch(err => console.log(err));
-
+      }).catch(err => console.log(err))
+      .finally(()=>{ setLoading(false)});
       }
     }
     else{
@@ -64,6 +67,7 @@ const MyProfile = () => {
       console.log(Object.entries(checkerr).length);
       console.log(checkerr)
       if (Object.entries(checkerr).length === 0) {
+        setResetLoading(true);
         axios.put("http://localhost:3000/technician/resetpassword",{
           id:id,
           password:password,
@@ -75,7 +79,8 @@ const MyProfile = () => {
         else{
           alert(res.data.message)
         }
-      }).catch(err => console.log(err));
+      }).catch(err => console.log(err))
+      .finally(()=>{ setResetLoading(false)});
       }
     }
   };
@@ -103,7 +108,7 @@ const MyProfile = () => {
         {/* Edit Profile Form (Default) */}
         {activeForm === "edit" && (
           <section className="form_section">
-            <form onSubmit={handleSubmit} className="issue_form">
+            <form className="issue_form">
               <div className="input_area_wrapper">
                 <section className="input_area_columns">
                   <section>
@@ -134,8 +139,8 @@ const MyProfile = () => {
 
               <section className="buttons_area_columns">
                 <section className="btn_fill_primary">
-                  <button type="submit" className="main_button">
-                    <span>Submit</span>
+                  <button type="submit" className="main_button" onClick={handleSubmit} disabled={loading}>
+                    <span>{loading?"Updating":"Submit"}</span>
                   </button>
                 </section>
               </section>
@@ -146,7 +151,7 @@ const MyProfile = () => {
         {/* Reset Password Form */}
         {activeForm === "reset" && (
           <section className="form_section">
-            <form onSubmit={handleSubmit} className="issue_form">
+            <form className="issue_form">
               <div className="input_area_wrapper">
                 <section className="input_area_columns">
                   <section>
@@ -161,8 +166,8 @@ const MyProfile = () => {
 
               <section className="buttons_area_columns">
                 <section className="btn_fill_primary">
-                  <button type="submit" className="main_button">
-                    <span>Submit</span>
+                  <button type="submit" className="main_button" onClick={handleSubmit} disabled={resetLoading}>
+                    <span>{resetLoading?"Updating":"Submit"}</span>
                   </button>
                 </section>
               </section>
