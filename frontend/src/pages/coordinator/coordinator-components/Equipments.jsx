@@ -114,7 +114,7 @@ const Equipments = () => {
     axios.delete(`http://localhost:3000/coordinator/deleteCategory/${categoryId}`)
       .then(res => {
         if (res.status === 200) {
-          // alert(res.data.message);
+          alert(res.data.message);
           setDeleteInvPopup(false);
           fetchCategories();
           fetchProducts();
@@ -133,7 +133,7 @@ const Equipments = () => {
     })
       .then(res => {
         if (res.status === 200) {
-          // alert(res.data.message);
+          alert(res.data.message);
           setShowDeleteServPopup(false);
           setDeleteInvPopup(false);
           fetchCategories();

@@ -404,6 +404,18 @@ const ComplaintStatus = () => {
                   </section>
 
                   <section>
+                  <div className="input_label">
+                    <label htmlFor="descriptionRemarks">Description/Remarks:</label>
+                  </div>
+                  <textarea
+                    name="descriptionRemarks"
+                    id="descriptionRemarks"
+                    className="custom-textarea"
+                    placeholder="Remarks"
+                  ></textarea>
+                </section>
+
+                  <section>
                     <div className="input_label">
                       <label htmlFor="status">Status: </label>
                     </div>
