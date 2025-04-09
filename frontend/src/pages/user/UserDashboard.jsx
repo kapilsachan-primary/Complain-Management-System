@@ -12,6 +12,7 @@ export default function UserDashboard() {
     department: "",
     productdescription: "",
     services: "",
+    descriptionRemarks: "",
   });
   const [errors, seterrors] = useState({});
   const [categories, setCategories] = useState([]);
@@ -114,6 +115,7 @@ export default function UserDashboard() {
         department: formData.department,
         productdescription: formData.productdescription,
         services: formData.services,
+        descriptionRemarks: formData.descriptionRemarks,
       }).then(res => {
         console.log(res);
         if (res.status == 200 || res.status == 422) {
@@ -155,153 +157,165 @@ export default function UserDashboard() {
 
       {/* User Form */}
       <section className="form_section flex justify-center items-center flex-grow w-full px-4 py-8">
-      <div className="w-full max-w-[80vw]">
+        <div className="w-full max-w-[80vw]">
 
-        <form className="issue_form w-full">
+          <form className="issue_form w-full">
 
-          <div className="input_area_wrapper !max-w-full">
-            <section className="input_area_columns">
+            <div className="input_area_wrapper !max-w-full">
+              <section className="input_area_columns">
 
-              <section className="input_area_two_columns">
+                <section className="input_area_two_columns">
 
-                <section>
-                  <div className="input_label">
-                    <label htmlFor="name">Name:</label>
-                  </div>
-                  <input type="text" id="name" name="name" placeholder="Enter your name" value={formData.name} onChange={handleChange} />
-                  {errors.name && <div className='userform-error'>{errors.name}</div>}
+                  <section>
+                    <div className="input_label">
+                      <label htmlFor="name">Name:</label>
+                    </div>
+                    <input type="text" id="name" name="name" placeholder="Enter your name" value={formData.name} onChange={handleChange} />
+                    {errors.name && <div className='userform-error'>{errors.name}</div>}
+                  </section>
+
+                  <section>
+                    <div className="input_label">
+                      <label htmlFor="roomNo">Room No:</label>
+                    </div>
+                    <input type="text" id="roomNo" name="roomNo" placeholder="Enter your room number" value={formData.roomNo} onChange={handleChange} />
+                    {errors.roomNo && <div className='userform-error'>{errors.roomNo}</div>}
+                  </section>
+                </section>
+
+
+                <section className="input_area_two_columns">
+                  <section>
+                    <div className="input_label">
+                      <label htmlFor="contactNo">Contact No:</label>
+                    </div>
+                    <input type="number" id="contactNo" name="contactNo" placeholder="Enter your contact number" value={formData.contactNo} onChange={handleChange} />
+                    {errors.contactNo && <div className='userform-error'>{errors.contactNo}</div>}
+                  </section>
+                  <section>
+                    <div className="input_label">
+                      <label htmlFor="email">Email:</label>
+                    </div>
+                    <input type="email" id="email" name="email" placeholder="Enter your contact number" value={formData.email} onChange={handleChange} />
+                    {errors.email && <div className='userform-error'>{errors.email}</div>}
+                  </section>
+
                 </section>
 
                 <section>
                   <div className="input_label">
-                    <label htmlFor="roomNo">Room No:</label>
-                  </div>
-                  <input type="text" id="roomNo" name="roomNo" placeholder="Enter your room number" value={formData.roomNo} onChange={handleChange} />
-                  {errors.roomNo && <div className='userform-error'>{errors.roomNo}</div>}
-                </section>
-              </section>
-
-
-              <section className="input_area_two_columns">
-                <section>
-                  <div className="input_label">
-                    <label htmlFor="contactNo">Contact No:</label>
-                  </div>
-                  <input type="number" id="contactNo" name="contactNo" placeholder="Enter your contact number" value={formData.contactNo} onChange={handleChange} />
-                  {errors.contactNo && <div className='userform-error'>{errors.contactNo}</div>}
-                </section>
-                <section>
-                  <div className="input_label">
-                    <label htmlFor="email">Email:</label>
-                  </div>
-                  <input type="email" id="email" name="email" placeholder="Enter your contact number" value={formData.email} onChange={handleChange} />
-                  {errors.email && <div className='userform-error'>{errors.email}</div>}
-                </section>
-
-              </section>
-
-              <section>
-                <div className="input_label">
-                  <label htmlFor="department">Department:</label>
-                </div>
-                <div className="select_container">
-                  <select id="department" name="department" value={formData.department} onChange={handleChange}>
-                    <option value="" disabled hidden>Select department</option>
-                    <option value="applied-mechanics">Applied Mechanics</option>
-                    <option value="artificial-intelligence">Artificial Intelligence and Machine Learning</option>
-                    <option value="automobile-engineering">Automobile Engineering</option>
-                    <option value="biomedical-engineering">Biomedical Engineering</option>
-                    <option value="chemical-engineering">Chemical Engineering</option>
-                    <option value="civil-engineering">Civil Engineering</option>
-                    <option value="computer-engineering">Computer Engineering</option>
-                    <option value="electrical-engineering">Electrical Engineering</option>
-                    <option value="electronics-communication">Electronics and Communication Engineering</option>
-                    <option value="environment-engineering">Environment Engineering</option>
-                    <option value="information-technology">Information Technology</option>
-                    <option value="instrumentation-control">Instrumentation & Control Engineering</option>
-                    <option value="mechanical-engineering">Mechanical Engineering</option>
-                    <option value="plastic-technology">Plastic Technology</option>
-                    <option value="robotics-automation">Robotics and Automation</option>
-                    <option value="rubber-technology">Rubber Technology</option>
-                    <option value="science-humanities">Science and Humanities</option>
-                    <option value="textile-technology">Textile Technology</option>
-                  </select>
-
-                </div>
-                {errors.department && <div className='userform-error'>{errors.department}</div>}
-              </section>
-
-              <section>
-                <div className="input_label">
-                  <label htmlFor="category">Category:</label>
-                </div>
-                <div className="select_container">
-                  <select id="category" name="category" value={formData.category} onChange={handleChange}>
-                    <option value="" disabled hidden selected>Select Category</option>
-                    {/* <option value="printer">Printer</option>
-                    <option value="cctv">CCTV</option> */}
-                    {categories.map((cat) => (
-                      <option key={cat._id} value={cat.name}>{cat.name}</option>
-                    ))}
-                  </select>
-                </div>
-                {errors.category && <div className='userform-error'>{errors.category}</div>}
-              </section>
-              {isServiceEnabled && (
-                <section>
-                  <div className="input_label">
-                    <label htmlFor="services">Services:</label>
+                    <label htmlFor="department">Department:</label>
                   </div>
                   <div className="select_container">
-                    <select
-                      id="services"
-                      name="services"
-                      value={formData.services}
-                      onChange={handleChange}
-                    // disabled={!formData.category}
-                    // style={{ cursor: formData.category ? "default" : "not-allowed" }}
-                    >
-                      <option value="" disabled hidden>Select Services</option>
-                      {/* {formData.category && options[formData.category].servicess.map((desc, index) => (
-                      <option key={index} value={desc}>{desc}</option>
-                    ))} */}
-                      {services.map((service, index) => (
-                        <option key={index} value={service}>{service}</option>
-                      ))}
+                    <select id="department" name="department" value={formData.department} onChange={handleChange}>
+                      <option value="" disabled hidden>Select department</option>
+                      <option value="applied-mechanics">Applied Mechanics</option>
+                      <option value="artificial-intelligence">Artificial Intelligence and Machine Learning</option>
+                      <option value="automobile-engineering">Automobile Engineering</option>
+                      <option value="biomedical-engineering">Biomedical Engineering</option>
+                      <option value="chemical-engineering">Chemical Engineering</option>
+                      <option value="civil-engineering">Civil Engineering</option>
+                      <option value="computer-engineering">Computer Engineering</option>
+                      <option value="electrical-engineering">Electrical Engineering</option>
+                      <option value="electronics-communication">Electronics and Communication Engineering</option>
+                      <option value="environment-engineering">Environment Engineering</option>
+                      <option value="information-technology">Information Technology</option>
+                      <option value="instrumentation-control">Instrumentation & Control Engineering</option>
+                      <option value="mechanical-engineering">Mechanical Engineering</option>
+                      <option value="plastic-technology">Plastic Technology</option>
+                      <option value="robotics-automation">Robotics and Automation</option>
+                      <option value="rubber-technology">Rubber Technology</option>
+                      <option value="science-humanities">Science and Humanities</option>
+                      <option value="textile-technology">Textile Technology</option>
                     </select>
 
                   </div>
-                  {errors.services && <div className='userform-error'>{errors.services}</div>}
+                  {errors.department && <div className='userform-error'>{errors.department}</div>}
                 </section>
-              )}
-              <section>
-                <div className="input_label">
-                  <label htmlFor="productdescription">Product Description:</label>
-                </div>
-                <div className="select_container">
-                  <select
-                    id="productdescription"
-                    name="productdescription"
-                    value={formData.productdescription}
-                    onChange={handleChange}
-                    disabled={products.length === 0}
-                    style={{ cursor: products.length !== 0 ? "default" : "not-allowed" }}
-                  >
-                    <option value="" disabled hidden>Select Product</option>
-                    {/* {formData.category && options[formData.category].productdescriptions.map((mdl, index) => (
+
+                <section>
+                  <div className="input_label">
+                    <label htmlFor="category">Category:</label>
+                  </div>
+                  <div className="select_container">
+                    <select id="category" name="category" value={formData.category} onChange={handleChange}>
+                      <option value="" disabled hidden selected>Select Category</option>
+                      {/* <option value="printer">Printer</option>
+                    <option value="cctv">CCTV</option> */}
+                      {categories.map((cat) => (
+                        <option key={cat._id} value={cat.name}>{cat.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  {errors.category && <div className='userform-error'>{errors.category}</div>}
+                </section>
+                {isServiceEnabled && (
+                  <section>
+                    <div className="input_label">
+                      <label htmlFor="services">Services:</label>
+                    </div>
+                    <div className="select_container">
+                      <select
+                        id="services"
+                        name="services"
+                        value={formData.services}
+                        onChange={handleChange}
+                      // disabled={!formData.category}
+                      // style={{ cursor: formData.category ? "default" : "not-allowed" }}
+                      >
+                        <option value="" disabled hidden>Select Services</option>
+                        {/* {formData.category && options[formData.category].servicess.map((desc, index) => (
+                      <option key={index} value={desc}>{desc}</option>
+                    ))} */}
+                        {services.map((service, index) => (
+                          <option key={index} value={service}>{service}</option>
+                        ))}
+                      </select>
+
+                    </div>
+                    {errors.services && <div className='userform-error'>{errors.services}</div>}
+                  </section>
+                )}
+                <section>
+                  <div className="input_label">
+                    <label htmlFor="productdescription">Product Description:</label>
+                  </div>
+                  <div className="select_container">
+                    <select
+                      id="productdescription"
+                      name="productdescription"
+                      value={formData.productdescription}
+                      onChange={handleChange}
+                      disabled={products.length === 0}
+                      style={{ cursor: products.length !== 0 ? "default" : "not-allowed" }}
+                    >
+                      <option value="" disabled hidden>Select Product</option>
+                      {/* {formData.category && options[formData.category].productdescriptions.map((mdl, index) => (
                       <option key={index} value={mdl}>{mdl}</option>
                     ))} */}
-                    {products.map((prod) => (
-                      <option key={prod._id} value={prod.name}>{prod.name}</option>
-                    ))}
-                  </select>
-                </div>
-                {errors.productdescription && <div className='userform-error'>{errors.productdescription}</div>}
-              </section>
+                      {products.map((prod) => (
+                        <option key={prod._id} value={prod.name}>{prod.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                  {errors.productdescription && <div className='userform-error'>{errors.productdescription}</div>}
+                </section>
 
+                <section>
+                  <div className="input_label">
+                    <label htmlFor="descriptionRemarks">Description/Remarks:</label>
+                  </div>
+                  <textarea
+                    name="descriptionRemarks"
+                    id="descriptionRemarks"
+                    className="custom-textarea"
+                    placeholder="Remarks"
+                  ></textarea>
+                  {errors.descriptionRemarks && <div className='userform-error'>{errors.descriptionRemarks}</div>}
+                </section>
 
-              {/* OLD - Prioriy Select Input */}
-              {/* <section>
+                {/* OLD - Prioriy Select Input */}
+                {/* <section>
                 <div className="input_label">
                   <label htmlFor="priority">Priority:</label>
                 </div>
@@ -316,8 +330,8 @@ export default function UserDashboard() {
                 {errors.priority && <div className='userform-error'>{errors.priority}</div>}
               </section> */}
 
-              {/* NEW - Prioriy Select Input */}
-              {/* <section>
+                {/* NEW - Prioriy Select Input */}
+                {/* <section>
                 <div className="input_label">
                   <label htmlFor="priority">Priority:</label>
                 </div>
@@ -331,18 +345,18 @@ export default function UserDashboard() {
                 {errors.priority && <div className='userform-error'>{errors.priority}</div>}
               </section> */}
 
-            </section>
-          </div>
+              </section>
+            </div>
 
-          <section className="buttons_area_columns flex justify-end">
-            <section className="btn_fill_primary">
-              <button type="submit" className="main_button" onClick={handleSubmit} disabled={loading}>
-                <span>{loading ? "Submiting" : "Add"}</span>
-              </button>
+            <section className="buttons_area_columns flex justify-end">
+              <section className="btn_fill_primary">
+                <button type="submit" className="main_button" onClick={handleSubmit} disabled={loading}>
+                  <span>{loading ? "Submiting" : "Raise Complaint"}</span>
+                </button>
+              </section>
             </section>
-          </section>
 
-        </form>
+          </form>
 
         </div>
       </section>
