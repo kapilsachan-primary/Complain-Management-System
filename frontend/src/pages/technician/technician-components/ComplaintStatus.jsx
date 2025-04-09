@@ -394,12 +394,13 @@ const ComplaintStatus = () => {
                     <div className="input_label">
                       <label htmlFor="complaintDes">Product Description:</label>
                     </div>
-                    <textarea
+                    <input
+                        type="text"
                       name="complaintDes"
                       id="complaintDes"
                       className="custom-textarea"
                       value={selectedComplaint.productdescription} readOnly={true}
-                    ></textarea>
+                    ></input>
                   </section>
 
                   <section>
