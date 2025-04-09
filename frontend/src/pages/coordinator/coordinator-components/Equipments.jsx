@@ -12,7 +12,10 @@ const Equipments = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [select_container, setSelectContainer] = useState("All");
   const [showDeletePopup, setShowDeletePopup] = useState(false);
-  const [equipmentToDelete, setEquipmentToDelete] = useState(null);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
+  const [showDeleteCatPopup, setShowDeleteCatPopup] = useState(false);
+  const [equipmentToDelete, setEquipmentToDelete] = useState({ name: "", category: "" });
+  const [showDeleteServPopup, setShowDeleteServPopup] = useState(false);
   const [showAddPopup, setShowAddPopup] = useState(false);
   const [showDeleteInvPopup, setDeleteInvPopup] = useState(false);
   const [step, setStep] = useState(1); // Track step for Add Equipment popup
@@ -21,6 +24,9 @@ const Equipments = () => {
   const [newProductorService, setNewProductorService] = useState({ department: "", category: { _id: "", name: "" }, type: "", modelNo: "" });
   const [categoryLoading, setCategotyLoading] = useState(false);
   const [serprodLoading, setServprodLoading] = useState(false);
+  const [showUploadPopup, setShowUploadPopup] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
 
@@ -103,35 +109,43 @@ const Equipments = () => {
       .catch(err => console.log(err));
   };
 
+  // Delete a category
   const categoryDelete = (categoryId) => {
-    // console.log("the category id is", categoryId);
-    axios.delete('http://localhost:3000/coordinator/deleteCategory/' + categoryId)
+    axios.delete(`http://localhost:3000/coordinator/deleteCategory/${categoryId}`)
       .then(res => {
         if (res.status === 200) {
-          alert(res.data.message); setDeleteInvPopup(false);
-          fetchCategories(); fetchProducts(); setSelectContainer("All");
-        }
-        else
+          // alert(res.data.message);
+          setDeleteInvPopup(false);
+          fetchCategories();
+          fetchProducts();
+          setSelectContainer("All");
+        } else {
           alert(res.data.message);
+        }
       })
       .catch(err => console.log(err));
   };
 
-  const serviceDelete =(categoryId,serviceName) =>{
-    console.log("category id "+categoryId+"service "+serviceName);
+  // Delete a service
+  const serviceDelete = (categoryId, serviceName) => {
     axios.delete(`http://localhost:3000/coordinator/${categoryId}/remove-service`, {
-      data:{ serviceName: serviceName}
-    }).then(res => {
-      if (res.status === 200) {
-        alert(res.data.message);  setDeleteInvPopup(false);
-        fetchCategories(); fetchProducts(); setSelectContainer("All");
-      }
-      else {
-        alert(res.data.message)
-      }
-    }).catch(err => console.log(err)
-    )
-  }
+      data: { serviceName }
+    })
+      .then(res => {
+        if (res.status === 200) {
+          // alert(res.data.message);
+          setShowDeleteServPopup(false);
+          setDeleteInvPopup(false);
+          fetchCategories();
+          fetchProducts();
+          setSelectContainer("All");
+        } else {
+          alert(res.data.message);
+        }
+      })
+      .catch(err => console.log(err));
+  };
+
 
   const handleNextStep = () => { setNewCategory(''); setStep(2); };
   const handlePreviousStep = () => { setNewProductorService({ department: "", category: { _id: "", name: "" }, type: "", modelNo: "" }); setStep(1); };
@@ -152,7 +166,7 @@ const Equipments = () => {
           if (res.data.Status === true) {
             alert(res.data.message)
             setShowAddPopup(false);
-            setStep(1);fetchCategories();
+            setStep(1); fetchCategories();
             // Reset values ONLY when the product is added
             setNewCategory('');
             setNewProductorService({ department: "", category: { _id: "", name: "" }, type: "", modelNo: "" });
@@ -240,6 +254,21 @@ const Equipments = () => {
     }
   };
 
+  const handleFileChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  };
+
+  const handleFileUpload = () => {
+    if (!selectedFile) return;
+
+    // your upload logic here...
+
+    // Reset after upload
+    setSelectedFile(null);
+    setSelectContainer("All"); // ✅ Reset dropdown
+    setShowUploadPopup(false); // Optional: close popup after upload
+  };
+
   const columns = [
     // {
     //   name: <span className="column_header">Model No</span>,
@@ -279,9 +308,7 @@ const Equipments = () => {
 
   const filteredPopupData = select_container === "All"
     ? categories.flatMap((category) => category.services || [])
-    : categories.find((item) => item._id === select_container)?.services ||[];
-
-
+    : categories.find((item) => item._id === select_container)?.services || [];
 
   return (
     <section>
@@ -302,18 +329,28 @@ const Equipments = () => {
         </div>
 
         <div className="flex items-center self-end gap-6">
+
           <div id="add_technician_btn" className="whitespace-nowrap icon_btn_fill_primary_danger" onClick={() => setDeleteInvPopup(true)}>
             <i className="fa-solid fa-minus"></i>
             <button>
               <span>Delete Inventory</span>
             </button>
           </div>
+
+          <div id="upload_file_btn" className="whitespace-nowrap icon_btn_fill_primary" onClick={() => setShowUploadPopup(true)}>
+          <i class="fa-solid fa-layer-group"></i>
+            <button>
+              <span>Add Bulk</span>
+            </button>
+          </div>
+
           <div id="add_technician_btn" className="whitespace-nowrap icon_btn_fill_primary" onClick={() => setShowAddPopup(true)}>
             <i className="fa-solid fa-plus"></i>
             <button>
               <span>Add Equipment</span>
             </button>
           </div>
+
           <div className="search-container">
             <input
               type="text"
@@ -332,244 +369,245 @@ const Equipments = () => {
 
 
       {showDeletePopup && (
-    <div className="popup_container">
-      <div className="popup_content delete_popup_content">
-        <div className="popup_components">
-          <h2>Are you sure?</h2>
-          <p>Do you really want to delete <span>"{equipmentToDelete?.name}"</span>?</p>
-          <section className="buttons_area_columns delete_user_popup_btns" >
-            <section className="btn_fill_primary" onClick={() => setShowDeletePopup(false)}>
-              <button className="main_button">
-                <span>Cancel</span>
-              </button>
-            </section>
-            <section className="btn_outlined_primary_red" onClick={confirmDelete}>
-              <button className="main_button">
-                <span>Delete</span>
-              </button>
-            </section>
-          </section>
-        </div>
-      </div>
-    </div>
-  )}
-
-  {showAddPopup && (
-    <div className="popup_container">
-      <div className="popup_content">
-
-        <div className="x_icon" onClick={closeAddPopup}>
-          <button className="close_popup">
-            <img src="/assets/icons/x-icon.svg" alt="Close Sidebar" />
-          </button>
-        </div>
-
-        <form className="popup_components ">
-
-          <div className="popup_tertiary_header_cont flex gap-8 flex-col sm:flex-row sm:items-center">
-            <h1 className={`popup_tertiary_header ${step === 1 ? "font-bold" : "font-light"}`}>
-              Add Category
-            </h1>
-            <i class="fa-solid fa-grip-lines-vertical text-[2rem]"></i>
-            <h1 className={`popup_tertiary_header ${step === 2 ? "font-bold" : "font-light"}`}>
-              Add Product
-            </h1>
+        <div className="popup_container">
+          <div className="popup_content delete_popup_content">
+            <div className="popup_components">
+              <h2>Are you sure?</h2>
+              <p>Do you really want to delete <span>"{equipmentToDelete?.name}"</span>?</p>
+              <section className="buttons_area_columns delete_user_popup_btns" >
+                <section className="btn_fill_primary" onClick={() => setShowDeletePopup(false)}>
+                  <button className="main_button">
+                    <span>Cancel</span>
+                  </button>
+                </section>
+                <section className="btn_outlined_primary_red" onClick={confirmDelete}>
+                  <button className="main_button">
+                    <span>Delete</span>
+                  </button>
+                </section>
+              </section>
+            </div>
           </div>
+        </div>
+      )}
 
+      {showAddPopup && (
+        <div className="popup_container">
+          <div className="popup_content">
 
-          {step === 1 && (
-            <>
-              <div className="input_area_wrapper">
-                <section className="input_area_columns">
+            <div className="x_icon" onClick={closeAddPopup}>
+              <button className="close_popup">
+                <img src="/assets/icons/x-icon.svg" alt="Close Sidebar" />
+              </button>
+            </div>
 
-                  <section>
-                    <div className="input_label">
-                      <label htmlFor="all">Departments:</label>
-                    </div>
-                    <input
-                      type="text"
-                      id="all"
-                      name="all"
-                      placeholder="All"
-                      className="custom-input"
-                      value="All" // Controlled input
-                    // onChange={(e) => setNewCategory({ ...newCategory, all: e.target.value })} // Keep state updated
-                    />
-                  </section>
+            <form className="popup_components ">
 
-                  <section>
-                    <div className="input_label">
-                      <label htmlFor="category">Category:</label>
-                    </div>
-                    <input
-                      type="text"
-                      id="category"
-                      name="category"
-                      placeholder="Category"
-                      className="custom-input"
-                      value={newCategory} // Controlled input
-                      onChange={(e) => setNewCategory(e.target.value.toUpperCase())}// Keep state updated
-                    />
-                    {errors.newCategory && <div className="popupform-error">{errors.newCategory}</div>}
-                  </section>
-                </section>
+              <div className="popup_tertiary_header_cont flex gap-8 flex-col sm:flex-row sm:items-center">
+                <h1 className={`popup_tertiary_header ${step === 1 ? "font-bold" : "font-light"}`}>
+                  Add Category
+                </h1>
+                <i class="fa-solid fa-grip-lines-vertical text-[2rem]"></i>
+                <h1 className={`popup_tertiary_header ${step === 2 ? "font-bold" : "font-light"}`}>
+                  Add Product
+                </h1>
               </div>
 
-              <section className="buttons_area_columns popup_button">
-                <section className="btn_outlined_primary" onClick={handleNextStep} disabled={categoryLoading}>
-                  <button type="submit" className="main_button">
-                    <span>{categoryLoading ? "Adding" : "Next"}</span>
-                  </button>
-                </section>
-                <section className="btn_fill_primary" onClick={handleAddCategory} disabled={categoryLoading}>
-                  <button type="submit" className="main_button">
-                    <span>{categoryLoading ? "Adding" : "Add"}</span>
-                  </button>
-                </section>
 
-              </section>
+              {step === 1 && (
+                <>
+                  <div className="input_area_wrapper">
+                    <section className="input_area_columns">
 
-            </>
-          )}
+                      <section>
+                        <div className="input_label">
+                          <label htmlFor="all">Departments:</label>
+                        </div>
+                        <input
+                          type="text"
+                          id="all"
+                          name="all"
+                          placeholder="All"
+                          className="custom-input"
+                          value="All" // Controlled input
+                        // onChange={(e) => setNewCategory({ ...newCategory, all: e.target.value })} // Keep state updated
+                        />
+                      </section>
 
+                      <section>
+                        <div className="input_label">
+                          <label htmlFor="category">Category:</label>
+                        </div>
+                        <input
+                          type="text"
+                          id="category"
+                          name="category"
+                          placeholder="Category"
+                          className="custom-input"
+                          value={newCategory} // Controlled input
+                          onChange={(e) => setNewCategory(e.target.value.toUpperCase())}// Keep state updated
+                        />
+                        {errors.newCategory && <div className="popupform-error">{errors.newCategory}</div>}
+                      </section>
+                    </section>
+                  </div>
 
-          {step === 2 && (
-            <>
-              <div className="input_area_wrapper">
-                <section className="input_area_columns">
+                  <section className="buttons_area_columns popup_button">
+                    <section className="btn_outlined_primary" onClick={handleNextStep} disabled={categoryLoading}>
+                      <button type="submit" className="main_button">
+                        <span>{categoryLoading ? "Adding" : "Next"}</span>
+                      </button>
+                    </section>
+                    <section className="btn_fill_primary" onClick={handleAddCategory} disabled={categoryLoading}>
+                      <button type="submit" className="main_button">
+                        <span>{categoryLoading ? "Adding" : "Add"}</span>
+                      </button>
+                    </section>
 
-                  <section>
-                    <div className="input_label">
-                      <label htmlFor="type">Type:</label>
-                    </div>
-                    <div className="select_container">
-                      <select
-                        id="type"
-                        name="type"
-                        value={newProductorService.type} // Controlled select
-                        onChange={(e) => setNewProductorService({ ...newProductorService, type: e.target.value })} // Keep state updated
-                      >
-                        <option value="" disabled hidden>Select Type:</option>
-                        <option value="Services">Services</option>
-                        <option value="Product">Product</option>
-                      </select>
-                      {errors.type && <div className="popupform-error">{errors.type}</div>}
-                    </div>
                   </section>
 
-                  {/* Conditional rendering based on the Type selection */}
-                  <section>
-                    <div className="input_label">
-                      <label htmlFor="department">Department:</label>
-                    </div>
-                    <div className="select_container">
-                      <select
-                        id="department"
-                        name="department"
-                        value={newProductorService.department} // Controlled select
-                        onChange={(e) => setNewProductorService({ ...newProductorService, department: e.target.value })} // Keep state updated
-                      >
-                        <option value="" disabled hidden>Select department</option>
-                        {newProductorService.type === "Services" ? (
-                          <option value="all">All</option>
-                        ) : (
-                          <>
-                            <option value="applied-mechanics">Applied Mechanics</option>
-                            <option value="artificial-intelligence">Artificial Intelligence and Machine Learning</option>
-                            <option value="automobile-engineering">Automobile Engineering</option>
-                            <option value="biomedical-engineering">Biomedical Engineering</option>
-                            <option value="chemical-engineering">Chemical Engineering</option>
-                            <option value="civil-engineering">Civil Engineering</option>
-                            <option value="computer-engineering">Computer Engineering</option>
-                            <option value="electrical-engineering">Electrical Engineering</option>
-                            <option value="electronics-communication">Electronics and Communication Engineering</option>
-                            <option value="environment-engineering">Environment Engineering</option>
-                            <option value="information-technology">Information Technology</option>
-                            <option value="instrumentation-control">Instrumentation & Control Engineering</option>
-                            <option value="mechanical-engineering">Mechanical Engineering</option>
-                            <option value="plastic-technology">Plastic Technology</option>
-                            <option value="robotics-automation">Robotics and Automation</option>
-                            <option value="rubber-technology">Rubber Technology</option>
-                            <option value="science-humanities">Science and Humanities</option>
-                            <option value="textile-technology">Textile Technology</option>
-                          </>
-                        )}
-                      </select>
-                      {errors.department && <div className="popupform-error">{errors.department}</div>}
-                    </div>
+                </>
+              )}
+
+
+              {step === 2 && (
+                <>
+                  <div className="input_area_wrapper">
+                    <section className="input_area_columns">
+
+                      <section>
+                        <div className="input_label">
+                          <label htmlFor="type">Type:</label>
+                        </div>
+                        <div className="select_container">
+                          <select
+                            id="type"
+                            name="type"
+                            value={newProductorService.type} // Controlled select
+                            onChange={(e) => setNewProductorService({ ...newProductorService, type: e.target.value })} // Keep state updated
+                          >
+                            <option value="" disabled hidden>Select Type:</option>
+                            <option value="Services">Services</option>
+                            <option value="Product">Product</option>
+                          </select>
+                          {errors.type && <div className="popupform-error">{errors.type}</div>}
+                        </div>
+                      </section>
+
+                      {/* Conditional rendering based on the Type selection */}
+                      <section>
+                        <div className="input_label">
+                          <label htmlFor="department">Department:</label>
+                        </div>
+                        <div className="select_container">
+                          <select
+                            id="department"
+                            name="department"
+                            value={newProductorService.department} // Controlled select
+                            onChange={(e) => setNewProductorService({ ...newProductorService, department: e.target.value })} // Keep state updated
+                          >
+                            <option value="" disabled hidden>Select department</option>
+                            {newProductorService.type === "Services" ? (
+                              <option value="all">All</option>
+                            ) : (
+                              <>
+                                <option value="applied-mechanics">Applied Mechanics</option>
+                                <option value="artificial-intelligence">Artificial Intelligence and Machine Learning</option>
+                                <option value="automobile-engineering">Automobile Engineering</option>
+                                <option value="biomedical-engineering">Biomedical Engineering</option>
+                                <option value="chemical-engineering">Chemical Engineering</option>
+                                <option value="civil-engineering">Civil Engineering</option>
+                                <option value="computer-engineering">Computer Engineering</option>
+                                <option value="electrical-engineering">Electrical Engineering</option>
+                                <option value="electronics-communication">Electronics and Communication Engineering</option>
+                                <option value="environment-engineering">Environment Engineering</option>
+                                <option value="information-technology">Information Technology</option>
+                                <option value="instrumentation-control">Instrumentation & Control Engineering</option>
+                                <option value="mechanical-engineering">Mechanical Engineering</option>
+                                <option value="plastic-technology">Plastic Technology</option>
+                                <option value="robotics-automation">Robotics and Automation</option>
+                                <option value="rubber-technology">Rubber Technology</option>
+                                <option value="science-humanities">Science and Humanities</option>
+                                <option value="textile-technology">Textile Technology</option>
+                              </>
+                            )}
+                          </select>
+                          {errors.department && <div className="popupform-error">{errors.department}</div>}
+                        </div>
+                      </section>
+
+                      <section>
+                        <div className="input_label">
+                          <label htmlFor="department">Category:</label>
+                        </div>
+                        <div className="select_container">
+                          <select
+                            id="category"
+                            name="category"
+                            value={newProductorService.category?._id || ""}
+                            onChange={(e) => {
+                              const selectcateg = categories.find(cat => cat._id === e.target.value)
+                              setNewProductorService({
+                                ...newProductorService,
+                                category: selectcateg ? { _id: selectcateg._id, name: selectcateg.name } : null
+                              })
+                            }} // Keep state updated
+                          >
+                            <option value="" disabled>Select Category</option>
+                            {categories.map((category) => (
+                              <option key={category._id}
+                                value={category._id}>
+                                {category.name}
+                              </option>
+                            ))}
+                          </select>
+                          {errors.category && <div className="popupform-error">{errors.category}</div>}
+                        </div>
+                      </section>
+
+                      <section>
+                        <div className="input_label">
+                          <label htmlFor="modelNo">Service Name/Model No.</label>
+                        </div>
+                        <input
+                          type="text"
+                          id="modelNo"
+                          name="modelNo"
+                          placeholder="Service Name/Model No."
+                          className="custom-input"
+                          value={newProductorService.modelNo} // Controlled input
+                          onChange={(e) => setNewProductorService({ ...newProductorService, modelNo: e.target.value })} // Keep state updated
+                        />
+                        {errors.modelNo && <div className="popupform-error">{errors.modelNo}</div>}
+                      </section>
+
+                    </section>
+                  </div>
+
+                  <section className="buttons_area_columns">
+                    <section className="btn_outlined_primary">
+                      <button className="main_button" onClick={handlePreviousStep} disabled={serprodLoading}>
+                        <span>{serprodLoading ? "Adding" : "Back"}</span>
+                      </button>
+                    </section>
+
+                    <section className="btn_fill_primary">
+                      <button className="main_button" onClick={handleAddProductorService} disabled={serprodLoading}>
+                        <span>{serprodLoading ? "Adding" : "Add"}</span>
+                      </button>
+                    </section>
+
                   </section>
 
-                  <section>
-                    <div className="input_label">
-                      <label htmlFor="department">Category:</label>
-                    </div>
-                    <div className="select_container">
-                      <select
-                        id="category"
-                        name="category"
-                        value={newProductorService.category?._id || ""}
-                        onChange={(e) => {
-                          const selectcateg = categories.find(cat => cat._id === e.target.value)
-                          setNewProductorService({
-                            ...newProductorService,
-                            category: selectcateg ? { _id: selectcateg._id, name: selectcateg.name } : null
-                          })
-                        }} // Keep state updated
-                      >
-                        <option value="" disabled>Select Category</option>
-                        {categories.map((category) => (
-                          <option key={category._id}
-                            value={category._id}>
-                            {category.name}
-                          </option>
-                        ))}
-                      </select>
-                      {errors.category && <div className="popupform-error">{errors.category}</div>}
-                    </div>
-                  </section>
+                </>
+              )}
 
-                  <section>
-                    <div className="input_label">
-                      <label htmlFor="modelNo">Service Name/Model No.</label>
-                    </div>
-                    <input
-                      type="text"
-                      id="modelNo"
-                      name="modelNo"
-                      placeholder="Service Name/Model No."
-                      className="custom-input"
-                      value={newProductorService.modelNo} // Controlled input
-                      onChange={(e) => setNewProductorService({ ...newProductorService, modelNo: e.target.value })} // Keep state updated
-                    />
-                    {errors.modelNo && <div className="popupform-error">{errors.modelNo}</div>}
-                  </section>
+            </form>
 
-                </section>
-              </div>
+          </div>
+        </div>
+      )}
 
-              <section className="buttons_area_columns">
-                <section className="btn_outlined_primary">
-                  <button className="main_button" onClick={handlePreviousStep} disabled={serprodLoading}>
-                    <span>{serprodLoading ? "Adding" : "Back"}</span>
-                  </button>
-                </section>
-
-                <section className="btn_fill_primary">
-                  <button className="main_button" onClick={handleAddProductorService} disabled={serprodLoading}>
-                    <span>{serprodLoading ? "Adding" : "Add"}</span>
-                  </button>
-                </section>
-
-              </section>
-
-            </>
-          )}
-
-        </form>
-
-      </div>
-    </div>
-  )}
 
 
 
@@ -578,7 +616,7 @@ const Equipments = () => {
           <div className="popup_content bg-white rounded-xl shadow-lg w-[90%] max-w-4xl p-6 relative flex flex-col gap-6">
 
             {/* Close Button */}
-            <div className="x_icon" onClick={() => {setDeleteInvPopup(false); setSelectContainer("All")}}>
+            <div className="x_icon" onClick={() => { setDeleteInvPopup(false); setSelectContainer("All"); }}>
               <button className="close_popup">
                 <img src="/assets/icons/x-icon.svg" alt="Close Sidebar" />
               </button>
@@ -589,59 +627,86 @@ const Equipments = () => {
 
               <div className="flex flex-col sm:flex-row gap-12">
                 {/* Left Container */}
-                <div className="select_container flex-1 h-fit ">
-                  <select
-                    className="category-dropdown w-full !text-[14px]"
-                    value={select_container}
-                    onChange={(e) => setSelectContainer(e.target.value)}
-                  >
-                    <option value="All">All</option>
-                    {categories.map((category, index) => (
-                      <option key={index} value={category._id}>
-                        {category.name}
-                      </option>
-                    ))}
-                  </select>
-
+                <div className="flex-1 h-fit">
+                  <div className="select_container ">
+                    <select
+                      className="category-dropdown w-full !text-[14px]"
+                      value={select_container}
+                      onChange={(e) => setSelectContainer(e.target.value)}
+                    >
+                      <option value="All">All</option>
+                      {categories.map((category, index) => (
+                        <option key={index} value={category._id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="!mt-2">
+                    <p className="text-2xl text-gray-500">Select a category to remove services from the inventory.</p>
+                  </div>
                 </div>
 
-                {/* Vertical Divider */}
+                {/* Divider */}
                 <div className="hidden sm:block w-px bg-gray-300" />
 
                 {/* Right Container */}
                 <div className="w-full sm:w-1/2 flex flex-col gap-4">
-
-                  {/* Parent Category (Like a Parent Title) */}
                   <div className="mb-2">
                     <div className="flex items-center justify-between">
                       <span className="text-4xl font-bold text-gray-800">
-                        {select_container === "All" ? "All Categories" : categories.find((item) => item._id === select_container)?.name}
+                        {select_container === "All"
+                          ? "All Categories"
+                          : categories.find((item) => item._id === select_container)?.name}
                       </span>
-                      <button type="button" 
-                      className="text-red-600 hover:text-red-800 text-lg" disabled={select_container === "All"} onClick={() =>categoryDelete(select_container)}>
-                        <i className="fa-regular fa-trash-can"></i>
-                      </button>
+
+                      {/* Only show delete button if a specific category is selected */}
+                      {select_container !== "All" && (
+                        <button
+                          type="button"
+                          className="text-red-600 hover:text-red-800 text-lg"
+                          onClick={() => {
+                            const selectedCat = categories.find(cat => cat._id === select_container);
+                            if (selectedCat) {
+                              setCategoryToDelete(selectedCat);
+                              setShowDeleteCatPopup(true);
+                            }
+                          }}
+                        >
+                          <i className="fa-regular fa-trash-can"></i>
+                        </button>
+                      )}
                     </div>
                     <p className="text-gray-500 text-xl mt-1">Services under this category:</p>
                   </div>
 
-                  {/* Child Items */}
-                  <div id="equipments_delete_popup" className="flex flex-col gap-3">
+                  {/* Services */}
+                  <div id="equipments_delete_popup" className="flex flex-col gap-3 max-h-[32rem] overflow-y-auto">
                     {filteredPopupData.map((item, index) => (
                       <div
                         key={index}
-                        className="flex items-center justify-between !py-2.5 !px-5 border border-gray-500 rounded-lg bg-gray-200/50"
+                        className="flex items-center justify-between py-2.5 px-5 border border-gray-500 rounded-lg bg-gray-200/50"
                       >
-                        <h4 className="text-3xl font-medium text-gray-700">{item}</h4>
-                        <button type="button"
-                          className="text-red-600 hover:text-red-800 text-2xl p-0 bg-transparent border-none focus:outline-none"
-                          onClick={() => serviceDelete(select_container,item)} disabled={select_container === "All"}
-                        >
-                          <i className="fa-regular fa-trash-can"></i>
-                        </button>
+                        <h4 className="text-3xl font-medium !py-2.5 !px-5 text-gray-700">{item}</h4>
+
+                        {/* Only show delete button if a specific category is selected */}
+                        {select_container !== "All" && (
+                          <button
+                            type="button"
+                            className="text-red-600 hover:text-red-800 text-2xl bg-transparent border-none focus:outline-none"
+                            onClick={() => {
+                              const selectedCategory = categories.find(cat => cat._id === select_container)?.name || "All";
+                              setEquipmentToDelete({ name: item, category: selectedCategory });
+                              setShowDeleteServPopup(true);
+                            }}
+                          >
+                            <i className="fa-regular fa-trash-can"></i>
+                          </button>
+                        )}
                       </div>
                     ))}
                   </div>
+
                 </div>
 
               </div>
@@ -649,6 +714,169 @@ const Equipments = () => {
           </div>
         </div>
       )}
+
+      {showDeleteCatPopup && (
+        <div className="popup_container">
+          <div className="popup_content delete_popup_content">
+            <div className="popup_components">
+              <h2>Are you sure?</h2>
+              <p className="text-xl text-gray-600 mb-6">
+                Do you really want to delete <span>"{categoryToDelete?.name}"</span> category?
+              </p>
+              <section className="buttons_area_columns delete_user_popup_btns">
+                <section className="btn_fill_primary" onClick={() => setShowDeleteCatPopup(false)}>
+                  <button className="main_button">
+                    <span>Cancel</span>
+                  </button>
+                </section>
+                <section
+                  className="btn_outlined_primary_red"
+                  onClick={() => {
+                    categoryDelete(categoryToDelete._id);
+                    setShowDeleteCatPopup(false);
+                  }}
+                >
+                  <button className="main_button">
+                    <span>Delete</span>
+                  </button>
+                </section>
+              </section>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {showDeleteServPopup && (
+        <div className="popup_container">
+          <div className="popup_content delete_popup_content">
+            <div className="popup_components">
+              <h2>Are you sure?</h2>
+              <p className="text-xl text-gray-600 mb-6">
+                Do you really want to delete{" "}
+                <span>"{equipmentToDelete?.name}"</span>
+                {equipmentToDelete?.category && (
+                  <> from <span>"{equipmentToDelete?.category}"</span> category</>
+                )}
+                ?
+              </p>
+              <section className="buttons_area_columns delete_user_popup_btns">
+                <section className="btn_fill_primary" onClick={() => setShowDeleteServPopup(false)}>
+                  <button className="main_button">
+                    <span>Cancel</span>
+                  </button>
+                </section>
+                <section
+                  className="btn_outlined_primary_red"
+                  onClick={() => {
+                    serviceDelete(select_container, equipmentToDelete.name);
+                  }}
+                >
+                  <button className="main_button">
+                    <span>Delete</span>
+                  </button>
+                </section>
+              </section>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showUploadPopup && (
+        <div className="popup_container fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="popup_content bg-white rounded-xl shadow-lg w-[90%] max-w-4xl p-6 relative flex flex-col gap-6">
+
+            {/* Close Button */}
+            <div
+              className="x_icon"
+              onClick={() => {
+                setShowUploadPopup(false);
+                setSelectedFile(null);        // ✅ Reset file input on close
+                setSelectContainer("All");    // ✅ Reset dropdown to "All"
+              }}
+            >
+              <button className="close_popup">
+                <img src="/assets/icons/x-icon.svg" alt="Close Popup" />
+              </button>
+            </div>
+
+            <form className="popup_components flex flex-col gap-6">
+              <h2 className="text-4xl font-semibold text-gray-800">Upload File</h2>
+
+              <div className="flex flex-col sm:flex-row gap-12">
+                {/* Left Container */}
+                <div className="flex-1 h-fit">
+                  {/* Dropdown */}
+                  <div className="select_container">
+                    <select
+                      className="category-dropdown w-full !text-[14px]"
+                      value={select_container}
+                      onChange={(e) => setSelectContainer(e.target.value)}
+                    >
+                      <option value="All">All</option>
+                      {categories.map((category, index) => (
+                        <option key={index} value={category._id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="!mt-2">
+                    <p className="text-2xl text-gray-500">Select a category to upload file.</p>
+                  </div>
+
+                  {/* Show input + button only when NOT All */}
+                  {select_container !== "All" && (
+                    <div className="!mt-10 flex flex-col">
+                      <div className="flex gap-6 w-full border border-gray-300 rounded-lg overflow-hidden">
+                        <input
+                          type="text"
+                          readOnly
+                          value={selectedFile ? selectedFile.name : ''}
+                          placeholder="Please select your file"
+                          className="flex-1 px-4 py-3 text-gray-700 focus:outline-none "
+                        />
+                        <label
+                          className="text-white flex justify-center items-center w-30 px-5 py-3 cursor-pointer hover:bg-blue-700 transition text-sm font-medium !rounded-lg"
+                          style={{ backgroundColor: "var(--color-deepskyblue)" }}
+                        >
+                          <span className="text-5xl text-center">
+                            <i className="fa-solid fa-plus"></i>
+                          </span>
+                          <input
+                            type="file"
+                            accept=".xlsx,.csv"
+                            onChange={handleFileChange}
+                            className="hidden"
+                          />
+                        </label>
+
+                      </div>
+
+                      {/* Upload Button */}
+                      {selectedFile && (
+                        <section className="buttons_area_columns popup_button">
+                          <section className="btn_outlined_primary" onClick={handleFileUpload}>
+                            <button type="submit" className="main_button">
+                              <span>{categoryLoading ? "Uploading..." : "Upload"}</span>
+                            </button>
+                          </section>
+                        </section>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+
+
+
+
 
 
 
