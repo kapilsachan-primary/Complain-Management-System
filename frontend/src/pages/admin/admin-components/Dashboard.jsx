@@ -5,6 +5,7 @@ import ReportValidate from "./ReportValidation";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
+import { useNavigate } from "react-router-dom";
 const StatusCard = ({ count, head, icon, link }) => {
   return (
     <section className="stats_card_wrapper">
@@ -106,6 +107,9 @@ const ComplaintTable = ({ data }) => {
 
 const Dashboard = () => {
   axios.defaults.withCredentials = true;
+  const [name, setName] = useState("");
+  const [id, setId] = useState("");
+  const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
   const [startDate, setStartDate] = useState("");
   const [closeDate, setCloseDate] = useState("");
@@ -122,6 +126,17 @@ const Dashboard = () => {
     onholdjobs: 0,
     technicians: 0
   });
+
+  useEffect(() => {
+          axios.get("http://localhost:3000/admin/status").then((res) => {
+              if (res.data.Status === "Success") {
+                  setName(res.data.name);
+                  setId(res.data.id);
+              } else {
+                  navigate("/admin-login");
+              }
+          });
+      }, []);
 
   useEffect(() => {
     axios.get('http://localhost:3000/admin/countjobs')

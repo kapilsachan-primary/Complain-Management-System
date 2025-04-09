@@ -29,7 +29,10 @@ export default function UserformValidate(formData,isServiceEnabled,products){
     if(formData.services==="" && isServiceEnabled == true){
         errors.services="Services is reqired";
     }
-    if(formData.productdescription==="" && products.length !== 0 ){
+    // if(formData.productdescription==="" && products.length !== 0 ){
+    //     errors.productdescription="Product description is reqired";
+    // }
+    if(formData.productdescription==="" ){
         errors.productdescription="Product description is reqired";
     }
     // if(formData.priority===""){

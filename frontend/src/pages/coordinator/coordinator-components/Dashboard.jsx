@@ -5,6 +5,7 @@ import ReportValidate from "./ReportValidation";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
+import { useNavigate } from "react-router-dom";
 const StatusCard = ({ count, head, icon, link }) => (
   <section className="stats_card_wrapper">
     <section className="stats_card">
@@ -119,6 +120,21 @@ const Dashboard = () => {
     resolvedjobs: 0,
     onholdjobs: 0,
   });
+
+  const [name, setName] = useState("");
+    const [id, setId] = useState("");
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        axios.get("http://localhost:3000/coordinator/status").then((res) => {
+            if (res.data.Status === "Success") {
+                setName(res.data.name);
+                setId(res.data.id);
+            } else {
+                navigate("/coordinator-login");
+            }
+        });
+    }, []);
 
   useEffect(() => {
     axios
