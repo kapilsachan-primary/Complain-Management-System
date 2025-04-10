@@ -76,6 +76,7 @@ const Equipments = () => {
 
   useEffect(() => {
     setSelectedFile(null);
+    setExcelFormatChecker(false);
   }, [select_container])
 
   useEffect(() => {
@@ -321,10 +322,10 @@ const Equipments = () => {
       }).catch(err => console.log(err)
       ).finally(() => {
         setUploadLoading(false);
-        setSelectedFile(null);
+        setSelectedFile(null); setExcelData([]);
         setSelectContainer("All"); // ✅ Reset dropdown
         setShowUploadPopup(false); // Optional: close popup after upload
-        fetchProducts();
+        fetchProducts(); 
         setExcelFormatChecker(false);
       })
   };
@@ -853,6 +854,7 @@ const Equipments = () => {
                 setShowUploadPopup(false);
                 setSelectedFile(null);        // ✅ Reset file input on close
                 setSelectContainer("All");    // ✅ Reset dropdown to "All"
+                setExcelFormatChecker(false);setExcelData([]);
               }}
             >
               <button className="close_popup">
