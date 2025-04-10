@@ -151,7 +151,7 @@ router.put('/assigntechnician', async (req,res) =>{
                 return res.json({Status: false,message: "Complaint Not Found"})       
             }
             const complaintData={
-                title:"New Complaint Assigned",
+                title:"Technician Assigned",
                 tokenno:updatedcomplain.tokenno,
                 name: updatedcomplain.name,
                 roomno: updatedcomplain.roomno,
@@ -159,6 +159,7 @@ router.put('/assigntechnician', async (req,res) =>{
                 category: updatedcomplain.category,
                 services: updatedcomplain.services,
                 productdescription: updatedcomplain.productdescription,
+                remarks: updatedcomplain.remarks,
                 status: "Pending",
                 technician:technician,
                 action:"Yet to be Taken",
@@ -166,7 +167,7 @@ router.put('/assigntechnician', async (req,res) =>{
             res.json({Status: true,message: "Technician assigned"})
             const findTechnician= await Technician.findById(techid);
             if(findTechnician){
-            await sendEmail(process.env.ComplaintRegister_Email, process.env.ComplaintRegister_Pass, findTechnician.email, "Complaint Assigned", complaintData);
+            await sendEmail(process.env.ComplaintRegister_Email, process.env.ComplaintRegister_Pass, findTechnician.email, "Technician Assigned", complaintData);
             }
         }catch(err){
         return res.json({Status: false,message: "Server error"})

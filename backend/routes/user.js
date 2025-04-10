@@ -38,6 +38,7 @@ router.post('/complain',async (req,res)=>{
             services: req.body.services,
             productdescription: req.body.productdescription,
             status: "Y/A",
+            remarks:req.body.descriptionRemarks,
         })
         await newComplain.save();
         const complaintData={
@@ -49,6 +50,7 @@ router.post('/complain',async (req,res)=>{
             category: req.body.category,
             services: req.body.services,
             productdescription: req.body.productdescription,
+            remarks:req.body.descriptionRemarks,
             status: "Y/A",
             technician:"Yet to be Assigned",
             action:"Yet to be Taken",

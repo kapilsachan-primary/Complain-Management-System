@@ -315,6 +315,8 @@ const ComplaintStatus = () => {
                     id="descriptionRemarks"
                     className="custom-textarea"
                     placeholder="Remarks"
+                    readOnly={true}
+                    value={selectedComplaint.remarks}
                   ></textarea>
                 </section>
 

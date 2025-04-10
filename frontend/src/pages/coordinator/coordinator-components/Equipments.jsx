@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { AddProductorService, AddCategory } from "./AddEquipment";
+import { AddProductorService, AddCategory, HandleExcelValidate } from "./AddEquipment";
+import * as XLSX from "xlsx";
 const Equipments = () => {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
@@ -26,7 +27,10 @@ const Equipments = () => {
   const [serprodLoading, setServprodLoading] = useState(false);
   const [showUploadPopup, setShowUploadPopup] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-
+  const [excelErrors,setExcelErrors] = useState({});
+  const [excelData, setExcelData] = useState([]);
+  const [excelFormatChecker,setExcelFormatChecker] =useState(false);
+  const [uploadLoading,setUploadLoading]=useState(false);
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
 
@@ -69,6 +73,11 @@ const Equipments = () => {
       department: "",
     }));
   }, [newProductorService.type])
+
+  useEffect(() => {
+    setSelectedFile(null);
+  }, [select_container])
+
   useEffect(() => {
     const lowerCaseSearch = searchText.toLowerCase();
     let filtered = data.filter(
@@ -92,11 +101,6 @@ const Equipments = () => {
   };
 
   const confirmDelete = () => {
-    // if (!equipmentToDelete) return;
-    // const updatedData = data.filter((item) => item.id !== equipmentToDelete.id);
-    // setData(updatedData);
-    // setFilteredData(updatedData);
-    // setShowDeletePopup(false);
     axios.delete('http://localhost:3000/coordinator/deleteproduct/' + equipmentToDelete._id)
       .then(res => {
         if (res.data.Status === true) {
@@ -253,20 +257,76 @@ const Equipments = () => {
       setTimeout(() => seterrors({}), 3000)
     }
   };
-
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+  const EXPECTED_HEADERS = {
+    department: "Departments",
+    name: "Make - Model No - Dead Stock Number",
   };
-
-  const handleFileUpload = () => {
-    if (!selectedFile) return;
-
+  const handleFileChange = (e) => {
+    e.preventDefault();
+    const file=e.target.files[0];
+    setSelectedFile(file);
+    const checkerr=HandleExcelValidate(file);
+    setExcelErrors(checkerr);
     // your upload logic here...
+    if (Object.entries(checkerr).length > 0) {
+      console.log("Excel errors",checkerr);
+      setSelectedFile(null);
+      //setTimeout(() => setExcelErrors({}), 3000)
+      return;
+    }
+    setExcelErrors({});
+    const reader = new FileReader();
+      reader.onload = (evt) => {
+        const bstr = evt.target.result;
+        const wb = XLSX.read(bstr, { type: "binary" });
+        const wsname = wb.SheetNames[0];
+        const ws = wb.Sheets[wsname];
+        const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+        const headers = rows[0];
+        const dataRows = rows.slice(1);
+          // Get exact indexes
+        const deptIndex = headers.findIndex(h => h.trim().toLowerCase() === EXPECTED_HEADERS.department.toLowerCase());
+        const nameIndex = headers.findIndex(h => h.trim().toLowerCase() === EXPECTED_HEADERS.name.toLowerCase());
 
-    // Reset after upload
-    setSelectedFile(null);
-    setSelectContainer("All"); // ✅ Reset dropdown
-    setShowUploadPopup(false); // Optional: close popup after upload
+        if (deptIndex === -1 || nameIndex === -1) {
+          alert(`Excel format is incorrect. Expected columns: ${EXPECTED_HEADERS.department} and ${EXPECTED_HEADERS.name}`);
+          setExcelFormatChecker(false);setSelectedFile(null);
+          return;
+          }
+          setExcelFormatChecker(true);
+          const parsedData = dataRows.map(row => ({
+            department: row[deptIndex],
+            name: row[nameIndex]
+          }));
+          setExcelData(parsedData);      
+        }
+        reader.readAsArrayBuffer(file);
+  };
+  
+  const handleFileUpload = async(e) => {
+    e.preventDefault();
+    if (!selectedFile) return;
+    if (!select_container || excelData.length === 0) return;
+    const formattedData = excelData.map((row) => ({
+      name: row.name,
+      categoryName: categories.find(cat => cat._id === select_container)?.name,
+      category: select_container,
+      department: row.department,
+    }));
+    setUploadLoading(true);
+      axios.post("http://localhost:3000/coordinator/bulkproducts", {
+         products: formattedData,}
+      ).then(res => {
+          alert(res.data.message);
+      }).catch(err => console.log(err)
+      ).finally(() => {
+        setUploadLoading(false);
+        setSelectedFile(null);
+        setSelectContainer("All"); // ✅ Reset dropdown
+        setShowUploadPopup(false); // Optional: close popup after upload
+        fetchProducts();
+        setExcelFormatChecker(false);
+      })
   };
 
   const columns = [
@@ -833,8 +893,8 @@ const Equipments = () => {
                         <input
                           type="text"
                           readOnly
-                          value={selectedFile ? selectedFile.name : ''}
                           placeholder="Please select your file"
+                          value={selectedFile ? selectedFile.name : ''}
                           className="flex-1 px-4 py-3 text-gray-700 focus:outline-none "
                         />
                         <label
@@ -846,20 +906,19 @@ const Equipments = () => {
                           </span>
                           <input
                             type="file"
-                            accept=".xlsx,.csv"
+                            accept=".xlsx,.xls"
                             onChange={handleFileChange}
                             className="hidden"
                           />
                         </label>
-
                       </div>
-
+                      {excelErrors.selectedFile && <div className="popupform-error">{excelErrors.selectedFile}</div>}
                       {/* Upload Button */}
-                      {selectedFile && (
+                      {excelFormatChecker && (
                         <section className="buttons_area_columns popup_button">
-                          <section className="btn_outlined_primary" onClick={handleFileUpload}>
+                          <section className="btn_outlined_primary" onClick={handleFileUpload} disabled={uploadLoading}>
                             <button type="submit" className="main_button">
-                              <span>{categoryLoading ? "Uploading..." : "Upload"}</span>
+                              <span>{uploadLoading ? "Uploading..." : "Upload"}</span>
                             </button>
                           </section>
                         </section>

@@ -28,6 +28,7 @@ export const sendEmail = async (from, fromPassword, to, subject, complaintData) 
             <p><strong>Category:</strong> ${complaintData.category}</p>
             <p><strong>services:</strong> ${complaintData.services}</p>
             <p><strong>Product Description:</strong> ${complaintData.productdescription}</p>
+            <p><strong>Remarks:</strong> ${complaintData.remarks}</p>
             <p><strong>Status:</strong> ${complaintData.status}</p>
             <p><strong>Technician:</strong> ${complaintData.technician}</p>
             <p><strong>Action:</strong> ${complaintData.action}</p>

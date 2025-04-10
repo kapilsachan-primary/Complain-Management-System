@@ -294,4 +294,21 @@ router.delete("/:categoryId/remove-service", async (req, res) => {
     }
   });
 
+  router.post("/bulkproducts", async (req, res) => {
+    try {
+      const { products } = req.body;
+  
+      if (!Array.isArray(products) || products.length === 0) {
+        return res.status(400).json({ message: "No data to insert" });
+      }
+  
+      await Product.insertMany(products);
+      res.status(201).json({ message: "Products inserted successfully" });
+    } catch (error) {
+      console.error("Bulk insert error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+  
+
 export {router as CoordinatorRouter}

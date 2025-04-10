@@ -104,7 +104,7 @@ export default function UserDashboard() {
     seterrors(checkerr);
     console.log(Object.entries(checkerr).length);
     if (Object.entries(checkerr).length === 0) {
-      console.log("Good to goo")
+      console.log("Good to goo");
       setLoading(true);
       axios.post("http://localhost:3000/user/complain", {
         name: formData.name,
@@ -310,6 +310,7 @@ export default function UserDashboard() {
                     id="descriptionRemarks"
                     className="custom-textarea"
                     placeholder="Remarks"
+                    value={formData.descriptionRemarks} onChange={handleChange}
                   ></textarea>
                   {errors.descriptionRemarks && <div className='userform-error'>{errors.descriptionRemarks}</div>}
                 </section>

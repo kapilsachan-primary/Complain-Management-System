@@ -21,3 +21,19 @@ export function AddCategory(newCategory){
     }
     return errors;
 }
+export function HandleExcelValidate(selectedFile){
+    const errors={};
+    if(selectedFile===null){
+        errors.selectedFile="Upload a File in .xlsx or .xls format only";
+    }
+    else {
+        const allowedtypes=[
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", /* .xlsx*/
+            "application/vnd.ms-excel", // .xls
+        ];
+        if(!allowedtypes.includes(selectedFile.type)){
+            errors.selectedFile="Enter a .xlsx or .xls file only";
+        }
+    }
+    return errors;
+}

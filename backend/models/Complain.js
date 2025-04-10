@@ -12,6 +12,7 @@ const ComplainSchema = new mongoose.Schema({
     services:{type: String, required: false, default:''},
     productdescription:{type: String, required: false, default:""},
     status:{type: String,required: true},
+    remarks:{type: String,required: true},
     technicianid:{type:String,required: false, default:''},
     technician:{type:String,required: false, default:''},
     technicianno:{type:String,required: false, default:''},
