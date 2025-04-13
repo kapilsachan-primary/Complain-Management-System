@@ -9,7 +9,9 @@ const Header = ({ activePage, toggleSidebar }) => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/coordinator/logout`)
       .then((res) => {
         if (res.data.Status === "Success") {
-          location.reload(true);
+          //location.reload(true);
+          localStorage.removeItem('ctoken');
+          navigate('coordinator-login');
         } else alert("error");
       })
       .catch((err) => console.log(err));

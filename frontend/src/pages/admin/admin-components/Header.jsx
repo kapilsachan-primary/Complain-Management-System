@@ -10,7 +10,9 @@ const Header = ({ activePage, toggleSidebar }) => {
       .get(`${import.meta.env.VITE_BACKEND_URL}/admin/logout`)
       .then((res) => {
         if (res.data.Status === "Success") {
-          location.reload(true);
+         // location.reload(true);
+         localStorage.removeItem('atoken');
+          navigate('admin-login');
         } else alert("error");
       })
       .catch((err) => console.log(err));

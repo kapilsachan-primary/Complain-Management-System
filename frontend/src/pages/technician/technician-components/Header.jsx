@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 const Header = ({ activePage, toggleSidebar }) => {
   axios.defaults.withCredentials = true;
-
+  const navigate=useNavigate();
   const handleLogout = () => {
     console.log("clicked");
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/technician/logout`)
       .then((res) => {
         if (res.data.Status === "Success") {
-          location.reload(true);
+          //location.reload(true);
+          localStorage.removeItem('ttoken');
+          navigate('technician-login');
         } else alert("error");
       })
       .catch((err) => console.log(err));
