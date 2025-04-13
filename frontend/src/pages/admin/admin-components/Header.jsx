@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 const Header = ({ activePage, toggleSidebar }) => {
   axios.defaults.withCredentials = true;
-
+  const navigate=useNavigate();
   const handleLogout = () => {
     console.log("clicked");
     axios
