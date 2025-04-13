@@ -42,6 +42,7 @@ const AdminLogin = () => {
             //console.log(res);
             if(res.data.status){
             alert(res.data.message);
+            console.log("Successfull login");
             navigate("/admin/dashboard");
             }
             else{
