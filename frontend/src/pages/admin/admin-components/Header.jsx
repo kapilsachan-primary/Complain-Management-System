@@ -12,7 +12,7 @@ const Header = ({ activePage, toggleSidebar }) => {
         if (res.data.Status === "Success") {
          // location.reload(true);
          localStorage.removeItem('atoken');
-          navigate('admin-login');
+          navigate('admin-login',{replace:true});
         } else alert("error");
       })
       .catch((err) => console.log(err));
