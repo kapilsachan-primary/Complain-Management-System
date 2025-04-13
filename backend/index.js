@@ -13,7 +13,7 @@ const app=express();
 app.use(express.json());
 app.use(cors({
     origin:process.env.Frontend_URL,
-    method:["POST","GET"],
+    methods:["POST","GET","PUT","DELETE","OPTIONS"],
     credentials: true
 }));
 app.use(cookieParser());

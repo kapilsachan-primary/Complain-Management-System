@@ -31,6 +31,7 @@ const verifyadmin = (req,res,next) =>{
         return res.json({status: false,Message: "We need token."})
     }
     else{
+        console.log("cookie found",token)
        jwt.verify(token, process.env.KEY, (err, decoded) => {
             if (err) {
                 return res.json({ status: false, Message: "Authentication failed." });
