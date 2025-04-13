@@ -28,7 +28,7 @@ app.use('/coordinator',CoordinatorRouter);
 //mongoose.connect('mongodb://127.0.0.1:27017/Complain-Management-System')
 
 //Serving the frontend files 
-app.use(express.static(path.join(__dirname, '/frontend/dist')));
+app.use(express.static(path.join(__dirname, 'frontend/dist')));
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'frontend', 'dist', 'index.html'));
 });
