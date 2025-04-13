@@ -21,7 +21,7 @@ router.post('/login', async(req,res)=>{
     //     return res.json({status: false, message: "Invalid Credentials"});
     // }
     const token=jwt.sign({name: admin.name, id: admin._id}, process.env.KEY , {expiresIn: '2h'})
-    res.cookie('atoken', token, {httpOnly: true,secure:true, sameSite:'None',maxAge: 7200000})
+    res.cookie('atoken', token, {httpOnly: true,secure:true, sameSite:'None',maxAge: 7200000, path: '/',})
     return res.json({status: true, message: "Login Successfull"})
 })
 
@@ -48,7 +48,12 @@ router.get("/status",verifyadmin,(req,res) =>{
 });
 
 router.get('/logout',(req,res)=>{
-    res.clearCookie('atoken');
+    res.clearCookie('atoken',{
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+        path: '/', // Must match original cookie's path
+      });
     return res.json({Status: "Success"});
 });
 

@@ -22,7 +22,7 @@ router.post('/login', async(req,res)=>{
     //     return res.json({status: false, message: "Invalid Credentials"});
     // }
     const token=jwt.sign({name: coordinator.name, id: coordinator._id}, process.env.KEY , {expiresIn: '2h'})
-    res.cookie('ctoken', token, {httpOnly: true,secure:true, sameSite:'None',maxAge: 7200000})
+    res.cookie('ctoken', token, {httpOnly: true,secure:true, sameSite:'None',maxAge: 7200000, path: '/',})
     return res.json({status: true, message: "Login Successfull"})
 })
 
@@ -49,7 +49,12 @@ router.get("/status",verifycoordinator,(req,res) =>{
 });
 
 router.get('/logout',(req,res)=>{
-    res.clearCookie('ctoken');
+    res.clearCookie('ctoken',{
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+        path: '/', // Must match original cookie's path
+      });
     return res.json({Status: "Success"});
 });
 

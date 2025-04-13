@@ -11,7 +11,7 @@ const Header = ({ activePage, toggleSidebar }) => {
         if (res.data.Status === "Success") {
           //location.reload(true);
           localStorage.removeItem('ctoken');
-          navigate('coordinator-login',{replace:true});
+          navigate('/coordinator-login',{replace:true});
         } else alert("error");
       })
       .catch((err) => console.log(err));
