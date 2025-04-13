@@ -18,7 +18,7 @@ const AdminLogin = () => {
   };
 
   useEffect(()=>{
-    axios.get("http://localhost:3000/admin/status").then((res) => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/admin/status`).then((res) => {
       if (res.data.Status === "Success") {
         setName(res.data.name);
         setId(res.data.id);
@@ -35,7 +35,7 @@ const AdminLogin = () => {
 
     if (Object.entries(checkerr).length === 0) {
       setLoading(true);
-      axios.post("http://localhost:3000/admin/login",{
+      axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/login`,{
         email:formData.email,
         password:formData.password,
       }).then(res =>{

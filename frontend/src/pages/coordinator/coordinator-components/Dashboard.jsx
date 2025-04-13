@@ -126,7 +126,7 @@ const Dashboard = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get("http://localhost:3000/coordinator/status").then((res) => {
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/coordinator/status`).then((res) => {
             if (res.data.Status === "Success") {
                 setName(res.data.name);
                 setId(res.data.id);
@@ -138,7 +138,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/coordinator/countjobs")
+      .get(`${import.meta.env.VITE_BACKEND_URL}/coordinator/countjobs`)
       .then((res) => setValues(res.data))
       .catch(console.error);
   }, []);
@@ -180,7 +180,7 @@ const Dashboard = () => {
     //console.log(checkerr)
     if (Object.entries(checkerr).length === 0) {
       console.log("Lets roll!")
-      axios.get("http://localhost:3000/coordinator/report", {
+      axios.get(`${import.meta.env.VITE_BACKEND_URL}/coordinator/report`, {
         params: { startDate, closeDate }
       }
       ).then(res => {

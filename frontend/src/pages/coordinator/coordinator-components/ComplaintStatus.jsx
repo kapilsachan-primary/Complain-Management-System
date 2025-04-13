@@ -17,7 +17,7 @@ const ComplaintStatus = () => {
   const navigate = useNavigate();
 
   const fetchComplaints = () => {
-    axios.post('http://localhost:3000/admin/details', {
+    axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/details`, {
       fetch: 'complain',
     })
       .then(res => {
@@ -51,7 +51,7 @@ const ComplaintStatus = () => {
   }, [searchText, statusFilter, data]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/coordinator/status").then((res) => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/coordinator/status`).then((res) => {
       if (res.data.Status === "Success") {
         setName(res.data.name);
         setId(res.data.id);

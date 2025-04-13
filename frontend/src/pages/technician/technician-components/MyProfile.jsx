@@ -13,12 +13,12 @@ const MyProfile = () => {
   const [loading,setLoading]=useState(false);
   const [resetLoading,setResetLoading]=useState(false);
   useEffect(() => {
-    axios.get('http://localhost:3000/technician/status')
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/technician/status`)
       .then(res => {
         if (res.data.Status === "Success") {
           setname(res.data.name);
           setid(res.data.id);
-          axios.post("http://localhost:3000/technician/profile",{
+          axios.post(`${import.meta.env.VITE_BACKEND_URL}/technician/profile`,{
             id:res.data.id
           }).then(res =>{
             console.log(res.data);
@@ -44,7 +44,7 @@ const MyProfile = () => {
       console.log(checkerr)
       if (Object.entries(checkerr).length === 0) {
         setLoading(true);
-        axios.put("http://localhost:3000/technician/editprofile",{
+        axios.put(`${import.meta.env.VITE_BACKEND_URL}/technician/editprofile`,{
           id:id,
           name:formData.name,
           email:formData.email,
@@ -68,7 +68,7 @@ const MyProfile = () => {
       console.log(checkerr)
       if (Object.entries(checkerr).length === 0) {
         setResetLoading(true);
-        axios.put("http://localhost:3000/technician/resetpassword",{
+        axios.put(`${import.meta.env.VITE_BACKEND_URL}/technician/resetpassword`,{
           id:id,
           password:password,
       }).then(res => {

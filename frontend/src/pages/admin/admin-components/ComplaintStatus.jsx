@@ -23,7 +23,7 @@ const ComplaintStatus = () => {
   const navigate = useNavigate();
 
   const fetchComplaints = () => {
-    axios.post('http://localhost:3000/admin/details', {
+    axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/details`, {
       fetch: 'complain',
     })
       .then(res => {
@@ -38,7 +38,7 @@ const ComplaintStatus = () => {
   }, []);
 
   useEffect(() => {
-    axios.post('http://localhost:3000/admin/details', {
+    axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/details`, {
       fetch: 'selecttech',
     })
       .then(res => {
@@ -75,7 +75,7 @@ const ComplaintStatus = () => {
   }, [searchText, statusFilter, data]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/admin/status").then((res) => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/admin/status`).then((res) => {
       if (res.data.Status === "Success") {
         setName(res.data.name);
         setId(res.data.id);
@@ -100,7 +100,7 @@ const ComplaintStatus = () => {
 
   const handleViewComplaint = (complaint) => {
     setSelectedComplaint(complaint);
-    axios.get(`http://localhost:3000/admin/complains/${complaint._id}`)
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/admin/complains/${complaint._id}`)
       .then((res) => {
         // console.log("working "+ res.data.roomno);
         setselectedtechnician(res.data.technician);
@@ -133,7 +133,7 @@ const ComplaintStatus = () => {
     seterrors(checkerr);
     if (Object.entries(checkerr).length === 0) {
       setLoading(true);
-      axios.put("http://localhost:3000/admin/assigntechnician", {
+      axios.put(`${import.meta.env.VITE_BACKEND_URL}/admin/assigntechnician`, {
         id: selectedComplaint._id,
         technician: selectedtechnician,
         technicianno: contact,

@@ -29,7 +29,7 @@ const Auth = () => {
   // };
 
   useEffect(()=>{
-    axios.get("http://localhost:3000/technician/status").then((res) => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/technician/status`).then((res) => {
       if (res.data.Status === "Success") {
         setName(res.data.name);
         setId(res.data.id);
@@ -48,7 +48,7 @@ const Auth = () => {
     //   console.log(Object.entries(checkerr).length);
 
     //   if (Object.entries(checkerr).length === 0) {
-    //     axios.post("http://localhost:3000/technician/register",{
+    //     axios.post("${import.meta.env.VITE_BACKEND_URL}/technician/register",{
     //       name:formData.name,
     //       email:formData.email,
     //       contactno:formData.contactNo,
@@ -74,7 +74,7 @@ const Auth = () => {
 
       if (Object.entries(checkerr).length === 0) {
         setLoading(true);
-        axios.post("http://localhost:3000/technician/login",{
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/technician/login`,{
           email:formData.email,
           password:formData.password,
         }).then(res =>{

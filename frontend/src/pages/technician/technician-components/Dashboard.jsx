@@ -126,11 +126,11 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
   useEffect(() => {
-    axios.get("http://localhost:3000/technician/status").then((res) => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/technician/status`).then((res) => {
       if (res.data.Status === "Success") {
         setName(res.data.name);
         setId(res.data.id);
-        axios.get(`http://localhost:3000/technician/countjobs/${res.data.id}`)
+        axios.get(`${import.meta.env.VITE_BACKEND_URL}/technician/countjobs/${res.data.id}`)
           .then(res => {
             setvalues(res.data)
             console.log(res.data)
@@ -178,7 +178,7 @@ const Dashboard = () => {
     //console.log(checkerr)
     if (Object.entries(checkerr).length === 0) {
       console.log("Lets roll!")
-      axios.get("http://localhost:3000/technician/report", {
+      axios.get(`${import.meta.env.VITE_BACKEND_URL}/technician/report`, {
         params: { startDate, closeDate, id }
       }
       ).then(res => {

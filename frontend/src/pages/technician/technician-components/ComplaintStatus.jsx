@@ -21,12 +21,12 @@ const ComplaintStatus = () => {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const fetchComplaints = (id) => {
-    axios.post('http://localhost:3000/technician/fetchjobs', {
+    axios.post(`${import.meta.env.VITE_BACKEND_URL}/technician/fetchjobs`, {
       id: id,
     })
       .then(res => {
         setData(res.data);
-        console.log(res.data);
+        console.log("My complains",res.data);
         setFilteredData(res.data);
       })
       .catch(err => { console.log(res.data.message) });
@@ -57,7 +57,7 @@ const ComplaintStatus = () => {
   }, [searchText, statusFilter, data]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/technician/status").then((res) => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/technician/status`).then((res) => {
       if (res.data.Status === "Success") {
         setName(res.data.name);
         setId(res.data.id);
@@ -82,7 +82,7 @@ const ComplaintStatus = () => {
 
   const handleViewComplaint = (complaint) => {
     setSelectedComplaint(complaint);
-    axios.get(`http://localhost:3000/technician/complains/${complaint._id}`)
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/technician/complains/${complaint._id}`)
       .then((res) => {
         //  console.log("working "+ res.data.roomno);        
         setstatus(res.data.status);
@@ -127,7 +127,7 @@ const ComplaintStatus = () => {
       console.log("EveryThing OK!!");
       setLoading(true);
       if (status === "Resolved") {
-        axios.put("http://localhost:3000/technician/updateactionresolved", {
+        axios.put(`${import.meta.env.VITE_BACKEND_URL}/technician/updateactionresolved`, {
           id: selectedComplaint._id,
           status: status,
           action: action,
@@ -146,7 +146,7 @@ const ComplaintStatus = () => {
       })
       }
       else {
-        axios.put("http://localhost:3000/technician/updateactionpending", {
+        axios.put(`${import.meta.env.VITE_BACKEND_URL}/technician/updateactionpending`, {
           id: selectedComplaint._id,
           status: status,
           action: action,
@@ -176,7 +176,7 @@ const ComplaintStatus = () => {
     if (Object.entries(checkerr).length === 0) {
       console.log("EveryThing OK!!");
       setf2ALoading(true);
-      axios.put("http://localhost:3000/technician/forward2admin", {
+      axios.put(`${import.meta.env.VITE_BACKEND_URL}/technician/forward2admin`, {
         id: selectedComplaint._id,
         action: action,
       }).then(res => {

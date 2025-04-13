@@ -18,7 +18,7 @@ const CoordinatorLogin = () => {
   };
 
   useEffect(()=>{
-    axios.get("http://localhost:3000/coordinator/status").then((res) => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/coordinator/status`).then((res) => {
       if (res.data.Status === "Success") {
         setName(res.data.name);
         setId(res.data.id);
@@ -35,7 +35,7 @@ const CoordinatorLogin = () => {
 
     if (Object.entries(checkerr).length === 0) {
       setLoading(true);
-      axios.post("http://localhost:3000/coordinator/login",{
+      axios.post(`${import.meta.env.VITE_BACKEND_URL}/coordinator/login`,{
         email:formData.email,
         password:formData.password,
       }).then(res =>{

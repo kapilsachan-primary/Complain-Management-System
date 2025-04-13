@@ -22,7 +22,7 @@ const Technician = () => {
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
   const fetchtechnicians=()=>{
-    axios.post('http://localhost:3000/admin/details', {
+    axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/details`, {
       fetch: 'technician',
     })
       .then(res => {
@@ -37,7 +37,7 @@ const Technician = () => {
   }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/admin/status").then((res) => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/admin/status`).then((res) => {
       if (res.data.Status !== "Success") {
         navigate("/admin-login");
       }
@@ -69,7 +69,7 @@ const Technician = () => {
     if (Object.entries(checkerr).length === 0) {
       setLoading(true);
       try {
-        const res = await axios.post("http://localhost:3000/technician/register", {
+        const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/technician/register`, {
           name: formData.name,
           email: formData.email,
           contactno: formData.contactNo,
@@ -120,10 +120,10 @@ const Technician = () => {
   function confirmDelete() {
     if (!technicianToDelete) return;
 
-    axios.put("http://localhost:3000/technician/clearstatus",{id:technicianToDelete._id,})
+    axios.put(`${import.meta.env.VITE_BACKEND_URL}/technician/clearstatus`,{id:technicianToDelete._id,})
     .then(res => {
     if(res.data.Status === true){
-      axios.delete('http://localhost:3000/technician/deletetechnician/'+technicianToDelete._id)
+      axios.delete(`${import.meta.env.VITE_BACKEND_URL}/technician/deletetechnician/`+technicianToDelete._id)
         .then( res =>{
           if(res.data.Status === true){
           alert(res.data.Message);setShowDeletePopup(false);

@@ -6,7 +6,7 @@ const Header = ({ activePage, toggleSidebar }) => {
 
   const handleLogout = () => {
     console.log("clicked");
-    axios.get("http://localhost:3000/technician/logout")
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/technician/logout`)
       .then((res) => {
         if (res.data.Status === "Success") {
           location.reload(true);

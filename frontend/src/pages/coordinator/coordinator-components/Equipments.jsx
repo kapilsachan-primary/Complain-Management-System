@@ -35,14 +35,14 @@ const Equipments = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("http://localhost:3000/coordinator/status").then((res) => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/coordinator/status`).then((res) => {
       if (res.data.Status !== "Success") {
         navigate("/coordinator-login");
       }
     });
   }, []);
   const fetchProducts = () => {
-    axios.get("http://localhost:3000/coordinator/allproducts").then((res) => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/coordinator/allproducts`).then((res) => {
       setData(res.data.products);
       setFilteredData(res.data.products);
       setproductCategories(res.data.productCategories);
@@ -50,7 +50,7 @@ const Equipments = () => {
     }).catch((err) => console.log(err));
   }
   const fetchCategories = () => {
-    axios.get("http://localhost:3000/coordinator/allcategories").then((res) => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/coordinator/allcategories`).then((res) => {
       setCategories(res.data);
     }).catch((err) => console.log(err));
   }
@@ -102,7 +102,7 @@ const Equipments = () => {
   };
 
   const confirmDelete = () => {
-    axios.delete('http://localhost:3000/coordinator/deleteproduct/' + equipmentToDelete._id)
+    axios.delete(`${import.meta.env.VITE_BACKEND_URL}/coordinator/deleteproduct/` + equipmentToDelete._id)
       .then(res => {
         if (res.data.Status === true) {
           alert(res.data.Message); setShowDeletePopup(false);
@@ -116,7 +116,7 @@ const Equipments = () => {
 
   // Delete a category
   const categoryDelete = (categoryId) => {
-    axios.delete(`http://localhost:3000/coordinator/deleteCategory/${categoryId}`)
+    axios.delete(`${import.meta.env.VITE_BACKEND_URL}/coordinator/deleteCategory/${categoryId}`)
       .then(res => {
         if (res.status === 200) {
           alert(res.data.message);
@@ -133,7 +133,7 @@ const Equipments = () => {
 
   // Delete a service
   const serviceDelete = (categoryId, serviceName) => {
-    axios.delete(`http://localhost:3000/coordinator/${categoryId}/remove-service`, {
+    axios.delete(`${import.meta.env.VITE_BACKEND_URL}/coordinator/${categoryId}/remove-service`, {
       data: { serviceName }
     })
       .then(res => {
@@ -165,7 +165,7 @@ const Equipments = () => {
       if (newProductorService.type == "Services") {
         console.log("No Error in services");
         setServprodLoading(true);
-        axios.post(`http://localhost:3000/coordinator/${newProductorService.category._id}/add-service`, {
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/coordinator/${newProductorService.category._id}/add-service`, {
           serviceName: newProductorService.modelNo,
         }).then(res => {
           if (res.data.Status === true) {
@@ -187,7 +187,7 @@ const Equipments = () => {
       else if (newProductorService.type == "Product") {
         console.log("No error in Products")
         setServprodLoading(true);
-        axios.post("http://localhost:3000/coordinator/addproduct", {
+        axios.post(`${import.meta.env.VITE_BACKEND_URL}/coordinator/addproduct`, {
           name: newProductorService.modelNo,
           categoryName: newProductorService.category.name,
           categoryId: newProductorService.category._id,
@@ -234,7 +234,7 @@ const Equipments = () => {
     if (Object.entries(checkerr).length === 0) {
       console.log("No error for category addition");
       setCategotyLoading(true);
-      axios.post("http://localhost:3000/coordinator/addcategory", {
+      axios.post(`${import.meta.env.VITE_BACKEND_URL}/coordinator/addcategory`, {
         name: newCategory,
         hasServices: false
       }).then(res => {
@@ -315,7 +315,7 @@ const Equipments = () => {
       department: row.department,
     }));
     setUploadLoading(true);
-      axios.post("http://localhost:3000/coordinator/bulkproducts", {
+      axios.post(`${import.meta.env.VITE_BACKEND_URL}/coordinator/bulkproducts`, {
          products: formattedData,}
       ).then(res => {
           alert(res.data.message);

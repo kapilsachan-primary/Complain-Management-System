@@ -24,7 +24,7 @@ export default function UserDashboard() {
   const [loading, setLoading] = useState(false);
   // Fetch categories on mount
   useEffect(() => {
-    axios.get("http://localhost:3000/user/categories")
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/categories`)
       .then(response => setCategories(response.data))
       .catch(error => console.error("Error fetching categories:", error));
   }, []);
@@ -32,7 +32,7 @@ export default function UserDashboard() {
   // Fetch products when department or category changes
   useEffect(() => {
     if (selectedDepartment && selectedCategory) {
-      axios.get("http://localhost:3000/user/products", {
+      axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/products`, {
         params: { department: selectedDepartment, categoryname: selectedCategory }
       })
         .then(response => {
@@ -106,7 +106,7 @@ export default function UserDashboard() {
     if (Object.entries(checkerr).length === 0) {
       console.log("Good to goo");
       setLoading(true);
-      axios.post("http://localhost:3000/user/complain", {
+      axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/complain`, {
         name: formData.name,
         roomno: formData.roomNo,
         contactno: formData.contactNo,
