@@ -22,7 +22,7 @@ router.post('/login', async(req,res)=>{
     //     return res.json({status: false, message: "Invalid Credentials"});
     // }
     const token=jwt.sign({name: coordinator.name, id: coordinator._id}, process.env.KEY , {expiresIn: '2h'})
-    res.cookie('ctoken', token, {httpOnly: true,maxAge: 7200000})
+    res.cookie('ctoken', token, {httpOnly: true,secure:true, sameSite:'None',maxAge: 7200000})
     return res.json({status: true, message: "Login Successfull"})
 })
 
