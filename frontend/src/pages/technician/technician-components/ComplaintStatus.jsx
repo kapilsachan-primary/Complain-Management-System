@@ -20,6 +20,18 @@ const ComplaintStatus = () => {
   const [f2Aloading,setf2ALoading] = useState(false);
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_BACKEND_URL}/technician/status`).then((res) => {
+      if (res.data.Status === "Success") {
+        setName(res.data.name);
+        setId(res.data.id);
+      } else {
+        navigate("/technician-login");
+      }
+    });
+  }, []);
+
   const fetchComplaints = (id) => {
     axios.post(`${import.meta.env.VITE_BACKEND_URL}/technician/fetchjobs`, {
       id: id,
@@ -33,7 +45,13 @@ const ComplaintStatus = () => {
   };
 
   useEffect(() => {
+    if(id){
+    //console.log("Id is present",id)
     fetchComplaints(id);
+    }
+    else{
+      //console.log("Id not present")
+    }
   }, [id]);
 
 
@@ -56,16 +74,6 @@ const ComplaintStatus = () => {
     setFilteredData(filtered);
   }, [searchText, statusFilter, data]);
 
-  useEffect(() => {
-    axios.get(`${import.meta.env.VITE_BACKEND_URL}/technician/status`).then((res) => {
-      if (res.data.Status === "Success") {
-        setName(res.data.name);
-        setId(res.data.id);
-      } else {
-        navigate("/technician-login");
-      }
-    });
-  }, []);
 
   const getDate = (issuedate) => {
     if (issuedate != null) {

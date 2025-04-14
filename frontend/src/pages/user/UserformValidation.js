@@ -30,10 +30,14 @@ export default function UserformValidate(formData, isServiceEnabled, products) {
         errors.services = "Services is reqired";
     }
     // if(formData.productdescription==="" && products.length !== 0 ){
+    //     if(formData.category!=="NETWORKING"){
     //     errors.productdescription="Product description is reqired";
+    //     }
     // }
-    if (formData.productdescription === "") {
-        errors.productdescription = "Product description is reqired";
+     if (formData.productdescription === "") {
+        if(formData.category!=="NETWORKING"){
+         errors.productdescription = "Product description is reqired";
+        }
     }
     // if(formData.priority===""){
     //     errors.priority="Priority has to be denoted";
