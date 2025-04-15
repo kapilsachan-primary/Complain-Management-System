@@ -208,7 +208,7 @@ const ComplaintStatus = () => {
 
   return (
     <section>
-      <div className="controls">
+      <div className="controls flex flex-wrap gap-4">
         <div className="filter-buttons">
           {["All", "Resolved", "Pending", "OnHold", "Y/A"].map((status) => (
             <button key={status} className={statusFilter === status ? "active" : ""} onClick={() => setStatusFilter(status)}>
@@ -217,11 +217,11 @@ const ComplaintStatus = () => {
           ))}
         </div>
 
-        <div className="search-container">
+        <div className="search-container !w-full md:!w-auto self-end ">
           <input
             type="text"
             placeholder="Search..."
-            className="search-input"
+            className="search-input !w-full md:!w-auto"
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
           />

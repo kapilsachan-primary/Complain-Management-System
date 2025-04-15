@@ -156,7 +156,7 @@ export default function UserDashboard() {
       </header>
 
       {/* User Form */}
-      <section className="form_section flex justify-center items-center flex-grow w-full px-4 py-8">
+      <section className="form_section flex justify-center items-center flex-grow w-full px-4 py-8 overflow-y-auto">
         <div className="w-full max-w-[80vw]">
 
           <form className="issue_form w-full">

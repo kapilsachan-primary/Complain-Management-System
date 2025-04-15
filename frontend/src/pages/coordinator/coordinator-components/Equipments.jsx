@@ -374,7 +374,7 @@ const Equipments = () => {
   return (
     <section>
       <div className="flex flex-col gap-x-5 gap-y-10 sm:flex-row justify-between">
-        <div className="select_container sm:!w-80 ">
+        <div className="select_container w-full sm:!w-80 ">
           <select
             className="category-dropdown w-full !text-[14px]"
             value={selectedCategory}
@@ -389,34 +389,34 @@ const Equipments = () => {
           </select>
         </div>
 
-        <div className="flex items-center self-end gap-6">
+        <div className="flex items-center flex-col sm:flex-row self-end gap-6  w-full sm:!w-auto">
 
-          <div id="add_technician_btn" className="whitespace-nowrap icon_btn_fill_primary_danger" onClick={() => setDeleteInvPopup(true)}>
+          <div id="add_technician_btn" className="whitespace-nowrap icon_btn_fill_primary_danger w-full sm:!w-auto" onClick={() => setDeleteInvPopup(true)}>
             <i className="fa-solid fa-minus"></i>
             <button>
               <span>Delete Inventory</span>
             </button>
           </div>
 
-          <div id="upload_file_btn" className="whitespace-nowrap icon_btn_fill_primary" onClick={() => setShowUploadPopup(true)}>
+          <div id="upload_file_btn" className="whitespace-nowrap icon_btn_fill_primary w-full sm:!w-auto" onClick={() => setShowUploadPopup(true)}>
           <i class="fa-solid fa-layer-group"></i>
             <button>
               <span>Add Bulk</span>
             </button>
           </div>
 
-          <div id="add_technician_btn" className="whitespace-nowrap icon_btn_fill_primary" onClick={() => setShowAddPopup(true)}>
+          <div id="add_technician_btn" className="whitespace-nowrap icon_btn_fill_primary w-full sm:!w-auto" onClick={() => setShowAddPopup(true)}>
             <i className="fa-solid fa-plus"></i>
             <button>
               <span>Add Equipment</span>
             </button>
           </div>
 
-          <div className="search-container">
+          <div className="search-container !w-full sm:!w-auto">
             <input
               type="text"
               placeholder="Search..."
-              className="search-input"
+              className="search-input !w-full sm:!w-auto"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
             />

@@ -429,15 +429,15 @@ const Dashboard = () => {
       {showDownload && (
         <section className="download_report_cont">
           <section className="report_overview">
-            <section className="coordinator_report_head_container">
+            <section className="report_head_container relative flex flex-col sm:flex-row justify-start !items-start gap-8 sm:gap-4">
               <section className="head_container">
                 <h2>Report</h2>
                 <p>Overview</p>
               </section>
-              <div className="flex justify-center items-center gap-8">
-                <div className="select_container !w-60  ">
+              <div className="w-full sm:w-fit flex justify-center items-center flex-col sm:flex-row gap-8">
+                <div className="select_container w-full sm:!w-60">
                   <select
-                    className="!w-60 !h-[5rem]"
+                    className="w-full sm:!w-60 !h-[5rem]"
                     value={selectedStatus}
                     onChange={(e) => setSelectedStatus(e.target.value)}
                   >
@@ -450,7 +450,7 @@ const Dashboard = () => {
                 </div>
                 <button
                   id="download_report_btn"
-                  className={`icon_btn_fill_primary ${complains.length === 0 ? 'disabled_button' : ''}`}
+                  className={`icon_btn_fill_primary ${complains.length === 0 ? 'disabled_button' : ''} w-full sm:w-fit`}
                   onClick={handleDownloadClick}
                   disabled={complains.length === 0}
                 >
@@ -459,14 +459,14 @@ const Dashboard = () => {
                 </button>
                 <button
                   id="download_report_btn"
-                  className={`icon_btn_fill_primary ${complains.length === 0 ? 'disabled_button' : ''}`}
+                  className={`icon_btn_fill_primary ${complains.length === 0 ? 'disabled_button' : ''} w-full sm:w-fit`}
                   onClick={handleExcelDownload}
                   disabled={complains.length === 0}
                 >
                   <i class="fa-solid fa-file-excel"></i>
                   <span className="whitespace-nowrap">Download Excel</span>
                 </button>
-                <div className="x_icon" onClick={() => setShowDownload(false)}>
+                <div className="x_icon absolute sm:relative top-10 right-10 sm:top-0 sm:right-0" onClick={() => setShowDownload(false)}>
                   <button className="close_popup">
                     <img src="/assets/icons/x-icon.svg" alt="Close Sidebar" className="w-14 h-14" />
                   </button>

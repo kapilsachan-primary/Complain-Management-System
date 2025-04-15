@@ -1227,7 +1227,7 @@ header .head_action_btns {
 
 /* ---------- Coordinator Dashboard ---------- */
 
-.coordinator_report_head_container {
+.report_head_container {
   display: flex;
   justify-content: space-between;
   align-items: center;
