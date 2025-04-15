@@ -27,10 +27,10 @@ const Equipments = () => {
   const [serprodLoading, setServprodLoading] = useState(false);
   const [showUploadPopup, setShowUploadPopup] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [excelErrors,setExcelErrors] = useState({});
+  const [excelErrors, setExcelErrors] = useState({});
   const [excelData, setExcelData] = useState([]);
-  const [excelFormatChecker,setExcelFormatChecker] =useState(false);
-  const [uploadLoading,setUploadLoading]=useState(false);
+  const [excelFormatChecker, setExcelFormatChecker] = useState(false);
+  const [uploadLoading, setUploadLoading] = useState(false);
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
 
@@ -264,9 +264,9 @@ const Equipments = () => {
   };
   const handleFileChange = (e) => {
     e.preventDefault();
-    const file=e.target.files[0];
+    const file = e.target.files[0];
     setSelectedFile(file);
-    const checkerr=HandleExcelValidate(file);
+    const checkerr = HandleExcelValidate(file);
     setExcelErrors(checkerr);
     // your upload logic here...
     if (Object.entries(checkerr).length > 0) {
@@ -277,34 +277,34 @@ const Equipments = () => {
     }
     setExcelErrors({});
     const reader = new FileReader();
-      reader.onload = (evt) => {
-        const bstr = evt.target.result;
-        const wb = XLSX.read(bstr, { type: "binary" });
-        const wsname = wb.SheetNames[0];
-        const ws = wb.Sheets[wsname];
-        const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
-        const headers = rows[0];
-        const dataRows = rows.slice(1);
-          // Get exact indexes
-        const deptIndex = headers.findIndex(h => h.trim().toLowerCase() === EXPECTED_HEADERS.department.toLowerCase());
-        const nameIndex = headers.findIndex(h => h.trim().toLowerCase() === EXPECTED_HEADERS.name.toLowerCase());
+    reader.onload = (evt) => {
+      const bstr = evt.target.result;
+      const wb = XLSX.read(bstr, { type: "binary" });
+      const wsname = wb.SheetNames[0];
+      const ws = wb.Sheets[wsname];
+      const rows = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      const headers = rows[0];
+      const dataRows = rows.slice(1);
+      // Get exact indexes
+      const deptIndex = headers.findIndex(h => h.trim().toLowerCase() === EXPECTED_HEADERS.department.toLowerCase());
+      const nameIndex = headers.findIndex(h => h.trim().toLowerCase() === EXPECTED_HEADERS.name.toLowerCase());
 
-        if (deptIndex === -1 || nameIndex === -1) {
-          alert(`Excel format is incorrect. Expected columns: ${EXPECTED_HEADERS.department} and ${EXPECTED_HEADERS.name}`);
-          setExcelFormatChecker(false);setSelectedFile(null);
-          return;
-          }
-          setExcelFormatChecker(true);
-          const parsedData = dataRows.map(row => ({
-            department: row[deptIndex],
-            name: row[nameIndex]
-          }));
-          setExcelData(parsedData);      
-        }
-        reader.readAsArrayBuffer(file);
+      if (deptIndex === -1 || nameIndex === -1) {
+        alert(`Excel format is incorrect. Expected columns: ${EXPECTED_HEADERS.department} and ${EXPECTED_HEADERS.name}`);
+        setExcelFormatChecker(false); setSelectedFile(null);
+        return;
+      }
+      setExcelFormatChecker(true);
+      const parsedData = dataRows.map(row => ({
+        department: row[deptIndex],
+        name: row[nameIndex]
+      }));
+      setExcelData(parsedData);
+    }
+    reader.readAsArrayBuffer(file);
   };
-  
-  const handleFileUpload = async(e) => {
+
+  const handleFileUpload = async (e) => {
     e.preventDefault();
     if (!selectedFile) return;
     if (!select_container || excelData.length === 0) return;
@@ -315,20 +315,27 @@ const Equipments = () => {
       department: row.department,
     }));
     setUploadLoading(true);
-      axios.post(`${import.meta.env.VITE_BACKEND_URL}/coordinator/bulkproducts`, {
-         products: formattedData,}
-      ).then(res => {
-          alert(res.data.message);
-      }).catch(err => console.log(err)
-      ).finally(() => {
-        setUploadLoading(false);
-        setSelectedFile(null); setExcelData([]);
-        setSelectContainer("All"); // ✅ Reset dropdown
-        setShowUploadPopup(false); // Optional: close popup after upload
-        fetchProducts(); 
-        setExcelFormatChecker(false);
-      })
+    axios.post(`${import.meta.env.VITE_BACKEND_URL}/coordinator/bulkproducts`, {
+      products: formattedData,
+    }
+    ).then(res => {
+      alert(res.data.message);
+    }).catch(err => console.log(err)
+    ).finally(() => {
+      setUploadLoading(false);
+      setSelectedFile(null); setExcelData([]);
+      setSelectContainer("All"); // ✅ Reset dropdown
+      setShowUploadPopup(false); // Optional: close popup after upload
+      fetchProducts();
+      setExcelFormatChecker(false);
+    })
   };
+
+  const handleDownloadTemplate = () => {
+    window.alert('Download Template button clicked!');
+    // Your existing logic to handle the download goes here
+  };
+  
 
   const columns = [
     // {
@@ -373,8 +380,8 @@ const Equipments = () => {
 
   return (
     <section>
-      <div className="flex flex-col gap-x-5 gap-y-10 sm:flex-row justify-between">
-        <div className="select_container w-full sm:!w-80 ">
+      <div className="flex flex-col gap-x-5 gap-y-10 md:flex-row justify-between">
+        <div className="select_container w-full md:!w-80 ">
           <select
             className="category-dropdown w-full !text-[14px]"
             value={selectedCategory}
@@ -389,34 +396,34 @@ const Equipments = () => {
           </select>
         </div>
 
-        <div className="flex items-center flex-col sm:flex-row self-end gap-6  w-full sm:!w-auto">
+        <div className="flex items-center flex-col md:flex-row self-end gap-6 w-full md:!w-auto">
 
-          <div id="add_technician_btn" className="whitespace-nowrap icon_btn_fill_primary_danger w-full sm:!w-auto" onClick={() => setDeleteInvPopup(true)}>
+          <div id="add_technician_btn" className="whitespace-nowrap icon_btn_fill_primary_danger w-full md:!w-auto" onClick={() => setDeleteInvPopup(true)}>
             <i className="fa-solid fa-minus"></i>
             <button>
               <span>Delete Inventory</span>
             </button>
           </div>
 
-          <div id="upload_file_btn" className="whitespace-nowrap icon_btn_fill_primary w-full sm:!w-auto" onClick={() => setShowUploadPopup(true)}>
-          <i class="fa-solid fa-layer-group"></i>
+          <div id="upload_file_btn" className="whitespace-nowrap icon_btn_fill_primary w-full md:!w-auto" onClick={() => setShowUploadPopup(true)}>
+            <i class="fa-solid fa-layer-group"></i>
             <button>
-              <span>Add Bulk</span>
+              <span>Upload Excel</span>
             </button>
           </div>
 
-          <div id="add_technician_btn" className="whitespace-nowrap icon_btn_fill_primary w-full sm:!w-auto" onClick={() => setShowAddPopup(true)}>
+          <div id="add_technician_btn" className="whitespace-nowrap icon_btn_fill_primary w-full md:!w-auto" onClick={() => setShowAddPopup(true)}>
             <i className="fa-solid fa-plus"></i>
             <button>
               <span>Add Equipment</span>
             </button>
           </div>
 
-          <div className="search-container !w-full sm:!w-auto">
+          <div className="search-container !w-full md:!w-auto">
             <input
               type="text"
               placeholder="Search..."
-              className="search-input !w-full sm:!w-auto"
+              className="search-input !w-full md:!w-auto"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
             />
@@ -854,7 +861,7 @@ const Equipments = () => {
                 setShowUploadPopup(false);
                 setSelectedFile(null);        // ✅ Reset file input on close
                 setSelectContainer("All");    // ✅ Reset dropdown to "All"
-                setExcelFormatChecker(false);setExcelData([]);
+                setExcelFormatChecker(false); setExcelData([]);
               }}
             >
               <button className="close_popup">
@@ -868,20 +875,31 @@ const Equipments = () => {
               <div className="flex flex-col sm:flex-row gap-12">
                 {/* Left Container */}
                 <div className="flex-1 h-fit">
-                  {/* Dropdown */}
-                  <div className="select_container">
-                    <select
-                      className="category-dropdown w-full !text-[14px]"
-                      value={select_container}
-                      onChange={(e) => setSelectContainer(e.target.value)}
+                  <div className="flex justify-center items-center gap-12">
+                    {/* Dropdown */}
+                    <div className="select_container">
+                      <select
+                        className="category-dropdown w-full !text-[14px]"
+                        value={select_container}
+                        onChange={(e) => setSelectContainer(e.target.value)}
+                      >
+                        <option value="All">All</option>
+                        {categories.map((category, index) => (
+                          <option key={index} value={category._id}>
+                            {category.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    {/* Download Template Button */}
+                    <button
+                      id="upload_file_btn"
+                      className="whitespace-nowrap icon_btn_fill_primary w-full sm:!w-auto flex items-center gap-2"
+                      onClick={handleDownloadTemplate}
                     >
-                      <option value="All">All</option>
-                      {categories.map((category, index) => (
-                        <option key={index} value={category._id}>
-                          {category.name}
-                        </option>
-                      ))}
-                    </select>
+                      <i className="fa-regular fa-file-lines"></i>
+                      <span>Download Template</span>
+                    </button>
                   </div>
 
                   <div className="!mt-2">

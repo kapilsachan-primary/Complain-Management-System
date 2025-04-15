@@ -420,12 +420,12 @@ const Dashboard = () => {
       {showDownload && (
         <section className="download_report_cont">
           <section className="report_overview">
-            <section className="report_head_container relative flex flex-col sm:flex-row justify-start !items-start gap-8 sm:gap-4">
+            <section className="report_head_container flex flex-col sm:flex-row justify-start !items-start gap-8 sm:gap-4 relative">
               <section className="head_container">
                 <h2>Report</h2>
                 <p>Overview</p>
               </section>
-              <div className="w-full sm:w-fit flex justify-center items-center flex-col sm:flex-row gap-8">
+              <div className="w-full sm:w-fit flex justify-center items-center flex-col sm:flex-row gap-8 ">
                 <div className="select_container w-full sm:!w-60">
                   <select
                     className="w-full sm:!w-60 !h-[5rem]"
@@ -457,7 +457,7 @@ const Dashboard = () => {
                   <i class="fa-solid fa-file-excel"></i>
                   <span className="whitespace-nowrap">Download Excel</span>
                 </button>
-                <div className="x_icon absolute sm:relative top-10 right-10 sm:top-0 sm:right-0" onClick={() => setShowDownload(false)}>
+                <div className="x_icon absolute sm:relative top-5 right-0 sm:top-0 sm:right-0" onClick={() => setShowDownload(false)}>
                   <button className="close_popup">
                     <img src="/assets/icons/x-icon.svg" alt="Close Sidebar" className="w-14 h-14" />
                   </button>
