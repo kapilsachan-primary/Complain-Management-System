@@ -99,12 +99,12 @@ export default function UserDashboard() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Submitted", formData);
+    //console.log("Form Submitted", formData);
     const checkerr = UserformValidate(formData, isServiceEnabled, products);
     seterrors(checkerr);
-    console.log(Object.entries(checkerr).length);
+    //console.log(Object.entries(checkerr).length);
     if (Object.entries(checkerr).length === 0) {
-      console.log("Good to goo");
+      //console.log("Good to goo");
       setLoading(true);
       axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/complain`, {
         name: formData.name,
@@ -117,7 +117,7 @@ export default function UserDashboard() {
         services: formData.services,
         descriptionRemarks: formData.descriptionRemarks,
       }).then(res => {
-        console.log(res);
+        //console.log(res);
         if (res.status == 200 || res.status == 422) {
           alert(res.data.message);
           window.location.reload();

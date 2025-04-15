@@ -44,7 +44,7 @@ export const sendEmail = async (from, fromPassword, to, subject, complaintData) 
         };
 
         await transporter.sendMail(mailOptions);
-        console.log(`Email sent from ${from} to ${to}`);
+        //console.log(`Email sent from ${from} to ${to}`);
     } catch (error) {
         console.error("Error sending email:", error);
     }

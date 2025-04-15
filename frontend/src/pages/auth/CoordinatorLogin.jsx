@@ -31,7 +31,7 @@ const CoordinatorLogin = () => {
     e.preventDefault();
     const checkerr = LoginValidate(formData);
     seterrors(checkerr);
-    console.log(Object.entries(checkerr).length);
+    //console.log(Object.entries(checkerr).length);
 
     if (Object.entries(checkerr).length === 0) {
       setLoading(true);

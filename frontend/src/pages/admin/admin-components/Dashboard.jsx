@@ -142,7 +142,7 @@ const Dashboard = () => {
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/admin/countjobs`)
       .then(res => {
         setvalues(res.data)
-        console.log(res.data)
+       // console.log(res.data)
       }).catch(err => { console.log(err) })
   }, [])
 
@@ -182,12 +182,12 @@ const Dashboard = () => {
     const checkerr = ReportValidate(startDate, closeDate);
     //console.log(checkerr)
     if (Object.entries(checkerr).length === 0) {
-      console.log("Lets roll!")
+     // console.log("Lets roll!")
       axios.get(`${import.meta.env.VITE_BACKEND_URL}/admin/report`, {
         params: { startDate, closeDate }
       }
       ).then(res => {
-        console.log(res.data);
+       // console.log(res.data);
         setComplains(res.data);
         setShowPopup(false);
         setShowDownload(true);

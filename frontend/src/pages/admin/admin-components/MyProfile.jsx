@@ -21,7 +21,7 @@ const MyProfile = () => {
           axios.post(`${import.meta.env.VITE_BACKEND_URL}/admin/profile`,{
             id:res.data.id
           }).then(res =>{
-            console.log(res.data);
+            //console.log(res.data);
             setFormData(res.data);
           }).catch(err => console.log(err))
         }
@@ -39,8 +39,8 @@ const MyProfile = () => {
     if(activeForm=="edit"){
       const checkerr = Editform(formData);
       seterrors(checkerr);
-      console.log(Object.entries(checkerr).length);
-      console.log(checkerr)
+      //console.log(Object.entries(checkerr).length);
+      //console.log(checkerr)
       if (Object.entries(checkerr).length === 0) {
         setLoading(true);
         axios.put(`${import.meta.env.VITE_BACKEND_URL}/admin/editprofile`,{
@@ -62,8 +62,8 @@ const MyProfile = () => {
     else{
       const checkerr = Resetpass(password);
       seterrors(checkerr);
-      console.log(Object.entries(checkerr).length);
-      console.log(checkerr)
+      //console.log(Object.entries(checkerr).length);
+      //console.log(checkerr)
       if (Object.entries(checkerr).length === 0) {
         setResetLoading(true);
         axios.put(`${import.meta.env.VITE_BACKEND_URL}/admin/resetpassword`,{

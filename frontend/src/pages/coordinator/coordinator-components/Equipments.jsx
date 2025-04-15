@@ -46,7 +46,7 @@ const Equipments = () => {
       setData(res.data.products);
       setFilteredData(res.data.products);
       setproductCategories(res.data.productCategories);
-      console.log("Product Categories", res.data.productCategories);
+      //console.log("Product Categories", res.data.productCategories);
     }).catch((err) => console.log(err));
   }
   const fetchCategories = () => {
@@ -160,10 +160,10 @@ const Equipments = () => {
     e.preventDefault();
     const checkerr = AddProductorService(newProductorService);
     seterrors(checkerr);
-    console.log(checkerr)
+    //console.log(checkerr)
     if (Object.entries(checkerr).length === 0) {
       if (newProductorService.type == "Services") {
-        console.log("No Error in services");
+        //console.log("No Error in services");
         setServprodLoading(true);
         axios.post(`${import.meta.env.VITE_BACKEND_URL}/coordinator/${newProductorService.category._id}/add-service`, {
           serviceName: newProductorService.modelNo,
@@ -185,7 +185,7 @@ const Equipments = () => {
         })
       }
       else if (newProductorService.type == "Product") {
-        console.log("No error in Products")
+        //console.log("No error in Products")
         setServprodLoading(true);
         axios.post(`${import.meta.env.VITE_BACKEND_URL}/coordinator/addproduct`, {
           name: newProductorService.modelNo,
@@ -195,7 +195,7 @@ const Equipments = () => {
         }).then(res => {
           if (res.data.Status === true) {
             alert(res.data.message);
-            console.log("Product Added:", newProductorService);
+            //console.log("Product Added:", newProductorService);
             setShowAddPopup(false);
             setStep(1);
             // Reset values ONLY when the product is added
@@ -230,9 +230,9 @@ const Equipments = () => {
     e.preventDefault();
     const checkerr = AddCategory(newCategory);
     seterrors(checkerr);
-    console.log(checkerr)
+    //console.log(checkerr)
     if (Object.entries(checkerr).length === 0) {
-      console.log("No error for category addition");
+      //console.log("No error for category addition");
       setCategotyLoading(true);
       axios.post(`${import.meta.env.VITE_BACKEND_URL}/coordinator/addcategory`, {
         name: newCategory,
@@ -270,7 +270,7 @@ const Equipments = () => {
     setExcelErrors(checkerr);
     // your upload logic here...
     if (Object.entries(checkerr).length > 0) {
-      console.log("Excel errors",checkerr);
+      //console.log("Excel errors",checkerr);
       setSelectedFile(null);
       //setTimeout(() => setExcelErrors({}), 3000)
       return;

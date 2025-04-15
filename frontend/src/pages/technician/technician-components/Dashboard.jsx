@@ -133,7 +133,7 @@ const Dashboard = () => {
         axios.get(`${import.meta.env.VITE_BACKEND_URL}/technician/countjobs/${res.data.id}`)
           .then(res => {
             setvalues(res.data)
-            console.log(res.data)
+            //console.log(res.data)
           }).catch(err => { console.log(err) })
       } else {
         navigate("/technician-login");
@@ -177,12 +177,12 @@ const Dashboard = () => {
     const checkerr = ReportValidate(startDate, closeDate);
     //console.log(checkerr)
     if (Object.entries(checkerr).length === 0) {
-      console.log("Lets roll!")
+      //console.log("Lets roll!")
       axios.get(`${import.meta.env.VITE_BACKEND_URL}/technician/report`, {
         params: { startDate, closeDate, id }
       }
       ).then(res => {
-        console.log(res.data);
+        //console.log(res.data);
         setComplains(res.data);
         setShowPopup(false);
         setShowDownload(true);

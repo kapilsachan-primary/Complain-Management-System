@@ -21,7 +21,7 @@ const MyProfile = () => {
           axios.post(`${import.meta.env.VITE_BACKEND_URL}/technician/profile`,{
             id:res.data.id
           }).then(res =>{
-            console.log(res.data);
+            //console.log(res.data);
             setFormData(res.data);
           }).catch(err => console.log(err))
         }
@@ -36,12 +36,12 @@ const MyProfile = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Clicked');
+    //console.log('Clicked');
     if(activeForm=="edit"){
       const checkerr = Editform(formData);
       seterrors(checkerr);
-      console.log(Object.entries(checkerr).length);
-      console.log(checkerr)
+      //console.log(Object.entries(checkerr).length);
+      //console.log(checkerr)
       if (Object.entries(checkerr).length === 0) {
         setLoading(true);
         axios.put(`${import.meta.env.VITE_BACKEND_URL}/technician/editprofile`,{
@@ -64,8 +64,8 @@ const MyProfile = () => {
     else{
       const checkerr = Resetpass(password);
       seterrors(checkerr);
-      console.log(Object.entries(checkerr).length);
-      console.log(checkerr)
+      //console.log(Object.entries(checkerr).length);
+      //console.log(checkerr)
       if (Object.entries(checkerr).length === 0) {
         setResetLoading(true);
         axios.put(`${import.meta.env.VITE_BACKEND_URL}/technician/resetpassword`,{

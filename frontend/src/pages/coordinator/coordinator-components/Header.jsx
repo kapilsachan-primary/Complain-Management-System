@@ -5,7 +5,7 @@ const Header = ({ activePage, toggleSidebar }) => {
   axios.defaults.withCredentials = true;
   const navigate=useNavigate();
   const handleLogout = () => {
-    console.log("clicked");
+    //console.log("clicked");
     axios.get(`${import.meta.env.VITE_BACKEND_URL}/coordinator/logout`)
       .then((res) => {
         if (res.data.Status === "Success") {

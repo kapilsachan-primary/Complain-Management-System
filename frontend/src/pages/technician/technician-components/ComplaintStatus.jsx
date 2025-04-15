@@ -38,7 +38,7 @@ const ComplaintStatus = () => {
     })
       .then(res => {
         setData(res.data);
-        console.log("My complains",res.data);
+        //console.log("My complains",res.data);
         setFilteredData(res.data);
       })
       .catch(err => { console.log(res.data.message) });
@@ -132,7 +132,7 @@ const ComplaintStatus = () => {
     const checkerr = submitValidate(status, action);
     seterrors(checkerr);
     if (Object.entries(checkerr).length === 0) {
-      console.log("EveryThing OK!!");
+      //console.log("EveryThing OK!!");
       setLoading(true);
       if (status === "Resolved") {
         axios.put(`${import.meta.env.VITE_BACKEND_URL}/technician/updateactionresolved`, {
@@ -182,7 +182,7 @@ const ComplaintStatus = () => {
     const checkerr = f2aValidate(status, action);
     seterrors(checkerr);
     if (Object.entries(checkerr).length === 0) {
-      console.log("EveryThing OK!!");
+      //console.log("EveryThing OK!!");
       setf2ALoading(true);
       axios.put(`${import.meta.env.VITE_BACKEND_URL}/technician/forward2admin`, {
         id: selectedComplaint._id,

@@ -31,7 +31,7 @@ const AdminLogin = () => {
     e.preventDefault();
     const checkerr = LoginValidate(formData);
     seterrors(checkerr);
-    console.log(Object.entries(checkerr).length);
+    //console.log(Object.entries(checkerr).length);
 
     if (Object.entries(checkerr).length === 0) {
       setLoading(true);
@@ -42,7 +42,7 @@ const AdminLogin = () => {
             //console.log(res);
             if(res.data.status){
             alert(res.data.message);
-            console.log("Successfull login");
+            //console.log("Successfull login");
             navigate("/admin/dashboard");
             }
             else{

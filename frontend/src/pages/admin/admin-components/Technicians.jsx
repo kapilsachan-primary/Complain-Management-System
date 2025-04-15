@@ -27,7 +27,7 @@ const Technician = () => {
     })
       .then(res => {
         setData(res.data);
-        console.log(res.data);
+        //console.log(res.data);
         setFilteredData(res.data);
       })
       .catch(err => { console.log(res.data.message) });
@@ -61,7 +61,7 @@ const Technician = () => {
 
   const handleAddTechnician = async (e) => {
     e.preventDefault();
-    console.log("Adding Technician:", formData);
+    //console.log("Adding Technician:", formData);
 
     const checkerr = RegisterValidate(formData);
     seterrors(checkerr);

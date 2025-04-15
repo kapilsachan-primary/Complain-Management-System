@@ -22,7 +22,7 @@ const ComplaintStatus = () => {
     })
       .then(res => {
         setData(res.data);
-        console.log(res.data);
+        //console.log(res.data);
         setFilteredData(res.data);
       })
       .catch(err => { console.log(res.data.message) });
