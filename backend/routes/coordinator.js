@@ -7,6 +7,7 @@ import { Technician} from "../models/Technician.js";
 import { Complain } from "../models/Complain.js";
 import { Category } from "../models/Category.js";
 import { Product } from "../models/Product.js";
+import ExcelJS from "exceljs";
 router.post('/login', async(req,res)=>{
     const email=req.body.email;
     const password=req.body.password;
@@ -315,5 +316,64 @@ router.delete("/:categoryId/remove-service", async (req, res) => {
     }
   });
   
+  router.get('/download-template', async (req, res) => {
+    try {
+      const workbook = new ExcelJS.Workbook();
+      const mainSheet = workbook.addWorksheet('Template');
+      const hiddenSheet = workbook.addWorksheet('Lists');
+      hiddenSheet.state = 'veryHidden'; // Hides the sheet
+      mainSheet.columns = [
+        { header: 'Departments', key: 'department', width: 25 },
+        { header: 'Make - Model No - Dead Stock Number', key: 'details', width: 40 },
+      ];
+      const headerRow = mainSheet.getRow(1);
+        headerRow.font = { bold: true };
+        headerRow.alignment = { vertical: 'middle', horizontal: 'center' };
+        headerRow.commit(); // Important to apply changes
+
+      const departments = [
+        "applied-mechanics", "artificial-intelligence", "automobile-engineering",
+        "biomedical-engineering", "chemical-engineering", "civil-engineering",
+        "computer-engineering", "electrical-engineering", "electronics-communication",
+        "environment-engineering", "information-technology", "instrumentation-control",
+        "mechanical-engineering", "plastic-technology", "robotics-automation",
+        "rubber-technology", "science-humanities", "textile-technology", "library", "office"
+      ];
+  
+      // Add the list of departments to the hidden sheet
+      departments.forEach((dept, index) => {
+        hiddenSheet.getCell(`A${index + 1}`).value = dept;
+      });
+  
+      // Add headers
+      //mainSheet.addRow(["Departments", "Make - Model No - Dead Stock No."]);
+  
+      // Add data validation (dropdown) for 1000 rows
+      for (let i = 0; i < 1000; i++) {
+        const row = mainSheet.addRow(["", ""]);
+        row.getCell(1).dataValidation = {
+          type: 'list',
+          allowBlank: false,
+          formulae: ['Lists!$A$1:$A$20'], // Adjust if your departments list grows
+          showErrorMessage: true,
+        };
+      }
+  
+      // Set headers for download
+      res.setHeader(
+        'Content-Type',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      );
+      res.setHeader('Content-Disposition', 'attachment; filename=Template.xlsx');
+  
+      // Stream the file
+      await workbook.xlsx.write(res);
+      res.end();
+    } catch (error) {
+      console.error('Error generating Excel template:', error);
+      res.status(500).json({ message: 'Failed to generate the template. Please try again later.' });
+    }
+  });
+
 
 export {router as CoordinatorRouter}

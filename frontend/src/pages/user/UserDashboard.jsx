@@ -227,6 +227,8 @@ export default function UserDashboard() {
                       <option value="rubber-technology">Rubber Technology</option>
                       <option value="science-humanities">Science and Humanities</option>
                       <option value="textile-technology">Textile Technology</option>
+                      <option value="library">Library</option>
+                      <option value="office">Office</option>
                     </select>
 
                   </div>

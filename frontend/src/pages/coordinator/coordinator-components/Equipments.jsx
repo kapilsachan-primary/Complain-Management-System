@@ -31,6 +31,14 @@ const Equipments = () => {
   const [excelData, setExcelData] = useState([]);
   const [excelFormatChecker, setExcelFormatChecker] = useState(false);
   const [uploadLoading, setUploadLoading] = useState(false);
+  const [templateloading,setTemplateLoading]=useState(false);
+  const [templateError,setTemplateError]=useState(null);
+  // const [departments]=useState(["applied-mechanics","artificial-intelligence","automobile-engineering",
+  //   "biomedical-engineering","chemical-engineering","civil-engineering","computer-engineering","electrical-engineering",
+  //   "electronics-communication","environment-engineering","information-technology","instrumentation-control",
+  //   "mechanical-engineering","plastic-technology","robotics-automation","rubber-technology","science-humanities",
+  //   "textile-technology","library","office"
+  // ]);
   axios.defaults.withCredentials = true;
   const navigate = useNavigate();
 
@@ -286,9 +294,19 @@ const Equipments = () => {
       const headers = rows[0];
       const dataRows = rows.slice(1);
       // Get exact indexes
-      const deptIndex = headers.findIndex(h => h.trim().toLowerCase() === EXPECTED_HEADERS.department.toLowerCase());
-      const nameIndex = headers.findIndex(h => h.trim().toLowerCase() === EXPECTED_HEADERS.name.toLowerCase());
-
+      // const deptIndex = headers.findIndex(h => h.trim().toLowerCase() === EXPECTED_HEADERS.department.toLowerCase());
+      // const nameIndex = headers.findIndex(h => h.trim().toLowerCase() === EXPECTED_HEADERS.name.toLowerCase());
+      const normalize = (str) =>
+        str?.toString().replace(/[\s\-–—]+/g, '').trim().toLowerCase();
+      
+      const deptIndex = headers.findIndex(
+        (h) => normalize(h) === normalize(EXPECTED_HEADERS.department)
+      );
+      const nameIndex = headers.findIndex(
+        (h) => normalize(h) === normalize(EXPECTED_HEADERS.name)
+      );
+      //console.log("Extracted headers:", headers.map(h => `'${h}'`));
+  
       if (deptIndex === -1 || nameIndex === -1) {
         alert(`Excel format is incorrect. Expected columns: ${EXPECTED_HEADERS.department} and ${EXPECTED_HEADERS.name}`);
         setExcelFormatChecker(false); setSelectedFile(null);
@@ -308,12 +326,39 @@ const Equipments = () => {
     e.preventDefault();
     if (!selectedFile) return;
     if (!select_container || excelData.length === 0) return;
-    const formattedData = excelData.map((row) => ({
-      name: row.name,
+    const hasInvalid = excelData.some((row, index) => {
+      const name = row.name?.trim();
+      const department = row.department?.trim();
+    
+      const isCompletelyEmpty = !name && !department;
+      const isIncomplete = (name && !department) || (!name && department);
+    
+      if (isIncomplete) {
+        console.log(`⚠️ Incomplete data at row ${index + 2}:`, row); // +2 for Excel rows
+      }
+    
+      return isIncomplete; // ✅ only flag incomplete rows, not empty ones
+    });
+    // const formattedData = excelData.map((row) => ({
+    //   name: row.name.trim(),
+    //   categoryName: categories.find(cat => cat._id === select_container)?.name,
+    //   category: select_container,
+    //   department: row.department.trim(),
+    // })).filter(row => row.name && row.department); // Only keep rows with values;
+    const formattedData = excelData
+    .map((row) => {
+    const name = row.name?.trim() || "";
+    const department = row.department?.trim() || "";
+
+    return {
+      name,
       categoryName: categories.find(cat => cat._id === select_container)?.name,
       category: select_container,
-      department: row.department,
-    }));
+      department,
+    };
+  })
+  .filter(row => row.name && row.department); // Only keep valid entries
+
     setUploadLoading(true);
     axios.post(`${import.meta.env.VITE_BACKEND_URL}/coordinator/bulkproducts`, {
       products: formattedData,
@@ -331,12 +376,31 @@ const Equipments = () => {
     })
   };
 
-  const handleDownloadTemplate = () => {
-    window.alert('Download Template button clicked!');
-    // Your existing logic to handle the download goes here
-  };
   
+  
+  const handleDownloadTemplate= async()=>{
+    setTemplateLoading(true);
+    //setTemplateError(null); // Clear previous errors
+    try {
+      // Send the GET request to download the template
+      const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/coordinator/download-template`, {
+        responseType: 'blob', // Ensures we get the file as a blob
+      });
 
+      // Create a link to download the file
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(response.data);
+      link.download = 'Template.xlsx'; // Name of the downloaded file
+      link.click();
+    } catch (err) {
+      // Handle error if the API call fails
+      alert(err.response?.data?.message || 'An error occurred while downloading the template.');
+    } finally {
+      setTemplateLoading(false);
+    }
+  }
+  
+  
   const columns = [
     // {
     //   name: <span className="column_header">Model No</span>,
@@ -597,6 +661,8 @@ const Equipments = () => {
                                 <option value="rubber-technology">Rubber Technology</option>
                                 <option value="science-humanities">Science and Humanities</option>
                                 <option value="textile-technology">Textile Technology</option>
+                                <option value="library">Library</option>
+                                <option value="office">Office</option>
                               </>
                             )}
                           </select>
@@ -893,13 +959,14 @@ const Equipments = () => {
                     </div>
                     {/* Download Template Button */}
                     <button
-                      id="upload_file_btn"
+                      id="upload_file_btn" type="button"
                       className="whitespace-nowrap icon_btn_fill_primary w-full sm:!w-auto flex items-center gap-2"
-                      onClick={handleDownloadTemplate}
+                      onClick={handleDownloadTemplate} disabled={templateloading}
                     >
                       <i className="fa-regular fa-file-lines"></i>
-                      <span>Download Template</span>
+                      <span>{templateloading?"Downloading":"Download Template"}</span>
                     </button>
+                     {templateError && <p style={{ color: 'red' }}>{templateError}</p>}
                   </div>
 
                   <div className="!mt-2">
