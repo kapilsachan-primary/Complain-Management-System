@@ -138,7 +138,7 @@ export default function UserDashboard() {
 
 
   return (
-    <main id="user_dashboard" className="main_content">
+    <main id="user_dashboard" className="main_content flex flex-col min-h-screen overflow-y-auto">
 
       {/* Header */}
       <header id="user_dashboard_header" className="flex justify-between">
@@ -156,7 +156,7 @@ export default function UserDashboard() {
       </header>
 
       {/* User Form */}
-      <section className="form_section flex justify-center items-center flex-grow w-full px-4 py-8 overflow-y-auto">
+      <section className="form_section flex justify-center items-start flex-grow w-full px-4 py-8 overflow-y-auto">
         <div className="w-full max-w-[80vw]">
 
           <form className="issue_form w-full">

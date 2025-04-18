@@ -11,6 +11,9 @@ import CoordinatorDashboard from "./pages/coordinator/CoordinatorDashboard";
 import AdminLogin from "./pages/auth/AdminLogin";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 
+import NotFoundPage from "./pages/404/NotFoundPage";
+
+
 
 const App = () => {
   return (
@@ -26,6 +29,8 @@ const App = () => {
         
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   );
