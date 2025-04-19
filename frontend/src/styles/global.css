@@ -102,7 +102,7 @@ html {
 }
 
 body {
-  overflow: hidden;
+  overflow-x: hidden;
   scroll-behavior: smooth;
   background-color: var(--color-lightblue);
 }
