@@ -18,14 +18,14 @@ app.use(cors({
 }));
 app.use(cookieParser());
 const __dirname = path.resolve();
-// mongoose.connect(process.env.MONGODB_URL)
-// .then(()=> console.log("Mongo DB Connected"))
-// .catch((err) => console.log("Error connecting DB",err));
+mongoose.connect(process.env.MONGODB_URL)
+.then(()=> console.log("Mongo DB Connected"))
+.catch((err) => console.log("Error connecting DB",err));
 app.use('/user', UserRouter);
 app.use('/technician', TechnicianRouter);
 app.use('/admin', AdminRouter);
 app.use('/coordinator',CoordinatorRouter);
-mongoose.connect('mongodb://127.0.0.1:27017/Complain-Management-System')
+//mongoose.connect('mongodb://127.0.0.1:27017/Complain-Management-System')
 
 //Serving the frontend files 
 // app.use(express.static(path.join(__dirname, '../frontend/dist')));
